@@ -1,0 +1,84 @@
+material OutlineCellGreen
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			ambient 0.400000 1.000000 0.400000 0.750000
+			diffuse 0.500000 0.500000 0.500000 0.750000
+			specular 0.200000 0.800000 0.200000 0.750000 12.500000
+			emissive 0.000000 0.000000 0.000000 0.750000
+			scene_blend alpha_blend
+			depth_write off
+		}
+	}
+}
+
+material OutlineCellRed
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			ambient 1.000000 0.400000 0.400000 750000
+			diffuse 0.500000 0.500000 0.500000 0.750000
+			specular 0.200000 0.800000 0.200000 0.750000 12.500000
+			emissive 0.000000 0.000000 0.000000 0.750000
+			scene_blend alpha_blend
+			depth_write off
+		}
+	}
+}
+
+material OutlineGreen
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			ambient 0.362597 0.900000 0.382412 0.340000
+			diffuse 0.362597 0.900000 0.382412 0.340000
+			specular 0.200000 0.800000 0.200000 0.340000 12.500000
+			emissive 0.000000 0.000000 0.000000 0.340000
+			scene_blend alpha_blend
+			depth_write off
+		}
+	}
+}
+
+material OutlineRed
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			ambient 0.900000 0.362597 0.382412 0.340000
+			diffuse 0.900000 0.362597 0.382412 0.340000
+			specular 0.200000 0.800000 0.200000 0.340000 12.500000
+			emissive 0.000000 0.000000 0.000000 0.340000
+			scene_blend alpha_blend
+			depth_write off
+		}
+	}
+}
+
+material CSiteMat
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.50000 1.000000
+			diffuse 0.500000 0.500000 0.500000 1.000000
+			specular 0.200000 0.800000 0.200000 0.500000 12.500000
+			emissive 0.000000 0.000000 0.000000 0.500000
+			scene_blend alpha_blend
+			depth_write off
+		}
+	}
+}

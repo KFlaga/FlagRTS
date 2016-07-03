@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="PowerPlant" family="SceneObject" type="PhysicalObject" final_type="Unit" data="PowerPlant">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="true"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <ObjectClasses>
+    <Class name="Passive"/>
+    <Class name="Building"/> <!-- Unit unable to move  -->
+    <Class name="PowerPlant"/> <!-- Unit is Storage (accepts packages) -->
+  </ObjectClasses>
+
+  <PhysicalObject type="Unit">
+    <Mesh name="Plant.mesh" group="HumanFaction"/>
+    <Size x="100" y="70" z="120"/>
+
+    <Flags>
+      <IsHoverable value="true"/>
+      <IsSelectable value="true"/>
+    </Flags>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Skeletal" name="Idle" action="Default"/>
+      </State>
+      <State name="Dying">
+        <Animation type="Empty" name="Idle" action="Default"/>
+      </State>
+    </Animations>
+    
+    <Unit>
+      <Icon name="PowerPlantIcon"/> <!-- Icon to be shown on hud -->
+      <GuiName locale="true" loc="UnitName_PowerPlant" sec="Game.UnitNames"/>
+      
+      <Flags>
+        <ShowOnMinimap value="true"/> <!-- False for things like animals -->
+      </Flags>
+
+      <Properties>
+      </Properties>
+
+      <Stats>
+        <Life value="300"/>
+        <MoveSpeed value="0"/> <!-- in map-units per second -->
+        <RotateSpeed value="0"/> <!-- in degreed per second -->
+      
+      <Cost>
+          <Time value="5000"/>
+          <Resource name="Metal" value="40" return="false"/>
+          <Resource name="Energy" value="300" return="false"/>
+        </Cost>
+      </Stats>
+
+      <Weapons>
+      </Weapons>
+
+      <Commands>
+      </Commands>
+      
+    
+      <SelectionMarker definition="MMarker_SelectionRectMedium" type="ModelMarker">
+        <Size x="120" y="1" z="145"/>
+        <Position x="0" y="5" z="0"/> 
+      </SelectionMarker>
+    </Unit>
+
+    <Pathing>
+      <AddToGraph value="true"/>
+      <PathingGroups>
+        <Group name="Ground"/>
+        <Group name="Building"/>
+      </PathingGroups>
+      <BlockedGroups>
+        <Group name="Ground"/>
+        <Group name="Naval"/>
+        <Group name="Building"/>
+        <Group name="Missle"/>
+      </BlockedGroups>
+      <UseFootprint value="true"/>
+      <Footprint x="5" y="6">
+        <Row filled=".xxx."/>
+        <Row filled="xxxxx"/>
+        <Row filled="xxxxx"/>
+        <Row filled="xxxxx"/>
+        <Row filled="xxxxx"/>
+        <Row filled=".xxx."/>
+      </Footprint>
+    </Pathing>
+  
+    <PortraitObject definition="PortraitPowerPlant" type="MapDecorator">
+      <Position x="0" y="-20" z="-160"/>
+      <Orientation w="0.924" x="0.383" y="0" z="0"/>
+    </PortraitObject>
+  
+      <PlayerColorMaterial name="PlantMat"/>
+    
+  </PhysicalObject>
+
+    <Minimap>
+      <Flags>
+        <RevealedVisible/>
+        <RadarVisible/>
+        <MinimapSelectable/>
+      </Flags>
+      <Size x="80.f" y="90.f"/>
+    </Minimap>
+
+</ObjectDefinition>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MapTriggers>
+  <!-- script variables defintions -->
+  <!-- For now setting variable values is very limited, so they are of little use -->
+  <Variables>
+    <Variable name="Key_B" type="KeyCode" value="b"/>
+    <Variable name="temp_player" type="Integer"/>
+  </Variables>
+
+  <Triggers>
+
+    <!-- Trigger will occur on map init : spawn for each player with 'Human' faction some units on start location -->
+    <Trigger name="Initialisation" is_enabled="true">
+      <Event family="General" type="Initialisation"/>
+      <Actions>
+        <Action family="General" type="ForInteger">
+          <!-- Iterate on each player -->
+          <From from="Value" value="0"/>
+          <To from="Value" value="8"/>
+          <IncrementBy from="Value" value="1"/>
+          <Variable name="temp_player"/>
+          <!-- Iteration index will be stored in this variable -->
+          <Actions>
+            <Action family="General" type="Condition">
+              <!-- Condition-Action -->
+              <Condition family="General" type="And">
+                <!-- And-Condition accepts list of Conditions -->
+                <Condition family="Player" type="IsInGame">
+                  <Player from="Variable" value="temp_player"/>
+                  <!-- Check if current player is used -->
+                </Condition>
+                <Condition family="Player" type="HaveFaction">
+                  <Player from="Variable" value="temp_player"/>
+                  <!-- And have Human faction -->
+                  <Faction from="Value" value="Human"/>
+                </Condition>
+              </Condition>
+              <!-- One Action which will be executed if conditions are true : fire other trigger for this player -->
+              <Action family="General" type="FireTrigger">
+                <Trigger name="SpawnHumanBaseUnits"/>
+              </Action>
+            </Action>
+          </Actions>
+        </Action>
+      </Actions>
+    </Trigger>
+
+    <!-- Trigger will spawn some units. Player is stored globally, so trigger can be used for each player with ease  -->
+    <!-- Trigger have no Event specifed, so it must be fired manually in some Action -->
+    <Trigger name="SpawnHumanBaseUnits" is_enabled="true">
+      <Actions>
+        <Action family="SceneObject" type="Spawn">
+          <Object from="Definition" name="LogisticsCenter" type="Unit">
+			<Owner from="Variable" value="temp_player"/>
+		  </Object>
+          <Position from="StartLocation">
+            <Player from="Variable" value="temp_player"/>
+          </Position>
+          <Orientation from="wxyz" w="1.0" x="0.0" y="0.0" z="0.0"/>
+          <SpawnOnTerrain from="Value" value="true"/>
+        </Action>
+
+        <Action family="SceneObject" type="Spawn">
+          <Object from="Definition" name="Transporter" type="Unit">
+			<Owner from="Variable" value="temp_player"/>
+		  </Object>
+          <Position from="Add">
+            <Vector3 from="StartLocation">
+              <Player from="Variable" value="temp_player"/>
+            </Vector3>
+            <Vector3 from="xyz" x="0.0" y="0.0" z="160.0"/>
+          </Position>
+          <Orientation from="wxyz" w="1.0" x="0.0" y="0.0" z="0.0"/>
+          <SpawnOnTerrain from="Value" value="true"/>
+        </Action>
+
+        <Action family="SceneObject" type="Spawn">
+          <Object from="Definition" name="Transporter" type="Unit">
+			<Owner from="Variable" value="temp_player"/>
+		  </Object>
+          <Position from="Add">
+            <Vector3 from="StartLocation">
+              <Player from="Variable" value="temp_player"/>
+            </Vector3>
+            <Vector3 from="xyz" x="0.0" y="0.0" z="-160.0"/>
+          </Position>
+          <Orientation from="wxyz" w="1.0" x="0.0" y="0.0" z="0.0"/>
+          <SpawnOnTerrain from="Value" value="true"/>
+        </Action>
+		<Action family="SceneObject" type="Spawn">
+          <Object from="Definition" name="QuadMech" type="Unit">
+			<Owner from="Variable" value="temp_player"/>
+		  </Object>
+          <Position from="Add">
+            <Vector3 from="StartLocation">
+              <Player from="Variable" value="temp_player"/>
+            </Vector3>
+            <Vector3 from="xyz" x="160.0" y="0.0" z="0.0"/>
+          </Position>
+          <Orientation from="wxyz" w="1.0" x="0.0" y="0.0" z="0.0"/>
+          <SpawnOnTerrain from="Value" value="true"/>
+        </Action>
+
+        <Action family="SceneObject" type="Spawn">
+          <Object from="Definition" name="QuadMech" type="Unit">
+			<Owner from="Variable" value="temp_player"/>
+		  </Object>
+          <Position from="Add">
+            <Vector3 from="StartLocation">
+              <Player from="Variable" value="temp_player"/>
+            </Vector3>
+            <Vector3 from="xyz" x="-160.0" y="0.0" z="0.0"/>
+          </Position>
+          <Orientation from="wxyz" w="1.0" x="0.0" y="0.0" z="0.0"/>
+          <SpawnOnTerrain from="Value" value="true"/>
+        </Action>
+      </Actions>
+    </Trigger>
+
+    <!--
+    Spawn some unit when button is pressed for testing -> will have to wait for SetVariable Action
+    or setting initial values of variables 
+    
+    <Trigger name="SpawnRobot">
+      <Event family="Input" type="KeyPressed"/>
+      <Actions>
+        <Action family="General" type="Condition">
+          <Condition family="General" type="IsEqual" var1="EventArg_0" var2="Key_B"/>
+          <Action family="SceneObject" type="Spawn">
+            <SceneObject type="Unit" from="Definition" definition="QuadMech"/>
+            <Position from="CursorTerrain"/>
+            <Orientation from="Value" w="1.0" x="0.0" y="0.0" z="0.0"/>
+            <Owner from="ClientPlayer"/>
+          </Action>
+        </Action>
+      </Actions>
+    </Trigger>
+    -->
+
+  </Triggers>
+
+</MapTriggers>

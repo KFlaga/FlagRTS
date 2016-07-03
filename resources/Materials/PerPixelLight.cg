@@ -1,0 +1,298 @@
+// Vertex program from per-pixel lightning
+// 3 lights are supported and no texture
+// Vertices are only transformed to clip-space
+void PerPixelLightning_Simple_VERT(
+    float4 position : POSITION, 
+    float3 normal   : NORMAL, 
+	uniform float4 lightPosition0,
+	uniform float4 lightPosition1,
+	uniform float4 lightPosition2,
+	uniform float4x4 worldviewproj,
+	uniform float3 eyePosition,
+	out float4 outClipPos 	: POSITION, 
+	out float3 outNormal    : TEXCOORD0,
+	out float3 outLightDir0 : TEXCOORD1, 
+	out float3 outLightDir1 : TEXCOORD2, 
+	out float3 outLightDir2 : TEXCOORD3,
+	out float3 outHalfAngle0 : TEXCOORD4, 
+	out float3 outHalfAngle1 : TEXCOORD5, 
+	out float3 outHalfAngle2 : TEXCOORD6  ) 
+ { 
+     outClipPos = mul(worldviewproj, position);
+     outNormal = normalize(normal);
+ 
+     outLightDir0 = normalize(lightPosition0.xyz -  (position.xyz * lightPosition0.w));
+     outLightDir1 = normalize(lightPosition1.xyz -  (position.xyz * lightPosition1.w));
+     outLightDir2 = normalize(lightPosition2.xyz -  (position.xyz * lightPosition2.w));
+ 
+     float3 eyeDir = normalize(eyePosition - position.xyz);
+ 
+     outHalfAngle0 = normalize(outLightDir0 + eyeDir);
+     outHalfAngle1 = normalize(outLightDir1 + eyeDir);
+     outHalfAngle2 = normalize(outLightDir2 + eyeDir);
+ } 
+
+// Fragment program for per-pxel lightning
+// 3 lights are supported and no texture
+// As directions are passed as TEXTCOORD, they will interpolated throughout
+// the triangle, so lightning will be more accurate than per-vertex computation
+void PerPixelLightning_Simple_FRAG(
+	float4 clipPos 	: POSITION, 
+	float3 normal    : TEXCOORD0,
+	float3 lightDir0 : TEXCOORD1, 
+	float3 lightDir1 : TEXCOORD2, 
+	float3 lightDir2 : TEXCOORD3, 
+	float3 halfAngle0 : TEXCOORD4, 
+	float3 halfAngle1 : TEXCOORD5, 
+	float3 halfAngle2 : TEXCOORD6,
+ 
+	uniform float4 lightDiffuse0,
+	uniform float4 lightSpecular0,
+	uniform float4 lightDiffuse1,
+	uniform float4 lightSpecular1,
+	uniform float4 lightDiffuse2,
+	uniform float4 lightSpecular2,
+	uniform float shininess,
+	uniform float4 ambient,
+	uniform float4 matAmbient,
+	uniform float4 matDiffuse,
+	uniform float4 matSpecular,
+ 
+    out float4 outColor : COLOR ) 
+ { 
+     float NdotL = dot(lightDir0, normal);
+     float NdotH = dot(halfAngle0, normal);
+	 
+	 // lit returns (1,diffuse_coeff,specular_coeff,1)
+     float4 lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor = lightDiffuse0 * lightCoeffs.y * matDiffuse + 
+		lightSpecular0 * lightCoeffs.z * matSpecular + 
+		ambient * matAmbient;
+ 
+	 // Repeat for other lights
+     NdotL = dot(lightDir1, normal);
+     NdotH = dot(halfAngle1, normal);
+     lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor += lightDiffuse1 * lightCoeffs.y * matDiffuse + 
+		lightSpecular1 * lightCoeffs.z * matSpecular;
+	 
+     NdotL = dot(lightDir2, normal);
+     NdotH = dot(halfAngle2, normal);
+     lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor += lightDiffuse2 * lightCoeffs.y * matDiffuse + 
+		lightSpecular2 * lightCoeffs.z * matSpecular;
+ }
+ 
+ 
+// Vertex program from per-pixel lightning
+// 3 lights are supported and no texture
+// Vertices are only transformed to clip-space
+void PerPixelLightning_Texture_VERT(
+    float4 position : POSITION, 
+    float3 normal   : NORMAL, 
+    float2 uv   : TEXCOORD0, 
+	uniform float4 lightPosition0,
+	uniform float4 lightPosition1,
+	uniform float4 lightPosition2,
+	uniform float4x4 worldviewproj,
+	uniform float3 eyePosition,
+	out float4 outClipPos 	: POSITION, 
+	out float2 outUV    	: TEXCOORD0,
+	out float3 outNormal    : TEXCOORD1,
+	out float3 outLightDir0 : TEXCOORD2, 
+	out float3 outLightDir1 : TEXCOORD3, 
+	out float3 outLightDir2 : TEXCOORD4,
+	out float3 outHalfAngle0 : TEXCOORD5, 
+	out float3 outHalfAngle1 : TEXCOORD6, 
+	out float3 outHalfAngle2 : TEXCOORD7  ) 
+ { 
+     outClipPos = mul(worldviewproj, position);
+     outNormal = normalize(normal);
+	 outUV = uv;
+ 
+     outLightDir0 = normalize(lightPosition0.xyz -  (position.xyz * lightPosition0.w));
+     outLightDir1 = normalize(lightPosition1.xyz -  (position.xyz * lightPosition1.w));
+     outLightDir2 = normalize(lightPosition2.xyz -  (position.xyz * lightPosition2.w));
+ 
+     float3 eyeDir = normalize(eyePosition - position.xyz);
+ 
+     outHalfAngle0 = normalize(outLightDir0 + eyeDir);
+     outHalfAngle1 = normalize(outLightDir1 + eyeDir);
+     outHalfAngle2 = normalize(outLightDir2 + eyeDir);
+ } 
+
+// Fragment program for per-pxel lightning
+// 3 lights are supported with one texture unit
+// As directions are passed as TEXTCOORD, they will interpolated throughout
+// the triangle, so lightning will be more accurate than per-vertex computation
+void PerPixelLightning_Texture_FRAG(
+	float4 clipPos 	: POSITION, 
+	float2 uv    	: TEXCOORD0,
+	float3 normal    : TEXCOORD1,
+	float3 lightDir0 : TEXCOORD2, 
+	float3 lightDir1 : TEXCOORD3, 
+	float3 lightDir2 : TEXCOORD4, 
+	float3 halfAngle0 : TEXCOORD5, 
+	float3 halfAngle1 : TEXCOORD6, 
+	float3 halfAngle2 : TEXCOORD7,
+	
+	uniform sampler2D image,
+	uniform float4 lightDiffuse0,
+	uniform float4 lightSpecular0,
+	uniform float4 lightDiffuse1,
+	uniform float4 lightSpecular1,
+	uniform float4 lightDiffuse2,
+	uniform float4 lightSpecular2,
+	uniform float shininess,
+	uniform float4 ambient,
+	uniform float4 matAmbient,
+	uniform float4 matDiffuse,
+	uniform float4 matSpecular,
+ 
+    out float4 outColor : COLOR ) 
+ { 
+	float4 texColor = tex2D(image, uv);
+ 
+     float NdotL = dot(lightDir0, normal);
+     float NdotH = dot(halfAngle0, normal);
+	 
+	 // lit returns (1,diffuse_coeff,specular_coeff,1)
+     float4 lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor = lightDiffuse0 * lightCoeffs.y * matDiffuse + 
+		lightSpecular0 * lightCoeffs.z * matSpecular + 
+		ambient * matAmbient;
+ 
+	 // Repeat for other lights
+     NdotL = dot(lightDir1, normal);
+     NdotH = dot(halfAngle1, normal);
+     lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor += lightDiffuse1 * lightCoeffs.y * matDiffuse + 
+		lightSpecular1 * lightCoeffs.z * matSpecular;
+	 
+     NdotL = dot(lightDir2, normal);
+     NdotH = dot(halfAngle2, normal);
+     lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor += lightDiffuse2 * lightCoeffs.y * matDiffuse + 
+		lightSpecular2 * lightCoeffs.z * matSpecular;
+		
+	outColor = outColor * texColor;
+ }
+
+// Fragment program for per-pxel lightning
+// 3 lights are supported and no texture
+// As directions are passed as TEXTCOORD, they will interpolated throughout
+// the triangle, so lightning will be more accurate than per-vertex computation
+// Also additional paramter -> playerColor must be supplied -> material will have this base color
+void PerPixelLightning_Simple_Player_FRAG(
+	float4 clipPos 	: POSITION, 
+	float3 normal    : TEXCOORD0,
+	float3 lightDir0 : TEXCOORD1, 
+	float3 lightDir1 : TEXCOORD2, 
+	float3 lightDir2 : TEXCOORD3, 
+	float3 halfAngle0 : TEXCOORD4, 
+	float3 halfAngle1 : TEXCOORD5, 
+	float3 halfAngle2 : TEXCOORD6,
+ 
+	uniform float4 lightDiffuse0,
+	uniform float4 lightSpecular0,
+	uniform float4 lightDiffuse1,
+	uniform float4 lightSpecular1,
+	uniform float4 lightDiffuse2,
+	uniform float4 lightSpecular2,
+	uniform float shininess,
+	uniform float4 ambient,
+	uniform float4 matAmbient,
+	uniform float4 matDiffuse,
+	uniform float4 matSpecular,
+	uniform float4 playerColor,
+ 
+    out float4 outColor : COLOR ) 
+ { 
+     float NdotL = dot(lightDir0, normal);
+     float NdotH = dot(halfAngle0, normal);
+	 
+	 // lit returns (1,diffuse_coeff,specular_coeff,1)
+     float4 lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor = lightDiffuse0 * lightCoeffs.y * matDiffuse + 
+		lightSpecular0 * lightCoeffs.z * matSpecular + 
+		ambient * matAmbient;
+ 
+	 // Repeat for other lights
+     NdotL = dot(lightDir1, normal);
+     NdotH = dot(halfAngle1, normal);
+     lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor += lightDiffuse1 * lightCoeffs.y * matDiffuse + 
+		lightSpecular1 * lightCoeffs.z * matSpecular;
+	 
+     NdotL = dot(lightDir2, normal);
+     NdotH = dot(halfAngle2, normal);
+     lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor += lightDiffuse2 * lightCoeffs.y * matDiffuse + 
+		lightSpecular2 * lightCoeffs.z * matSpecular;
+		
+	outColor = outColor * playerColor;
+	outColor.w = 1.0;
+ }
+
+// Fragment program for per-pxel lightning
+// 3 lights are supported with one texture unit
+// As directions are passed as TEXTCOORD, they will interpolated throughout
+// the triangle, so lightning will be more accurate than per-vertex computation
+// Also additional paramter -> playerColor must be supplied -> material will have this base color
+// Texture color will be strongly neglected : base color is blended with texture in 0.5:(0.5-texAlpha) ratio
+void PerPixelLightning_Texture_Player_FRAG(
+	float4 clipPos 	: POSITION, 
+	float2 uv    	: TEXCOORD0,
+	float3 normal    : TEXCOORD1,
+	float3 lightDir0 : TEXCOORD2, 
+	float3 lightDir1 : TEXCOORD3, 
+	float3 lightDir2 : TEXCOORD4, 
+	float3 halfAngle0 : TEXCOORD5, 
+	float3 halfAngle1 : TEXCOORD6, 
+	float3 halfAngle2 : TEXCOORD7,
+	
+	uniform sampler2D image,
+	uniform float4 lightDiffuse0,
+	uniform float4 lightSpecular0,
+	uniform float4 lightDiffuse1,
+	uniform float4 lightSpecular1,
+	uniform float4 lightDiffuse2,
+	uniform float4 lightSpecular2,
+	uniform float shininess,
+	uniform float4 ambient,
+	uniform float4 matAmbient,
+	uniform float4 matDiffuse,
+	uniform float4 matSpecular,
+	uniform float4 playerColor,
+ 
+    out float4 outColor : COLOR ) 
+ { 
+	float4 textColor = tex2D(image, uv);
+	// Texture is blended with base color
+	textColor = lerp(playerColor, textColor, max(0,0.5-textColor.w));
+ 
+     float NdotL = dot(lightDir0, normal);
+     float NdotH = dot(halfAngle0, normal);
+	 
+	 // lit returns (1,diffuse_coeff,specular_coeff,1)
+     float4 lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor = lightDiffuse0 * lightCoeffs.y * matDiffuse + 
+		lightSpecular0 * lightCoeffs.z * matSpecular + 
+		ambient * matAmbient;
+ 
+	 // Repeat for other lights
+     NdotL = dot(lightDir1, normal);
+     NdotH = dot(halfAngle1, normal);
+     lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor += lightDiffuse1 * lightCoeffs.y * matDiffuse + 
+		lightSpecular1 * lightCoeffs.z * matSpecular;
+	 
+     NdotL = dot(lightDir2, normal);
+     NdotH = dot(halfAngle2, normal);
+     lightCoeffs = lit(NdotL,NdotH,shininess);
+     outColor += lightDiffuse2 * lightCoeffs.y * matDiffuse + 
+		lightSpecular2 * lightCoeffs.z * matSpecular;
+		
+	outColor = outColor * textColor;
+	outColor.w = 1.0;
+ }

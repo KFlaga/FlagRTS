@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<SoundPackList>
+	<SoundPack Name="FactionHuman">
+		<Sound Name="TransporterSelect" Pack="FactionHuman" File="click_switch.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="TransporterExplosion" Pack="FactionHuman" File="car_explo.ogg" Ext="Ogg" Player="Revolver" MaxPlays="2"/>
+		<Sound Name="BigGunFire" Pack="FactionHuman" File="tank_fire.ogg" Ext="Ogg" Player="Revolver" MaxPlays="2"/>
+	</SoundPack>
+</SoundPackList>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="MinePackage" family="SceneObject" type="PhysicalObject" final_type="MapDecorator" data="Package">
+
+  <Flags>
+    <IsIndependent value="false"/>
+    <InheritsScale value="false"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <ObjectClasses>
+    <Class name="NoPrespawn"/>
+    <Class name="Package"/>
+  </ObjectClasses>
+
+  <PhysicalObject type="MapDecorator">
+    <Mesh name="Package.mesh" group="HumanFaction"/>
+    <Size x="18" y="8" z="16"/>
+    
+    <Flags>
+      <IsHoverable value="false"/>
+      <IsSelectable value="false"/> 
+    </Flags>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Empty" name="Idle" action="Default"/>
+      </State>
+      <State name="Internal">
+        <Animation type="Skeletal" name="CraneTransport" action="CraneTransport"/>
+        <Animation type="Transform" name="Walk" action="BeltTransport">
+          <KeyFrame length="1000">
+            <Rotation x="1.0" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="0.0" z="40.0"/>
+          </KeyFrame>
+        </Animation>
+      </State>
+    </Animations>
+
+    <MapDecorator>
+
+    </MapDecorator>
+
+    <Pathing>
+      <AddToGraph value="false"/>
+      <PathingGroups>
+      </PathingGroups>
+      <BlockedGroups>
+      </BlockedGroups>
+      <UseFootprint value="false"/>
+    </Pathing>
+
+  </PhysicalObject>
+
+</ObjectDefinition>

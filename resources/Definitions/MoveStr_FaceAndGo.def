@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Move_FaceAndGo" family="MoveStrategy" type="FaceAndGo" final_type="FaceAndGo">
+
+  <MoveHeight value="0"/>
+  <MaxFaceAngle value="3"/> <!-- in degrees -->
+
+</ObjectDefinition>

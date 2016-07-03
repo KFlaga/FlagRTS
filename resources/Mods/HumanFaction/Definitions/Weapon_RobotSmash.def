@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Weapon_RobotSmash" family="Weapon">
+
+  <Icon name="RobotSmashIcon.png"/>
+  <Name locale="false" text="Smash"/> <!-- In game name - not neccessarly same as definition name -->
+  <Type value="Melee"/>
+  <Action value="AttackMelee"/>
+  <AttackTime value="0.5"/>
+  <AttackAngle value="30"/>
+  
+  <Stats
+       range="30"
+       damage="10"
+       count="1"
+       delay="1.6"
+    />
+
+  <Targets value="gbn"/>
+  <OnAttack effect="Effect_InflictDamage"/>
+
+</ObjectDefinition>

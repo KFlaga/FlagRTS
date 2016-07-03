@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Resource">
+   <Resource type="ResourceImageSet" name="ArrowNextIcon">
+    <Group name="States" texture="ArrowLeft.png" size="16 36">
+      <Index name="normal">
+        <Frame point="0 0"/>
+      </Index>
+      <Index name="disabled">
+        <Frame point="16 0"/>
+      </Index>
+      <Index name="highlighted">
+        <Frame point="32 0"/>
+      </Index>
+      <Index name="pushed">
+        <Frame point="48 0"/>
+      </Index>
+    </Group>
+  </Resource>
+  <Resource type="ResourceImageSet" name="ArrowPrevIcon">
+    <Group name="States" texture="ArrowPrev.png" size="16 36">
+      <Index name="normal">
+        <Frame point="0 0"/>
+      </Index>
+      <Index name="disabled">
+        <Frame point="16 0"/>
+      </Index>
+      <Index name="highlighted">
+        <Frame point="32 0"/>
+      </Index>
+      <Index name="pushed">
+        <Frame point="48 0"/>
+      </Index>
+    </Group>
+  </Resource>
+   <Resource type="ResourceImageSet" name="NoCommandIcon">
+    <Group name="States" texture="NoCommandIcon.png" size="64 64">
+      <Index name="normal">
+        <Frame point="0 0"/>
+      </Index>
+      <Index name="disabled">
+        <Frame point="64 0"/>
+      </Index>
+      <Index name="highlighted">
+        <Frame point="128 0"/>
+      </Index>
+      <Index name="pushed">
+        <Frame point="192 0"/>
+      </Index>
+    </Group>
+  </Resource>
+  <Resource type="ResourceImageSet" name="MoveIcon">
+    <Group name="States" texture="MoveIcon.png" size="64 64">
+      <Index name="normal">
+        <Frame point="0 0"/>
+      </Index>
+      <Index name="disabled">
+        <Frame point="64 0"/>
+      </Index>
+      <Index name="highlighted">
+        <Frame point="128 0"/>
+      </Index>
+      <Index name="pushed">
+        <Frame point="192 0"/>
+      </Index>
+    </Group>
+  </Resource>
+  <Resource type="ResourceImageSet" name="AttackIcon">
+    <Group name="States" texture="AttackIcon.png" size="64 64">
+      <Index name="normal">
+        <Frame point="0 0"/>
+      </Index>
+      <Index name="disabled">
+        <Frame point="64 0"/>
+      </Index>
+      <Index name="highlighted">
+        <Frame point="128 0"/>
+      </Index>
+      <Index name="pushed">
+        <Frame point="192 0"/>
+      </Index>
+    </Group>
+  </Resource>
+</MyGUI>

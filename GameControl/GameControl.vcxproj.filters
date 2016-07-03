@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\GameGui">
+      <UniqueIdentifier>{698d0115-5977-4b04-8b13-770b2c19db2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameGui">
+      <UniqueIdentifier>{239d50f6-03c3-45a4-8ae8-cc795c9c1abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Console">
+      <UniqueIdentifier>{598a8291-6cab-48f8-90be-043df3a84979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Console">
+      <UniqueIdentifier>{5dbb259d-89aa-4808-b505-03706d7dbd2c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CameraController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraActionExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HoverController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultHoverContextes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiCommandButtonsPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiHealthBar.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiMainPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiMenuWindow.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiMinimapPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiPerformancePanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiSelectionPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiUnitButton.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiUnitPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiResourcesPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiFunctionalButtonsPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiIFunctionalPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiBuildingPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="TechnologyController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiConstructionButton.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiUnderConstructionPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiIUnitSubPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiUnitStatsSubPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiNotifyPanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiConsole.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiQuickNoticePanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiUnitTrainingSubplanel.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Header Files\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="NumericConsoleParamter.h">
+      <Filter>Header Files\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="BooleanConsoleParamter.h">
+      <Filter>Header Files\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="IConsoleFunction.h">
+      <Filter>Header Files\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="IConsoleParameter.h">
+      <Filter>Header Files\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralConsoleFunctions.h">
+      <Filter>Header Files\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGuiModelViewer.h">
+      <Filter>Header Files\GameGui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HoverController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultHoverContextes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectionController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractionController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathingController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiUnitPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiUnitButton.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiSelectionPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiPerformancePanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiMinimapPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiMenuWindow.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiMainPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiCommandButtonsPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiResourcesPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiFunctionalButtonsPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiConstructionButton.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiBuildingsPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="TechnologyController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiUnderConstructionSubPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiUnitStatsSubPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiNotifyPanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiUnitTrainingSubpanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="IConsoleFunction.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralConsoleFunctions.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiConsolePanel.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGuiModelViewer.cpp">
+      <Filter>Source Files\GameGui</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

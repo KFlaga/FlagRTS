@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="LogisticsCenter" family="SceneObject" type="PhysicalObject" final_type="Unit" data="LogisticsCenter">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="true"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <ObjectClasses>
+    <Class name="Passive"/>
+    <Class name="Building"/> <!-- Unit unable to move  -->
+    <Class name="LogisticsCenter"/>
+  </ObjectClasses>
+
+  <PhysicalObject type="Unit">
+    <Mesh name="LogisticsCenter.mesh" group="HumanFaction"/>
+    <Size x="240" y="110" z="240"/>
+
+    <Flags>
+      <IsHoverable value="true"/>
+      <IsSelectable value="true"/>
+    </Flags>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Empty" name="Idle" action="Default"/>
+        <Animation type="Empty" name="Idle" action="Bored"/>
+      </State>
+      <State name="Internal">
+        <Animation type="Empty" name="OpenDoors" action="OpenDoors"/>
+        <Animation type="Empty" name="CloseDoors" action="CloseDoors"/>
+      </State>
+      <State name="Dying">
+        <Animation type="Empty" name="Idle" action="Default"/>
+      </State>
+    </Animations>
+    
+    <Unit>
+      <Icon name="LogisticsCenterIcon"/> <!-- Icon to be shown on hud -->
+      <GuiName locale="true" loc="UnitName_LogisticsCenter" sec="Game.UnitNames"/>
+      
+      <Flags>
+        <ShowOnMinimap value="true"/> <!-- False for things like animals -->
+      </Flags>
+
+      <Properties>
+      </Properties>
+
+      <Stats>
+        <Life value="1500"/>
+        <MoveSpeed value="0"/> <!-- in map-units per second -->
+        <RotateSpeed value="0"/> <!-- in degreed per second -->
+
+        <Cost>
+          <Time value="8000"/>
+          <Resource name="Metal" value="80" return="false"/>
+          <Resource name="Energy" value="400" return="false"/>
+        </Cost>
+      </Stats>
+
+      <Weapons>
+      </Weapons>
+
+      <Commands>
+      </Commands>
+    
+      <SelectionMarker definition="MMarker_SelectionRectMedium" type="ModelMarker">
+        <Size x="270" y="1" z="270"/>
+        <Position x="0" y="5" z="0"/> 
+      </SelectionMarker>
+    </Unit>
+
+    <Pathing>
+      <AddToGraph value="true"/>
+      <PathingGroups>
+        <Group name="Ground"/>
+        <Group name="Building"/>
+      </PathingGroups>
+      <BlockedGroups>
+        <Group name="Ground"/>
+        <Group name="Naval"/>
+        <Group name="Building"/>
+        <Group name="Missle"/>
+      </BlockedGroups>
+      <UseFootprint value="true"/>
+      <Footprint x="12" y="12">
+        <Row filled="..xxxxxxxx.."/>
+        <Row filled=".xxxxxxxxxx."/>
+        <Row filled="xxxxxxxxxxxx"/>
+        <Row filled="xxxxxxxxxxxx"/>
+        <Row filled="xxxxxxxxxxxx"/>
+        <Row filled="xxxxxxxxxxxx"/>
+        <Row filled="xxxxxxxxxxxx"/>
+        <Row filled="xxxxxxxxxxxx"/>
+        <Row filled="xxxxxxxxxxxx"/>
+        <Row filled="xxxxxxxxxxxx"/>
+        <Row filled=".xxxxxxxxxx."/>
+        <Row filled="..xxxxxxxx.."/>
+      </Footprint>
+    </Pathing>
+
+    <PortraitObject definition="PortraitLogisticsCenter" type="MapDecorator">
+      <Position x="0" y="-3" z="-300"/>
+      <Orientation w="0.924" x="0.383" y="0" z="0"/>
+    </PortraitObject>
+
+    <PlayerColorMaterial name="LCPlayerColor"/>
+    
+  
+  </PhysicalObject>
+
+    <Minimap>
+      <Flags>
+        <RevealedVisible/>
+        <RadarVisible/>
+        <MinimapSelectable/>
+      </Flags>
+      <Size x="200.f" y="200.f"/>
+    </Minimap>
+
+</ObjectDefinition>

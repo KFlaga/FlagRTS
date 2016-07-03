@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="MinimapMarker" family="SceneObject" type="SceneMarker" final_type="BillboardMarker">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="false"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <SceneMarker type="BillboardMarker">
+    <IsInteractable value="false"/>
+    <IsTimed value="false"/>
+    <Timeout value="0"/>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Empty" name="Idle" action="Default">
+        </Animation>
+      </State>
+    </Animations>
+
+    <BillboardMarker>
+      <Material name="MinimapWhiteMat" group="Base"/>
+      <DefaultSize x="1.f" y="1.f"/>
+      <PoolSize value="10"/>
+    </BillboardMarker>
+  </SceneMarker>
+
+  <Events>
+
+  </Events>
+
+</ObjectDefinition>

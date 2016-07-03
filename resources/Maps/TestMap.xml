@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Map name="TestMap">
+  <MinimapImage name="TestMap.png"/>
+  <!-- First info on terrains -->
+  <Terrain>
+    <Tileset name="outdoor" texname="outdoor" count="9" size="256" ext="png"/>
+    <Size x="1" z="1"/> <!-- size in cells ( each cell = 1600 units and 80x80 mini-cells ) -->
+    <BaseHeight value="-500"/>
+    <HeightScale value="1000"/>
+  </Terrain>
+  <!-- Info on global lights -->
+  <GlobalLight>
+    <Ambient r="0,6" g="0,6" b="0,6"/>
+    <Direction x="-1" y="-1" z="-1"/>
+    <ColorDiffuse r="1" g="1" b="1"/>
+    <ColorSpecular r="0,4" g="0,4" b="0,4"/>
+  </GlobalLight>
+  <!-- Info on starting positions and camera -->
+  <!-- Info on placed SceneObjects -->
+  <SceneObjects>
+	<!--
+    <SceneObject name="QuadMech" type="Unit">
+      <Position x="2150" y="0" z="2150"/>
+      <Orientation x="0,0" y="0.0" z="0,0"/>
+      <Owner value="2"/>
+    </SceneObject>
+	-->
+  </SceneObjects>
+  
+  
+</Map>

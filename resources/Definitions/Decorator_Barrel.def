@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="BeerBarrel" family="SceneObject" type="PhysicalObject" final_type="MapDecorator">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="true"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <PhysicalObject type="MapDecorator">
+    <Mesh name="BeerBarrel.mesh" group="Base"/>
+    <Size x="40" y="60" z="40"/>
+    
+    <Flags>
+      <IsHoverable value="false"/>
+      <IsSelectable value="false"/> 
+    </Flags>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Empty" name="Idle" action="Default">
+          
+        </Animation>
+      </State>
+    </Animations>
+
+    <MapDecorator>
+
+    </MapDecorator>
+
+    <Pathing>
+      <Shape value="Circle"/>
+      <PathingGroups>
+        <Group name="Ground"/>
+      </PathingGroups>
+      <BlockedGroups>
+        <Group name="Ground"/>
+        <Group name="Naval"/>
+      </BlockedGroups>
+      <UseFootprint value="true"/>
+      <Footprint x="2" y="2">
+        <Row filled="xx"/>
+        <Row filled="xx"/>
+      </Footprint>
+    </Pathing>
+
+  </PhysicalObject>
+
+  <Events>
+
+  </Events>
+
+</ObjectDefinition>

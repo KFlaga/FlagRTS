@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="InputContext_UnitDefault" family="InputContext">
+
+  <!-- Move context occurs when player clicked move button/hotkey -->
+
+</ObjectDefinition>

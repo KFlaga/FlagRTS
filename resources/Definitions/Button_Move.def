@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Button_Move" family="CommandButton">
+
+  <Icon name="MoveIcon"/>
+  <CommandName locale="true" loc="CommandButtonName_Move" sec="Game.CommandButtons"/> <!-- Actual strings are taken from loc file -->
+  <CommandDesc locale="true" loc="CommandButtonDesc_Move" sec="Game.CommandButtons"/>
+
+  <Flags>
+    <ShowHotkey value="true"/>
+    <ShowEnergy value="false"/>
+    <ShowCooldown value="false"/>
+    <ShowCost value="false"/>
+    <ShowTime value="false"/>
+    <ShowProgress value="false"/>
+  </Flags>
+  
+</ObjectDefinition>

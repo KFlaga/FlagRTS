@@ -1,0 +1,7 @@
+MechaFont
+{
+type truetype
+source Mecha.ttf
+size 16
+resolution 96
+}

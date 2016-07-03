@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Faction name="Human" is_enabled="false">
+
+  <!-- Cursors for use if player plays this faction (if not specified default will be used ) -->
+  <CursorContext name="Faction_Template"/>
+  <!-- Gui layout used when player plays this faction (if not specified default will be used ) -->
+  <GuiLayout name="GameGui_Faction_Template"/>
+  <!-- SoundPack for notices/gui used when player plays this faction  -->
+  <GuiSounds pack="Gui.Faction_Template"/>
+  <NoticeSounds pack="Alerts.Faction_Template"/>
+  
+  <!-- All units that belong to fraction -->
+  <Units>
+    <Unit definition="DefName"/>
+  </Units>
+
+  <!-- Technology tree for this faction -->
+  <Technology>
+    <!-- All buildings that belong to faction ( must br included in Units too ) -->
+    <Buildings>
+      <Building definition="DefName" family="Economy/Military" planner="CustomPlannerName_Or_Empty_For_Default">
+        <Requirements>
+          <Requirement name="Some_Req_Name"/>
+        </Requirements>
+      </Building>
+    </Buildings>
+    
+    <!-- All researches available for faction -->
+    <Researches>
+      
+    </Researches>
+    
+    <!-- All tech requirements of faction -->
+    <TechRequirements>
+	<Requirement name="Some_Req_Name" custom="false" type="HaveAtLeastUnits">
+        <Params 
+		on_true="Available"
+		on_false="Inavailable"
+		unit_name="LogisticsCenter" 
+		count="1"/>
+        <Hint locale="true" loc="Hint_HaveLogisticsCenter" sec="Game.ReqsHints"/>
+      </Requirement>
+    </TechRequirements>
+  </Technology>
+
+</Faction>

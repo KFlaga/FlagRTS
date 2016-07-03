@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinitions>
+  <DefinitionsList type="SceneObject">
+    <Definition name="Mine" type="Unit" file="Unit_Mine.def"/>
+    <Definition name="Transporter" type="Unit" file="Unit_Transporter.def"/>
+    <Definition name="MinePackage" type="MapDecorator" file="Decorator_MinePackage.def"/>
+    <Definition name="Storage" type="Unit" file="Unit_Storage.def"/>
+    <Definition name="PowerPlant" type="Unit" file="Unit_PowerPlant.def"/>
+    <Definition name="Factory" type="Unit" file="Unit_TFactory.def"/>
+	
+    <Definition name="LogisticsCenter" type="Unit" file="Unit_LogisticsCenter.def"/>
+    <Definition name="LCRangeMarker" type="TerrainProjectionMarker" file="TProj_LCRangeMarker.def"/>
+    <Definition name="LCRangeCircle" type="ModelMarker" file="MMarker_LCRangeCircle.def"/>
+	
+    <Definition name="QuadMech" type="Unit" file="Unit_QuadMech.def"/>
+    <Definition name="BigGunBullet" file="Missle_BigGunBullet.def"/>
+    <Definition name="Particles_BGBulletTrack" file="Particles_BGBulletTrack.def"/>
+    <Definition name="Sound_TransporterExplosion" file="Sound_TransporterExplosion.def"/>
+    <Definition name="Sound_BigGunFire" file="Sound_BigGunFire.def"/>
+	
+	 <Definition name="Turret" type="Unit" file="Unit_Turret.def"/>
+    <Definition name="TurretGunBullet" file="Missle_TurretGunBullet.def"/>
+    <Definition name="Sound_TurretGunFire" file="Sound_TurretGunFire.def"/>
+   
+    <Definition name="PortraitTransporter" file="Decorator_PortraitTransporter.def"/>
+    <Definition name="PortraitMine" file="Decorator_PortraitMine.def"/>
+    <Definition name="PortraitQuadMech" file="Decorator_PortraitQuadMech.def"/>
+    <Definition name="PortraitTurret" file="Decorator_PortraitTurret.def"/>
+    <Definition name="PortraitFactory" file="Decorator_PortraitFactory.def"/>
+    <Definition name="PortraitPowerPlant" file="Decorator_PortraitPowerPlant.def"/>
+    <Definition name="PortraitStorage" file="Decorator_PortraitStorage.def"/>
+    <Definition name="PortraitLogisticsCenter" file="Decorator_PortraitLogisticsCenter.def"/>
+  </DefinitionsList>
+   <DefinitionsList type="Weapon">
+    <Definition name="Weapon_RobotSmash" file="Weapon_RobotSmash.def"/>
+    <Definition name="Weapon_BigGun" file="Weapon_BigGun.def"/>
+    <Definition name="Weapon_TurretGun" file="Weapon_TurretGun.def"/>
+  </DefinitionsList>
+  <DefinitionsList type="CommandButton">
+    <Definition name="Button_TrainTransporter" file="Button_TrainTransporter.def"/>
+  </DefinitionsList>
+   <DefinitionsList type="Effect">
+    <Definition name="Effect_InflictDamage" file="Effect_InflictDamage.def"/>
+    <Definition name="Effect_LaunchBigGunBullet" file="Effect_LaunchBigGunBullet.def"/>
+    <Definition name="Effect_BigGunAttack" file="Effect_BigGunAttack.def"/>
+    <Definition name="Effect_LaunchTurretGunBullet" file="Effect_LaunchTurretGunBullet.def"/>
+    <Definition name="Effect_LaunchTurretGunBulletLeft" file="Effect_LaunchTurretGunBulletLeft.def"/>
+    <Definition name="Effect_LaunchTurretGunBulletRight" file="Effect_LaunchTurretGunBulletRight.def"/>
+    <Definition name="Effect_TurretGunAttack" file="Effect_TurretGunAttack.def"/>
+  </DefinitionsList>
+   <DefinitionsList type="Mover">
+    <Definition name="Mover_BigGunBullet" file="Mover_BigGunBullet.def"/>
+    <Definition name="Mover_TurretGunBullet" file="Mover_TurretGunBullet.def"/>
+  </DefinitionsList>
+</ObjectDefinitions>

@@ -1,0 +1,41 @@
+material MapPreviewStartBillboardMat
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			diffuse vertexcolour
+			ambient vertexcolour
+			scene_blend alpha_blend
+			depth_write off
+			texture_unit
+			{
+				texture startloc.png
+				tex_address_mode wrap
+				filtering linear linear none
+			}
+		}
+	}
+}
+
+material MapPreviewHighlightBillboardMat
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			diffuse vertexcolour
+			ambient vertexcolour
+			scene_blend alpha_blend
+			depth_write off
+			texture_unit
+			{
+				texture startlochigh.png
+				tex_address_mode wrap
+				filtering linear linear none
+			}
+		}
+	}
+}

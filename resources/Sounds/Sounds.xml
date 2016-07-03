@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<SoundPackList>
+	<SoundPack Name="Gui">
+		<Sound Name="ButtonClick" Pack="Gui" File="DeepAffirm.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="ButtonClick2" Pack="Gui" File="ButtonAffirm.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="ButtonClickOk" Pack="Gui" File="DeepAffirm.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="ButtonClickCancel" Pack="Gui" File="DeepDeny.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="ButtonHover" Pack="Gui" File="ButtonClickShort.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="Music_0" Pack="Gui" File="Alkowa.ogg" Ext="Ogg" Player="Music"/>
+	</SoundPack>
+	<SoundPack Name="GameDefaults">
+		<Sound Name="Def_OnSelected" Pack="GameDefaults" File="click_switch.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="Def_OnMove" Pack="GameDefaults" File="click_switch.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="Def_OnAttack" Pack="GameDefaults" File="click_switch.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="Def_EnemySpotted" Pack="GameDefaults" File="click_switch.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="Def_Constructed" Pack="GameDefaults" File="click_switch.ogg" Ext="Ogg" Player="Single"/>
+		<Sound Name="Def_Died" Pack="GameDefaults" File="click_switch.ogg" Ext="Ogg" Player="Single"/>
+	</SoundPack>
+</SoundPackList>

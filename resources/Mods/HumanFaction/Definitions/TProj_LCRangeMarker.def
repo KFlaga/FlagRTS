@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="LCRangeMarker" family="SceneObject" type="SceneMarker" final_type="TerrainProjectionMarker">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="false"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <SceneMarker type="TerrainProjectionMarker">
+    <IsInteractable value="false"/>
+    <IsTimed value="false"/>
+    <Timeout value="0"/>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Transform" name="Idle" action="Default">
+          <KeyFrame length="10000">
+            <Rotation x="0.0" y="1.0" z="0.0" a="180.0"/>
+            <Translation x="0.0" y="0.0" z="0.0"/>
+          </KeyFrame>
+        </Animation>
+      </State>
+    </Animations>
+
+    <TerrainProjectionMarker>
+      <Texture name="LCRangeMarkerTexture.png"/>
+      <HalfSize x="600" y="600"/>
+    </TerrainProjectionMarker>
+  </SceneMarker>
+
+</ObjectDefinition>

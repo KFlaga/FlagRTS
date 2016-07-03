@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Effect_LaunchTurretGunBullet" family="Effect" type="LaunchMissleMulti" final_type="LaunchMissleMulti">
+    
+  <Effects>
+    <Effect name="Effect_LaunchTurretGunBulletLeft"/>
+    <Effect name="Effect_LaunchTurretGunBulletRight"/>
+  </Effects>
+
+</ObjectDefinition>

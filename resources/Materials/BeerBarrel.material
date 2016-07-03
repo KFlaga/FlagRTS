@@ -1,0 +1,29 @@
+material BeerBarrel/Wall06
+{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture Wall06.jpg
+                filtering trilinear
+            }
+        }
+    }
+}
+
+material BeerBarrel/Wood01
+{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture Wood01.jpg
+                filtering trilinear
+            }
+        }
+    }
+}

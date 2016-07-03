@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="InputContext_UnitGround" family="InputContext">
+
+  <!-- Input contextes defines action taken when mouse clicking based on hover target -->
+
+  <Type value="Selection"/> <!-- Selection IC applies when units are selected and default commands are to be exectued on left clicks -->
+  
+  <!-- List of commands available in current context -->
+  <Commands count="1">
+    <Command name="Command_MoveBasic" id="0"/>
+  </Commands>
+  
+  <!-- Defines flags/types of hovered physical object -->
+  <HoverContext default_type="0" default_cursor="Default"> <!-- Count of target types -->
+    <Target>
+      <Type name="Terrain" id="0"/>
+      <Cursor name="Default"/>
+      <ObjectType value="None"/>
+    </Target>
+    <Target>
+      <Type name="PassableObject" id="0"/>
+      <Cursor name="Default"/>
+      <ObjectType value="Any"/>
+      <Flags>
+        <IsGroundPassable value="true"/>
+      </Flags>
+    </Target>
+    <Target>
+      <Type name="Invalid" id="1"/>
+      <Cursor name="Default"/>
+      <ObjectType value="Any"/>
+      <Flags>
+        <IsGroundPassable value="false"/>
+      </Flags>
+    </Target>
+    <Target>
+      <Type name="Own" id="2"/>
+      <Cursor name="AllyFollow"/>
+      <ObjectType value="Unit"/>
+      <Flags>
+        <IsOwned value="true"/>
+        <CanGarnizon value="false"/>
+      </Flags>
+    </Target>
+    <Target>
+      <Type value="Ally" id="2"/>
+      <Cursor name="AllyFollow"/>
+      <ObjectType value="Unit"/>
+      <Flags>
+        <IsAlly value="true"/>
+      </Flags>
+    </Target>
+    <Target>
+      <Type value="OwnGarnizon" id="3"/>
+      <Cursor name="Garnizon"/>
+      <ObjectType value="Unit"/>
+      <Flags>
+        <IsOwned value="true"/>
+        <CanGarnizon value="true"/>
+        <HaveGarnizonSpace value="true"/>
+      </Flags>
+    </Target>
+    <Target>
+      <Type value="Neutral" id="4"/>
+      <Cursor name="NeutralAttack"/>
+      <ObjectType value="Unit"/>
+      <Flags>
+        <IsNeutral value="true"/>
+      </Flags>
+    </Target>
+    <Target>
+      <Type value="Enemy" id="5"/>
+      <Cursor name="EnemyAttack"/>
+      <ObjectType value="Unit"/>
+      <Flags>
+        <IsEnemy value="true"/>
+      </Flags>
+    </Target>
+  </HoverContext>
+
+  <!-- map of traget type -> action for right mouse click  -->
+  <RightTargets>
+    <Target id="0"> 
+      <!-- Clicked when hovering over terrain :
+           Execute Move on mouse terrain position  -->
+      <Commands> <!-- Commands will be executed one after another -->
+        <Command id="0" unit="Selected" target="Hover"/>
+      </Commands>
+    </Target>
+    <Target id="1">
+      <!-- Clicked when hovering over impassable terrain ( or obstacle ) 
+           For now do nothing, later maybe sth -->
+      <!--<Acitions>
+        <Action family="SceneObject" type="Spawn">
+          <SceneObject type="Marker" from="Definition">
+            <ObjectDefinition name="InvalidTargetMarker"/>
+          </SceneObject>
+          <Position from="CursorTerrain"/>
+          <Orientation from="wxyz" w="1.0" x="0.0" y="0.0" z="0.0"/>
+          <Owner from="Number" number="0"/>
+        </Action>
+      </Acitions>-->
+    </Target>
+    <Target id="2">
+      <!-- Clicked when hovering over ally unit 
+           Execute follow command ( or aid = copy actions ) -->
+
+    </Target>
+    <Target id="3">
+      <!-- Clicked when hovering over ally unit capable of garnizoning ( or transport ) 
+           Queue Move + Garnizon -->
+
+    </Target>
+    <Target id="4">
+      <!-- Clicked when hovering over neutral unit -->
+
+    </Target>
+    <Target id="5">
+      <!-- Clicked when hovering over enemy unit -->
+
+    </Target>
+  </RightTargets>
+
+</ObjectDefinition>

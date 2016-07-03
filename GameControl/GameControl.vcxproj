@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DllExport|Win32">
+      <Configuration>DllExport</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DllExport|x64">
+      <Configuration>DllExport</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="PFTest|Win32">
+      <Configuration>PFTest</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="PFTest|x64">
+      <Configuration>PFTest</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Tests|Win32">
+      <Configuration>Tests</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Tests|x64">
+      <Configuration>Tests</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0C3DC0DF-23B1-442D-8B05-95CB284710F3}</ProjectGuid>
+    <RootNamespace>GameControl</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tests|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DllExport|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tests|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DllExport|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Tests|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DllExport|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Tests|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DllExport|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+    <TargetName>FlagRTSGameControl_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|Win32'">
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+    <TargetName>ORTSGameControl_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tests|Win32'">
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+    <TargetName>ORTSGameControl_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DllExport|Win32'">
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+    <TargetName>ORTSGameControl_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>ORTSGameControl_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|x64'">
+    <TargetName>ORTSGameControl_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Tests|x64'">
+    <TargetName>ORTSGameControl_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DllExport|x64'">
+    <TargetName>ORTSGameControl_d</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetExt>.lib</TargetExt>
+    <TargetName>FlagRTSGameControl</TargetName>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)PathFinding;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetExt>.lib</TargetExt>
+    <TargetName>ORTSGameControl</TargetName>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)GameCore;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <DisableSpecificWarnings>4221;4006</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>$(SolutionDir)lib\Debug\FlagRTSGameCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4221,4006,4099,4217 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <DisableSpecificWarnings>4221;4006</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\ORTSGameCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4221,4006,4099,4217 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Tests|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <DisableSpecificWarnings>4221;4006</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\ORTSGameCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4221,4006,4099,4217 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DllExport|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <DisableSpecificWarnings>4221;4006</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\ORTSGameCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4221,4006,4099,4217 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\ORTSGameCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4221 /ignore:4006 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\ORTSGameCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4221 /ignore:4006 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Tests|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\ORTSGameCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4221 /ignore:4006 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DllExport|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\ORTSGameCore_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4221 /ignore:4006 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <DisableSpecificWarnings>4221; 4006</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>$(SolutionDir)lib\Release\FlagRTSGameCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4221,4006,4099,4217 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Release\ORTSGameCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="BooleanConsoleParamter.h" />
+    <ClInclude Include="CameraActionExecutor.h" />
+    <ClInclude Include="CameraController.h" />
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="GameGuiConsole.h" />
+    <ClInclude Include="GameGuiConstructionButton.h" />
+    <ClInclude Include="GameGuiModelViewer.h" />
+    <ClInclude Include="GameGuiNotifyPanel.h" />
+    <ClInclude Include="GameGuiQuickNoticePanel.h" />
+    <ClInclude Include="GameGuiUnderConstructionPanel.h" />
+    <ClInclude Include="GameGuiIUnitSubPanel.h" />
+    <ClInclude Include="GameGuiUnitStatsSubPanel.h" />
+    <ClInclude Include="GameGuiUnitTrainingSubplanel.h" />
+    <ClInclude Include="IConsoleFunction.h" />
+    <ClInclude Include="IConsoleParameter.h" />
+    <ClInclude Include="NumericConsoleParamter.h" />
+    <ClInclude Include="GeneralConsoleFunctions.h" />
+    <ClInclude Include="TechnologyController.h" />
+    <ClInclude Include="DefaultHoverContextes.h" />
+    <ClInclude Include="GameController.h" />
+    <ClInclude Include="GameGuiBuildingPanel.h" />
+    <ClInclude Include="GameGuiCommandButtonsPanel.h" />
+    <ClInclude Include="GameGuiFunctionalButtonsPanel.h" />
+    <ClInclude Include="GameGuiHealthBar.h" />
+    <ClInclude Include="GameGuiIFunctionalPanel.h" />
+    <ClInclude Include="GameGuiMainPanel.h" />
+    <ClInclude Include="GameGuiMenuWindow.h" />
+    <ClInclude Include="GameGuiMinimapPanel.h" />
+    <ClInclude Include="GameGuiPerformancePanel.h" />
+    <ClInclude Include="GameGuiResourcesPanel.h" />
+    <ClInclude Include="GameGuiSelectionPanel.h" />
+    <ClInclude Include="GameGuiUnitButton.h" />
+    <ClInclude Include="GameGuiUnitPanel.h" />
+    <ClInclude Include="GuiController.h" />
+    <ClInclude Include="HoverController.h" />
+    <ClInclude Include="InteractionController.h" />
+    <ClInclude Include="PathingController.h" />
+    <ClInclude Include="SelectionController.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="DefaultHoverContextes.cpp" />
+    <ClCompile Include="GameGuiBuildingsPanel.cpp" />
+    <ClCompile Include="GameGuiConsolePanel.cpp" />
+    <ClCompile Include="GameGuiConstructionButton.cpp" />
+    <ClCompile Include="GameGuiFunctionalButtonsPanel.cpp" />
+    <ClCompile Include="GameController.cpp" />
+    <ClCompile Include="GameGuiCommandButtonsPanel.cpp" />
+    <ClCompile Include="GameGuiMainPanel.cpp" />
+    <ClCompile Include="GameGuiMenuWindow.cpp" />
+    <ClCompile Include="GameGuiMinimapPanel.cpp" />
+    <ClCompile Include="GameGuiModelViewer.cpp" />
+    <ClCompile Include="GameGuiNotifyPanel.cpp" />
+    <ClCompile Include="GameGuiPerformancePanel.cpp" />
+    <ClCompile Include="GameGuiResourcesPanel.cpp" />
+    <ClCompile Include="GameGuiSelectionPanel.cpp" />
+    <ClCompile Include="GameGuiUnderConstructionSubPanel.cpp" />
+    <ClCompile Include="GameGuiUnitButton.cpp" />
+    <ClCompile Include="GameGuiUnitPanel.cpp" />
+    <ClCompile Include="GameGuiUnitStatsSubPanel.cpp" />
+    <ClCompile Include="GameGuiUnitTrainingSubpanel.cpp" />
+    <ClCompile Include="GeneralConsoleFunctions.cpp" />
+    <ClCompile Include="GuiController.cpp" />
+    <ClCompile Include="HoverController.cpp" />
+    <ClCompile Include="IConsoleFunction.cpp" />
+    <ClCompile Include="InteractionController.cpp" />
+    <ClCompile Include="PathingController.cpp" />
+    <ClCompile Include="SelectionController.cpp" />
+    <ClCompile Include="TechnologyController.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Storage" family="SceneObject" type="PhysicalObject" final_type="Unit" data="ResourceStorage">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="true"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <ObjectClasses>
+    <Class name="Passive"/> <!-- Unit attacks enemy on sight -->
+    <Class name="Building"/> <!-- Unit unable to move  -->
+    <Class name="ResourceStorage"/> <!-- Unit is Storage (accepts packages) -->
+  </ObjectClasses>
+
+  <PhysicalObject type="Unit">
+    <Mesh name="Storage.mesh"  group="HumanFaction"/>
+    <Size x="120" y="62" z="120"/>
+
+    <Flags>
+      <IsHoverable value="true"/>
+      <IsSelectable value="true"/>
+    </Flags>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Skeletal" name="IdleDoors" action="Default"/>
+        <Animation type="Skeletal" name="IdleDoors" action="Processing"/>
+      </State>
+      <State name="Internal">
+        <Animation type="Skeletal" name="OpenDoors" action="OpenDoors"/>
+        <Animation type="Skeletal" name="CloseDoors" action="CloseDoors"/>
+      </State>
+      <State name="Dying">
+        <Animation type="Empty" name="Idle" action="Default"/>
+      </State>
+    </Animations>
+    
+    <Unit>
+      <Icon name="StorageIcon"/> <!-- Icon to be shown on hud -->
+      <GuiName locale="true" loc="UnitName_Store" sec="Game.UnitNames"/>
+      
+      <Flags>
+        <ShowOnMinimap value="true"/> <!-- False for things like animals -->
+      </Flags>
+
+      <Properties>
+      </Properties>
+
+      <Stats>
+        <Life value="500"/>
+        <MoveSpeed value="0"/> <!-- in map-units per second -->
+        <RotateSpeed value="0"/> <!-- in degreed per second -->
+
+        <Cost>
+          <Time value="8000"/>
+          <Resource name="Metal" value="80" return="false"/>
+          <Resource name="Energy" value="400" return="false"/>
+        </Cost>
+      </Stats>
+
+      <Weapons>
+      </Weapons>
+
+      <Commands>
+      </Commands>
+      
+      <SelectionMarker definition="MMarker_SelectionRectMedium" type="ModelMarker">
+        <Size x="140" y="1" z="140"/>
+        <Position x="0" y="5" z="0"/>
+      </SelectionMarker>
+    </Unit>
+
+    <Pathing>
+      <AddToGraph value="true"/>
+      <PathingGroups>
+        <Group name="Ground"/>
+        <Group name="Building"/>
+      </PathingGroups>
+      <BlockedGroups>
+        <Group name="Ground"/>
+        <Group name="Naval"/>
+        <Group name="Building"/>
+        <Group name="Missle"/>
+      </BlockedGroups>
+      <UseFootprint value="true"/>
+      <Footprint x="6" y="6">
+        <Row filled="xxxxxx"/>
+        <Row filled="xxxxxx"/>
+        <Row filled="xxxxxx"/>
+        <Row filled="xxxxxx"/>
+        <Row filled="xxxxxx"/>
+        <Row filled="..xxxx"/>
+      </Footprint>
+    </Pathing>
+  
+    <PortraitObject definition="PortraitStorage" type="MapDecorator">
+      <Position x="0" y="-3" z="-150"/>
+      <Orientation w="0.924" x="0.383" y="0" z="0"/>
+    </PortraitObject>
+    <PlayerColorMaterial name="StorePlayerColor"/>
+
+  </PhysicalObject>
+
+  <Minimap>
+    <Flags>
+      <RevealedVisible/>
+      <RadarVisible/>
+      <MinimapSelectable/>
+    </Flags>
+    <Size x="80.f" y="65.f"/>
+  </Minimap>
+
+</ObjectDefinition>

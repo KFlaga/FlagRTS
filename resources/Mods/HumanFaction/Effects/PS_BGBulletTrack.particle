@@ -1,0 +1,46 @@
+particle_system PS_BGBulletTrack
+{
+	material Particles/Flare.001
+	particle_width 10.0
+	particle_height 10.0
+	quota 30
+	cull_each false
+	sorted false
+	local_space true
+	iteration_interval 0.0
+	nonvisible_update_timeout 0.0
+	billboard_type point
+	billboard_origin center
+	billboard_rotation_type texcoord
+	point_rendering false
+	accurate_facing false
+
+	emitter Cylinder
+	{
+		position 0.0 0.0 -4.0
+		direction 0.0 0.0 -1.0
+		angle 4
+		width 6
+		height 1
+		depth 6
+		emission_rate 30
+		velocity_min 10
+		velocity_max 20
+		time_to_live_min 0.8
+		time_to_live_max 0.8
+		duration_min 0
+		duration_max 0
+		repeat_delay_min 0
+		repeat_delay_max 0
+		colour_range_start 1 0.666667 0 1
+		colour_range_end 0.545098 0.364706 0 1
+	}
+
+	affector ColourFader
+	{
+		red -0.4
+		green -0.8
+		blue -1.0
+		alpha -0.5
+	}
+}

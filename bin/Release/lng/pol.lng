@@ -1,0 +1,35 @@
+[Gui.MainMenu]
+ButtonStart=Start
+ButtonOptions=Opcje
+ButtonQuit=Koniec
+
+[Gui.MainMenu.Options]
+ButtonAccept=Zastosuj
+ButtonBack=Powrot
+ButtonVideoSettings=Obraz
+ButtonAudioSettings=Dzwiek
+ButtonGameSetttings=Rozgrywka
+ButtonInputSettings=Sterowanie
+
+[Gui.MainMenu.Options.Video]
+LabelRenderer=Silnik Renderowania
+LabelResolution=Rozdzielczosc
+
+[Gui.QuitConfirmDialog]
+DialogText=Potwierdz wyjscie
+ButtonAccept=Wyjdz
+ButtonCancel=Wroc
+
+[Game.UnitNames]
+UnitName_Robot=Robot
+UnitName_QuadMech=Mech Bojowy
+UnitName_Mine=Kopalnia
+UnitName_Transporter=Ciezarowka_Pracownik
+
+[Game.CommandButtons]
+CommandButtonName_Move=Ruch
+CommandButtonDesc_Move=CommandButtonDesc_Move
+CommandButtonName_Attack=Atak
+CommandButtonDesc_Attack=CommandButtonDesc_Attack
+CommandButtonName_TransportPack=Transportuj Surowce
+CommandButtonDesc_TransportPack=CommandButtonDesc_TransportPack

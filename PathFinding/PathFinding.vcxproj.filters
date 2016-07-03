@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\MapRepresentation">
+      <UniqueIdentifier>{66c4cfe3-a649-4080-a370-547eb9cbaf19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PathFinder">
+      <UniqueIdentifier>{65bf06fd-c80c-49cb-ad97-66aff1e9f7ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PathFinder">
+      <UniqueIdentifier>{ec7971a9-7762-45dc-8b99-6bc0d806f7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PotentialFields">
+      <UniqueIdentifier>{bef6528e-d53b-4b6b-adf2-3c89357732e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PotentialFields">
+      <UniqueIdentifier>{3d0ccae0-3a59-4e63-931a-94eb2023f531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ForceBasedPathing">
+      <UniqueIdentifier>{864045a3-dc03-4893-b5ed-07c9ab6a939f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ForceBasedPathing">
+      <UniqueIdentifier>{181965c2-5bdc-4f21-9e06-0120872f4af1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MapRep">
+      <UniqueIdentifier>{b9aa788c-7abf-4f52-811d-8e6b194efd4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DBVH">
+      <UniqueIdentifier>{38957ae9-7657-43e0-9c1e-8a8ac6e903c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IPathFindingAlgorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IDebugReporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingPolygon.h">
+      <Filter>Header Files\MapRepresentation</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingPolygonSet.h">
+      <Filter>Header Files\MapRepresentation</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingPreReqs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingUniformGridPathingMap.h">
+      <Filter>Header Files\MapRepresentation</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingUniformGridObstacle.h">
+      <Filter>Header Files\MapRepresentation</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingIDebugDrawer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingUniformGridAstarFinder.h">
+      <Filter>Header Files\PathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingUniformGridJumpPointFinder.h">
+      <Filter>Header Files\PathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingUniformGridHPAFinder.h">
+      <Filter>Header Files\PathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingAstarNodeQueue.h">
+      <Filter>Header Files\PathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingAstarNode.h">
+      <Filter>Header Files\PathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingJumpNode.h">
+      <Filter>Header Files\PathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingPotentialForce.h">
+      <Filter>Header Files\PotentialFields</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingPotentialMap.h">
+      <Filter>Header Files\PotentialFields</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingPotentialObstacle.h">
+      <Filter>Header Files\PotentialFields</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingIUnitUnitPairer.h">
+      <Filter>Header Files\ForceBasedPathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingBruteUUPairer.h">
+      <Filter>Header Files\ForceBasedPathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingForcesPathFinder.h">
+      <Filter>Header Files\ForceBasedPathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingIPathFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingIPathUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingUnitIgnorePathFinder.h">
+      <Filter>Header Files\PathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingBoundingShapes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingDBVH.h">
+      <Filter>Header Files\DBVH</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingBvhNode.h">
+      <Filter>Header Files\DBVH</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingShapeAdapter.h">
+      <Filter>Header Files\DBVH</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingIShape.h">
+      <Filter>Header Files\DBVH</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingDbvhQueries.h">
+      <Filter>Header Files\DBVH</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingDbvhUnitUnitPairer.h">
+      <Filter>Header Files\ForceBasedPathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingBoundingShapes3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingHeightMapConverter.h">
+      <Filter>Header Files\MapRepresentation</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFindingUniformGridVariedSizeJumpFinder.h">
+      <Filter>Header Files\PathFinder</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PathFindingUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingUniformGridAstarFinder.cpp">
+      <Filter>Source Files\PathFinder</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingUniformGridJumpPointFinder.cpp">
+      <Filter>Source Files\PathFinder</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingPotentialObstacle.cpp">
+      <Filter>Source Files\PotentialFields</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingPotentialUnit.cpp">
+      <Filter>Source Files\PotentialFields</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingPotentialMap.cpp">
+      <Filter>Source Files\PotentialFields</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingPolygon.cpp">
+      <Filter>Source Files\MapRep</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingPolygonMerge.cpp">
+      <Filter>Source Files\MapRep</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingPolygonSet.cpp">
+      <Filter>Source Files\MapRep</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingUniformGridPathingMap.cpp">
+      <Filter>Source Files\MapRep</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingForcesPathFinder.cpp">
+      <Filter>Source Files\ForceBasedPathing</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingUnitIgnorePathFinder.cpp">
+      <Filter>Source Files\PathFinder</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingHeightMapConverter.cpp">
+      <Filter>Source Files\MapRep</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFindingUniformGridVariedSizeJumpFinder.cpp">
+      <Filter>Source Files\PathFinder</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

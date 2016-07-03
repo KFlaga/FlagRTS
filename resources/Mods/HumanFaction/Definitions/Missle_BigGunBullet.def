@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="BigGunBullet" family="SceneObject" type="PhysicalObject" final_type="Missle">
+
+  <Flags>
+    <IsIndependent value="false"/>
+    <InheritsScale value="false"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <ObjectClasses>
+  </ObjectClasses>
+
+  <ChildObjects>
+    <!-- Child objects are created/spawned together when object is spawned and are attached to its node
+     and despawned/destroyed when object is despawned-->
+    <SceneObject type="FXParticles" definition="Particles_BGBulletTrack">
+      <Position x="0" y="0" z="0"/>
+      <Orientation w="1" x="0" y="0" z="0"/>
+    </SceneObject>
+  </ChildObjects>
+
+  <PhysicalObject type="Missle">
+    <Mesh name="BigGunBullet.mesh" group="HumanFaction"/>
+    <Size x="5" y="5" z="10"/>
+    
+    <Flags>
+      <IsHoverable value="false"/>
+      <IsSelectable value="false"/> 
+    </Flags>
+
+    <Animations>
+      <State name="Dying">
+        <Animation type="Transform" name="Walk" action="Default">
+          <KeyFrame length="10">
+            <Rotation x="1.0" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="0.0" z="0.0"/>
+          </KeyFrame>
+        </Animation>
+      </State>
+    </Animations>
+
+    <Missle>
+      <Mover definition="Mover_BigGunBullet"/>
+      <Range value="400"/>
+      <PathType value="Line"/>
+      <CollisionType value="OnObject"/>
+
+      <OnImpact effect="Effect_InflictDamage"/>
+    </Missle>
+
+    <Pathing>
+      <AddToGraph value="false"/> <!-- If true object will be added to pathing graph, so it will be able to move and influence other objects movement -->
+      <Shape value="Box"/>
+      <PathingGroups>
+        <Group name="Missle"/>
+      </PathingGroups>
+      <BlockedGroups>
+      </BlockedGroups>
+      <UseFootprint value="false"/>
+    </Pathing>
+
+  </PhysicalObject>
+</ObjectDefinition>

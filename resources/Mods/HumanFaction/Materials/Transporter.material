@@ -1,0 +1,67 @@
+material TruckTeasers
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 0.660000
+			diffuse 0.424926 0.171384 0.176577 0.660000
+			specular 0.164997 0.327781 0.500000 0.660000 12.500000
+			emissive 0.000000 0.000000 0.000000 0.660000
+			scene_blend alpha_blend
+			depth_write off
+		}
+	}
+}
+material TruckTracks
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.241266 0.423036 0.267233 1.000000
+			specular 0.164997 0.327781 0.500000 1.000000 12.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+		}
+	}
+}
+material TruckWheels
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.100000 0.100000 0.100000 1.000000
+			specular 0.164997 0.327781 0.500000 1.000000 12.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+		}
+	}
+}
+material TruckPlayerColor 
+{ 
+	receive_shadows on
+    technique 
+    {
+        pass 
+        {
+            iteration 1 per_n_lights 3
+ 
+            vertex_program_ref PPL_Simple_VERT
+            { 
+            }   
+ 
+            fragment_program_ref PPL_Simple_Player_FRAG
+            { 
+				param_named matAmbient float4 0.2 0.2 0.2 1.0
+				param_named matDiffuse float4 0.5 0.5 0.5 1.0
+				param_named matSpecular float4 0.3 0.3 0.3 1.0
+				param_named_auto playerColor custom 1
+            } 
+        } 
+    } 
+ }

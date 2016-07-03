@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="MMarker_SelectionSmall" family="SceneObject" type="SceneMarker" final_type="ModelMarker">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="false"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <SceneMarker type="ModelMarker">
+    <IsInteractable value="false"/>
+    <IsTimed value="false"/>
+    <Timeout value="0"/>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Empty" name="Idle" action="Default">
+        </Animation>
+      </State>
+    </Animations>
+
+    <ModelMarker>
+      <Mesh name="SelectionCircleSmall.mesh" group="Base"/>
+      <Size x="50" y="0.5" z="50"/>
+    </ModelMarker>
+  </SceneMarker>
+
+  <Events>
+
+  </Events>
+
+</ObjectDefinition>

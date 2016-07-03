@@ -1,0 +1,59 @@
+[Gui.MainMenu.MainScreen]
+ButtonStart=Start
+ButtonOptions=Options
+ButtonQuit=Quit
+
+[Gui.MainMenu.Options]
+ButtonApply=Accept
+ButtonReturn=Back
+ButtonVideoSettings=Video
+ButtonAudioSettings=Audio
+ButtonGameSetttings=Game
+ButtonInputSettings=Input
+
+[Gui.MainMenu.Options.Video]
+ButtonApply=Accept
+LabelRenderer=Renderer
+LabelResolution=Resolution
+LabelFullscreen=Fullscreen
+LabelVSync=VSync
+LabelFSAA=FSAA
+Text_NeedRestart=Need to restart the game for some changes to take effect
+
+[Gui.MainMenu.QuitConfirmDialog]
+DialogText=Confirm Quit
+ButtonAccept=Confirm
+ButtonCancel=Cancel
+
+[Gui.MainMenu.CreateGameScreen]
+ButtonStart=Start
+ButtonReturn=Return
+LabelMapList=Maps
+LabelMapPreview=Map Preview
+LabelPlayers=Players
+LabelSettings=Game Settings
+LabelGameMode=Game Mode
+LabelStartLocMode=Start Locations
+LabelVisibilityMode=Map Visibility
+LabelResourcesMode=Starting Resources
+
+[Game.UnitNames]
+UnitName_Robot=Robot
+UnitName_QuadMech=Attack Mech
+UnitName_Mine=Mine
+UnitName_Transporter=Worker Truck
+UnitName_Store=Storage
+UnitName_PowerPlant=Power Plant
+UnitName_Factory=Factory
+
+[Game.CommandButtons]
+CommandButtonName_Move=Move
+CommandButtonDesc_Move=Moves unit to given position, not engaging enemies.
+CommandButtonName_Attack=Attack
+CommandButtonDesc_Attack=Attacks enemy unit. Click on ground for attack-move.
+CommandButtonName_TransportPack=Transport Packages
+CommandButtonDesc_TransportPack=Transports packages from mines to rafineries.
+
+[Game.ReqsHints]
+Hint_HavePowerPlant=Have PowerPlant constructed 
+Hint_HaveLogisticsCenter=Have LogisticsCenter constructed

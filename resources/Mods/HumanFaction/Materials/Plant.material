@@ -1,0 +1,53 @@
+material TurbineMat
+{
+	receive_shadows on
+	technique
+	{
+		pass
+		{
+			ambient 0.500000 0.500000 0.500000 1.000000
+			diffuse 0.800000 0.790042 0.419938 1.000000
+			specular 0.500000 0.500000 0.500000 1.000000 12.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+		}
+	}
+}
+
+//material PlantMat
+//{
+//	receive_shadows on
+//	technique
+//	{
+//		pass
+//		{
+//			ambient 0.500000 0.500000 0.500000 1.000000
+//			diffuse 0.401935 0.429941 0.529969 1.000000
+//			specular 0.500000 0.500000 0.500000 1.000000 12.500000
+//			emissive 0.000000 0.000000 0.000000 1.000000
+//		}
+//	}
+//}
+
+material PlantMat 
+{ 
+	receive_shadows on
+    technique 
+    {
+        pass 
+        {
+            iteration 1 per_n_lights 3
+ 
+            vertex_program_ref PPL_Simple_VERT
+            { 
+            }   
+ 
+            fragment_program_ref PPL_Simple_Player_FRAG
+            { 
+				param_named matAmbient float4 0.2 0.2 0.2 1.0
+				param_named matDiffuse float4 0.5 0.5 0.5 1.0
+				param_named matSpecular float4 0.3 0.3 0.3 1.0
+				param_named_auto playerColor custom 1
+            } 
+        } 
+    } 
+ }

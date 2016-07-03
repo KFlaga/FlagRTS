@@ -1,0 +1,14 @@
+material 3LeggedStool/Ash_Red02
+{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture Ash_Red02.jpg
+                filtering trilinear
+            }
+        }
+    }
+}

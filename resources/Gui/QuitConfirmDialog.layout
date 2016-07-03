@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Window" skin="Window" position_real="0.3 0.3 0.4 0.2" layer="Popup" name="DialogWindow">
+        <Property key="Movable" value="false"/>
+	<Property key="Visible" value="false"/>
+        <Widget type="Button" skin="Button" position_real="0.6 0.7 0.35 0.25" name="ButtonAccept">
+		
+	</Widget>
+        <Widget type="Button" skin="Button" position_real="0.05 0.7 0.35 0.25" name="ButtonCancel">
+		
+	</Widget>
+        <Widget type="TextBox" skin="TextBox" position_real="0.0190114 0.0438596 0.969582 0.263158" name="DialogText">
+		<Property key="TextAlign" value="Center"/>
+		
+	</Widget>
+    </Widget>
+</MyGUI>

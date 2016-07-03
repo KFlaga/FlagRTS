@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="robot" family="SceneObject" type="PhysicalObject" final_type="MapDecorator">
+	
+  <Flags>
+		<IsSpawnable value="true"/>
+    <IsIndependent value="true"/>
+    <CanBeVisible value="true"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <PhysicalObject type="MapDecorator">
+    <Entity value="robot.mesh"/>
+    <Scale x="1" y="1" z="1"/>
+
+    <Flags>
+      <UseFootprint value="true"/> <!-- If is stationary then to be placed cells defined by 'footprint' must be cleared -->
+      <Hoverable value="true"/>
+    </Flags>
+
+    <Footprint x="2" y="2" matrix="1 1 1 1"/> <!-- Cells that must be free for object to be palced ( row-major order ) -->
+    
+    <Properties>
+      <HoverContext value="Obstacle"/>
+      <CollisionType value="Ground"/>
+      
+    </Properties>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Skeletal" name="Idle" action="Default" 
+                   interruptable="true" fade_in="false" fade_out="false"/>
+      </State>
+    </Animations>
+
+    <MapDecorator>
+      
+    </MapDecorator>
+    
+  </PhysicalObject>
+
+  <Events>
+    
+  </Events>
+
+</ObjectDefinition>

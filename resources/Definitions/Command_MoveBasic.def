@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Command_MoveBasic" family="Command">
+
+  <!-- Some base types of commands must exists : 
+   move, attack, attack-move, gather, repair, patrol,
+   capture, reclaim, guard, stop, ability.
+   Only think more than type can be to specify hotkeys etc ( actually
+   here not in units ( there can be overrides at most ), couse almost
+   every unit will have same hotkey, button etc )-->
+
+  <!-- Base action from predefined set -->
+  <Base value="Move"/> 
+  <Target type="Point"/> <!-- Type of required target -->
+  
+  <Flags>
+    <IsActive value="true"/>
+    <SelfCast value="false"/> <!-- If true will be cast automaticly on self -->
+    <AllowMinimap value="true"/>
+    <ApplyToGroup value="true"/>
+    <UseCustomContext value="false"/> <!-- If false uses default input context for given base, if true  -->
+  </Flags>
+
+  <UI type="Command">
+    <Hotkey key="m"/>
+    <Button icon="Button_Move.png"/>
+    <ShortName value="Move"/>
+    <Tooltip value="Moves an unit to targeted point"/>
+    <ShowEnergy value="false"/>
+    <ShowCooldown value="false"/>
+  </UI>
+
+  <!-- Set of self-events -->
+  <Events>
+    
+  </Events>
+  
+</ObjectDefinition>

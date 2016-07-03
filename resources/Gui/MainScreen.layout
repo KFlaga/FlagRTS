@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="ImageBox" skin="ImageBox" position_real="0 0 1 1" layer="Main" name="MainPanel">
+	
+	<Widget type="Button" skin="Button" position_real="0.35 0.5 0.29875 0.0983333" name="ButtonQuit">
+		<Property key="Caption" value="KONIEC"/>
+		<UserString key="ClickSoundName" value="ButtonClickCancel"/>
+		<UserString key="ClickSoundPack" value="Gui"/>
+		<UserString key="HoverSoundName" value="ButtonHover"/>
+		<UserString key="HoverSoundPack" value="Gui"/>
+	</Widget>
+	<Widget type="Button" skin="Button" position_real="0.35 0.35 0.29875 0.0983333" name="ButtonOptions">
+		<Property key="Caption" value="OPCJE"/>
+		<UserString key="ClickSoundName" value="ButtonClickOk"/>
+		<UserString key="ClickSoundPack" value="Gui"/>
+		<UserString key="HoverSoundName" value="ButtonHover"/>
+		<UserString key="HoverSoundPack" value="Gui"/>
+	</Widget>
+	<Widget type="Button" skin="Button" position_real="0.35 0.198333 0.29875 0.0983333" name="ButtonStart">
+		<Property key="Caption" value="START"/>
+		<UserString key="ClickSoundName" value="ButtonClickOk"/>
+		<UserString key="ClickSoundPack" value="Gui"/>
+		<UserString key="HoverSoundName" value="ButtonHover"/>
+		<UserString key="HoverSoundPack" value="Gui"/>
+	</Widget>
+    </Widget>
+</MyGUI>

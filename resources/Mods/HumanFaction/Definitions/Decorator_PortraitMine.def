@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="PortraitMine" family="SceneObject" type="PhysicalObject" final_type="MapDecorator">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="true"/>
+  </Flags>
+
+  <ObjectClasses>
+  </ObjectClasses>
+
+  <PhysicalObject type="MapDecorator">
+    <Mesh name="Mine.mesh" group="HumanFaction"/>
+    <Size x="100" y="120" z="200"/>
+
+    <Flags>
+      <IsHoverable value="false"/>
+      <IsSelectable value="false"/>
+    </Flags>
+
+    <MapDecorator>
+
+    </MapDecorator>
+    
+    <Pathing>
+      <AddToGraph value="false"/>
+      <PathingGroups>
+      </PathingGroups>
+      <BlockedGroups>
+      </BlockedGroups>
+      <UseFootprint value="false"/>
+    </Pathing>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Transform" name="Walk" action="Default">
+          <KeyFrame length="2000">
+            <Rotation x="0.0" y="1.0" z="0.0" a="180.0"/>
+            <Translation x="0.0" y="0.0" z="0.0"/>
+          </KeyFrame>
+          <KeyFrame length="2000">
+            <Rotation x="0.0" y="1.0" z="0.0" a="180.0"/>
+            <Translation x="0.0" y="0.0" z="0.0"/>
+          </KeyFrame>
+        </Animation>
+      </State>
+    </Animations>
+
+      <PlayerColorMaterial name="MinePlayerColor"/>
+
+  </PhysicalObject>
+
+  <Events>
+
+  </Events>
+
+</ObjectDefinition>

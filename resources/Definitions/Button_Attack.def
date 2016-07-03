@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Button_Attack" family="CommandButton">
+
+  <Icon name="AttackIcon"/>
+  <CommandName locale="true" loc="CommandButtonName_Attack" sec="Game.CommandButtons"/> <!-- Actual strings are taken from loc file -->
+  <CommandDesc locale="true" loc="CommandButtonDesc_Attack" sec="Game.CommandButtons"/>
+
+  <Flags>
+    <ShowHotkey value="true"/>
+    <ShowEnergy value="false"/>
+    <ShowCooldown value="false"/>
+    <ShowCost value="false"/>
+    <ShowTime value="false"/>
+    <ShowProgress value="false"/>
+  </Flags>
+  
+</ObjectDefinition>

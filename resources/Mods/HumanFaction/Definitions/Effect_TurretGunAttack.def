@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Effect_TurretGunAttack" family="Effect" type="SpawnObject" final_type="SpawnObject">
+
+  <Position x="0" y="0" z="0"/>
+  <Orientation w="1" x="0" y="0" z="0"/>
+  <SpawnPositionType value="Caster"/>
+  <AttachToCaster value="false"/>
+  <SetCastersOwner value="false"/>
+  <Object definition="Sound_TurretGunFire" type="FXSound"/>
+
+</ObjectDefinition>

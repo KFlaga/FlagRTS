@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MyGUI type="Resource">
+
+	<Resource type="CursorContext" name="Faction_Human">
+		<Map>
+			<Item name="Default">Cursor_ArrowGrey</Item>
+			<Item name="Gui">Cursor_ArrowGrey</Item>
+			<Item name="Invalid">Cursor_ArrowBad</Item>
+			<Item name="SelectOwn">Cursor_ArrowGreen</Item>
+			<Item name="SelectAlly">Cursor_ArrowYellow</Item>
+			<Item name="SelectEnemy">Cursor_ArrowRed</Item>
+			<Item name="SelectNeutral">Cursor_ArrowYellow</Item>
+			<Item name="Follow">Cursor_ArrowGreen</Item>
+			<Item name="Attack">Cursor_ArrowRed</Item>
+			<Item name="Neutral">Cursor_ArrowYellow</Item>
+			<Item name="Garnison">Cursor_ArrowBlue</Item>
+			<Item name="TargetDefault">Cursor_TargetWhite</Item>
+			<Item name="TargetNeutral">Cursor_TargetYellow</Item>
+			<Item name="TargetBad">Cursor_TargetWhite</Item>
+			<Item name="TargetFriendly">Cursor_TargetGreen</Item>
+			<Item name="TargetHostile">Cursor_TargetRed</Item>
+			<Item name="Move">Cursor_ArrowWhite</Item>
+			<Item name="CannotMove">Cursor_ArrowBad</Item>
+			<Item name="RallyPoint">Cursor_FlagRed</Item>
+			<Item name="PickUp">Cursor_ArrowBlue</Item>
+			<Item name="Return">Cursor_ArrowBlue</Item>
+			<Item name="Repair">Cursor_Repair</Item>
+			<Item name="Heal">Cursor_Heal</Item>
+		</Map>
+	</Resource>
+
+</MyGUI>

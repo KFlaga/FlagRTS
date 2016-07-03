@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathingConfig>
+  <MapRepresentation name="UniformGrid"> <!--must be UniformGrid-->
+    <DefaultBlockedGroups>
+		<Group value="Naval"/>
+    </DefaultBlockedGroups>
+    <DefaultGroups>
+		<Group value="None"/>
+    </DefaultGroups>
+  </MapRepresentation>
+  <Dbvh>
+	<Pathing shape="Box" MergeBenefit="0.9" RotationBenefit="0.75"/>
+  </Dbvh>
+  <GlobalPathFinder name="JumpPoint"> <!--JumpPoint/VariedSizeJumpPoint-->
+    <PrecomputePathingMap value="true"/> <!--Does nothing-->
+	<HeuristicMultiplier value="1.0"/> <!--must be 1 for jump point-->
+  </GlobalPathFinder>
+  <!--
+  <LocalPathFinder name="Forces">
+    <RepulsionCoeff value="2"/>
+    <AttractionCoeff value="5"/>
+    <RespulsionFalloff value="20"/>
+    <ScaleRepulsionFalloff value="false"/>
+  </LocalPathFinder>
+ -->
+  
+  <LocalPathFinder name="IgnoreUnits"> <!--must be IgnoreUnits-->
+  </LocalPathFinder>
+  
+  <PathGoalTolerance value="10"/> <!--Does nothing??-->
+  <PathGoalToleranceRelative value="false"/> <!--Does nothing??-->
+  
+  <SlopeRules>
+	<Rule>
+		<MaxAngle value="999"/>
+		<MinAngle value="3"/>
+		<Blocks value="Building"/>
+	</Rule>
+	<Rule>
+		<MaxAngle value="999"/>
+		<MinAngle value="60"/>
+		<Blocks value="Ground"/>
+	</Rule>
+  </SlopeRules>
+</PathingConfig>

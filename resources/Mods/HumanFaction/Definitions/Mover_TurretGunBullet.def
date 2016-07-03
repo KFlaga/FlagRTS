@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Mover_TurretGunBullet" family="Mover" type="AcceleratedLine" final_type="AcceleratedLine">
+
+  <MaxVelocity value="800"/>
+  <InitialVelocity value="400"/>
+  <Acceleration value="200"/>
+
+</ObjectDefinition>

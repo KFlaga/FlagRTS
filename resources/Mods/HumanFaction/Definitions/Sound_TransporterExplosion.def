@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Sound_BigGunFire" family="SceneObject" type="FXObject" final_type="FXSound">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="true"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Hidden"/>
+  </Properties>
+
+  <FXObject type="FXSound">
+    <Effect name="TransporterExplosion"/>
+    <Length value="5000"/>
+    <Loop value="false"/>
+    <PlayOnSpawn value="true"/>
+    <DestroyOnEnd value="true"/>
+
+    <FXSound>
+      <Sound name="TransporterExplosion" pack="GameTest"/>
+      <Gain value="1.0"/>
+      <HalfDistance value="500.0"/>
+      <MaxDistance value="1500.0"/>
+      <Rolloff value="10.0"/>
+      <InnerConeAngle value="360.0"/>
+      <OuterConeAngle value="360.0"/>
+      <OuterConeGain value="0.0"/>
+      <Position x="0.0" y="0.0" z="0.0"/>
+      <Orientation x="0.0" y="0.0" z="0.0" w="1.0"/>
+      <IsDirectional value="false"/>
+      <IsSceneSound value="true"/>
+    </FXSound>
+  </FXObject>
+
+</ObjectDefinition>

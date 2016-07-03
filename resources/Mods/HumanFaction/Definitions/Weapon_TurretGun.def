@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Weapon_TurretGun" family="Weapon">
+
+  <Icon name="TurretGunIcon.png"/>
+  <Name locale="false" text="Turret Gun"/>
+  <Type value="Missle"/>
+  <Action value="AttackRanged"/>
+  <AttackTime value="0.1"/>
+  <AttackAngle value="5"/>
+
+
+  <Stats
+       range="400"
+       damage="10"
+       count="1"
+       delay="1.0"
+    />
+
+  <OnAttack effect="Effect_TurretGunAttack"/>
+  <Missle effect="Effect_LaunchTurretGunBullet"/>
+ 
+</ObjectDefinition>

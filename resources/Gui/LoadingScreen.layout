@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="ImageBox" skin="ImageBox" position_real="0 0 1 1" layer="Main" name="MainPanel">
+        <Widget type="TextBox" skin="TextBox" position_real="0.25 0.4 0.5 0.1" name="TextLoading">
+            <Property key="TextColour" value="0.645669 0.935673 0.707974"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="Caption" value="Loading"/>
+            <Property key="InheritsVisible" value="true"/>
+            <Property key="FontHeight" value="55"/>
+            <Property key="TextShadow" value="false"/>
+            <Property key="TextShadowColour" value="0.221504 0.22354 0.74269"/>
+        </Widget>
+        <Widget type="TextBox" skin="TextBox" position_real="0.25 0.55 0.5 0.1" name="TextStatus">
+            <Property key="FontHeight" value="40"/>
+            <Property key="TextColour" value="0.9 0.9 0.9"/>
+            <Property key="InheritsVisible" value="true"/>
+        </Widget>
+    </Widget>
+</MyGUI>

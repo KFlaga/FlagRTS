@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Effect_LaunchBigGunBullet" family="Effect" type="LaunchMissle" final_type="LaunchMissle">
+    
+  <Missle definition="BigGunBullet"/>
+  <MissleHolder>
+    <AllocStrategy resize="AddBaseSize" cooldown="CooldownOnRequest" user_resize="UsersProportionalResize"/>
+    <BaseSize value="1"/>
+    <FreeMissles value="0"/>
+    <Cooldown value="30000"/>
+  </MissleHolder>
+
+  <SpawnOffset x="0" y="35" z="33"/>
+  <TargetOffset x="0" y="0" z="0"/>
+
+</ObjectDefinition>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Map>
+  <!-- File with actual map info (must be in same folder) -->
+  <MapFile value="TestMap.xml"/>
+  <!-- Name of map to show in gui -->
+  <MapName value="Test Map"/>
+  <!-- Size of map, 'value' is shown on map browser, size is used for preview -->
+  <Size value="S" x="2560" y ="2560"/>
+  <!-- Image with map terrain (must be in same folder) -->
+  <PreviewImage value="TestMap.png"/>
+
+  <!-- Max number of players by default -->
+  <Players value="3"/>
+  <!-- List of available starting positions, numbered from 0 -->
+  <!-- Start loc can have an optional name, shown on player panel
+       used i.e. if its assigned to some role on map -->
+  <AvailableStartLocations>
+    <StartLoc id="0" x="500" y="500"/> <!-- 'id' here for compability with mode/player restrictions -->
+    <StartLoc id="1" x="2060" y="500"/>
+    <StartLoc id="2" x="2060" y="2060"/>
+  </AvailableStartLocations>
+  <!-- List of factions available for map -->
+  <AvailableFactions>
+    <Faction name="Human"/>
+  </AvailableFactions>
+  <!-- List of teams available for map -->
+  <!-- TODO Team can have an optional name, shown on player panel
+       used i.e. if its assigned to some role on map -->
+  <AvailableTeams>
+    <Team id="0"/> <!-- 'id' here for compability with mode/player restrictions -->
+    <Team id="1"/>
+    <Team id="2"/>
+  </AvailableTeams>
+  
+  <!-- Default used mode, 'name' is used to choose one from below list, 
+    'display' to show on map browser-->
+  <DefaultMode name="FFA" display="FFA"/>
+  <!-- List of game modes available for this map -->
+  <!-- Each Mode is named as Node -->
+  <!-- If Mode is customisable, then game options may be changed (if not they are not used),
+       some available options may be restricted -->
+  <Modes>
+    <FFA customisable="true" display="FFA">
+      <!-- List of Mods used in this map ( 'Base' is used always ) -->
+      <Mods>
+        <Mod value="HumanFaction"/>
+      </Mods>
+      <!-- Options restrictions for all players -->
+      <!-- Possible restrictions: 
+           - AvailableFactions
+           - AvailableStartLocations
+           - AvailableTeams
+           - AvailableGameSettings  
+           What is not restricted is allowed, based on above entries
+      -->
+      <AvailableFactions>
+        <Faction name="Human"/>
+      </AvailableFactions>
+      <!-- Per-player restrictions -->
+      <Players>
+        <!-- Player with id=0 is on 1st position on player panel -->
+        <!-- Player may be unavailable, then it cannot be opened and do not participate-->
+        <!-- Player may be restricted to be human/ai only -->
+        <Player id="0" available="true" can_be_human="true" can_be_ai="true">
+          <AvailableTeams>
+            <Team id="0"/>
+          </AvailableTeams>
+        </Player>
+        <Player id="1" available="true" can_be_human="true" can_be_ai="true">
+          <AvailableTeams>
+            <Team id="1"/>
+          </AvailableTeams>
+        </Player>
+        <Player id="2" available="true" can_be_human="true" can_be_ai="true">
+          <AvailableTeams>
+            <Team id="2"/>
+          </AvailableTeams>
+        </Player>
+      </Players>
+    </FFA>
+    <TeamMelee customisable="true" display="Team Melee">
+      <Mods>
+        <Mod value="HumanFaction"/>
+      </Mods>
+      <AvailableFactions>
+        <Faction name="Human"/>
+      </AvailableFactions>
+    </TeamMelee>
+    <TestCustom customisable="false" display="Map Defined">
+      <!-- Script file used for this Mode -->
+      <ScriptFile value="TestMap.mtf"/>
+      <Mods>
+        <Mod value="HumanFaction"/>
+      </Mods>
+
+      <Players>
+        <Player id="0" available="true" can_be_human="true" can_be_ai="false">
+          <AvailableFactions>
+            <Faction name="Human"/>
+          </AvailableFactions>
+          <AvailableStartLocations>
+            <StartLocation id="0"/>
+            <StartLocation id="1"/>
+          </AvailableStartLocations>
+          <AvailableTeams>
+            <Team id="0"/>
+          </AvailableTeams>
+        </Player>
+        <Player id="1" available="true" can_be_human="false" can_be_ai="true">
+          <AvailableFactions>
+            <Faction name="Human"/>
+          </AvailableFactions>
+          <AvailableStartLocations>
+            <StartLocation id="1"/>
+            <StartLocation id="2"/>
+          </AvailableStartLocations>
+          <AvailableTeams>
+            <Team id="1"/>
+          </AvailableTeams>
+        </Player>
+        <Player id="2" available="false">
+        </Player>
+      </Players>
+    </TestCustom>
+  </Modes>
+
+</Map>

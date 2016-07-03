@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinitions>
+  <DefinitionsList type="SceneObject">
+    <Definition name="BeerBarrel" type="MapDecorator" file="Decorator_Barrel.def"/>
+    <Definition name="MMarker_SelectionSmall" type="ModelMarker" file="MMarker_SelectionSmall.def"/>
+    <Definition name="MMarker_SelectionRectMedium" type="ModelMarker" file="MMarker_SelectionRectMedium.def"/>
+    <Definition name="MinimapMarker" file="BMarker_MinimapMarker.def"/>
+  </DefinitionsList>
+  <DefinitionsList type="CommandButton">
+    <Definition name="Button_Move" file="Button_Move.def"/>
+    <Definition name="Button_Attack" file="Button_Attack.def"/>
+  </DefinitionsList>
+   <DefinitionsList type="MoveStrategy">
+    <Definition name="Move_FaceAndGo" file="MoveStr_FaceAndGo.def"/>
+    <Definition name="NoMove" file="MoveStr_NoMove.def"/>
+  </DefinitionsList>
+  
+</ObjectDefinitions>

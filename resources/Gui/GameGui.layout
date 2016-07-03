@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+  <Widget type="Widget" skin="PanelEmpty" position="0 0 800 600" name="MainPanel" layer="Main" >
+    <Widget type="ImageBox" skin="ImageBox" position="360 0 440 47" name="ResourcesPanel">
+      <Property key="ImageTexture" value="ResourcesPanel.png"/>
+
+      <Widget type="ImageBox" skin="ImageBox" position="10 15 105 26" name="Resource_0">
+        <Property key="ImageTexture" value="ResourceMetal.png"/>
+        <Property key="NeedToolTip" value="true"/>
+        <Widget type="TextBox" skin="TextBox" position="25 3 75 20" name="ResourceText_0">
+          <Property key="NeedToolTip" value="true"/>
+          <Property key="TextColour" value="1 1 1"/>
+          <Property key="FontHeight" value="16"/>
+          <Property key="TextAlign" value="Right"/>
+        </Widget>
+      </Widget>
+      <Widget type="ImageBox" skin="ImageBox" position="115 15 105 26" name="Resource_1">
+        <Property key="ImageTexture" value="ResourceEnergy.png"/>
+        <Property key="NeedToolTip" value="true"/>
+        <Widget type="TextBox" skin="TextBox" position="25 3 75 20" name="ResourceText_1">
+          <Property key="NeedToolTip" value="true"/>
+          <Property key="TextColour" value="1 1 1"/>
+          <Property key="FontHeight" value="16"/>
+          <Property key="TextAlign" value="Right"/>
+        </Widget>
+      </Widget>
+      <Widget type="ImageBox" skin="ImageBox" position="220 15 105 26" name="Resource_2">
+        <Property key="ImageTexture" value="ResourceCrystal.png"/>
+        <Property key="NeedToolTip" value="true"/>
+        <Widget type="TextBox" skin="TextBox" position="25 3 75 20" name="ResourceText_2">
+          <Property key="NeedToolTip" value="true"/>
+          <Property key="TextColour" value="1 1 1"/>
+          <Property key="FontHeight" value="16"/>
+          <Property key="TextAlign" value="Right"/>
+        </Widget>
+      </Widget>
+      <Widget type="ImageBox" skin="ImageBox" position="325 15 105 26" name="Resource_3">
+        <Property key="ImageTexture" value="ResourceCommand.png"/>
+        <Property key="NeedToolTip" value="true"/>
+        <Widget type="TextBox" skin="TextBox" position="25 3 75 20" name="ResourceText_3">
+          <Property key="NeedToolTip" value="true"/>
+          <Property key="TextColour" value="1 1 1"/>
+          <Property key="FontHeight" value="16"/>
+          <Property key="TextAlign" value="Right"/>
+        </Widget>
+      </Widget>
+    </Widget>
+
+    <Widget type="ImageBox" skin="ImageBox" position="5 350 350 100" name="NotifyPanel">
+
+    </Widget>
+
+    <Widget type="ImageBox" skin="ImageBox" position="0 450 800 150" name="BottomPanel">
+      <Property key="ImageTexture" value="BottomPanel.png"/>
+
+      <Widget type="ImageBox" skin="ImageBox" position="3 31 152 114" name="ButtonsPanel">
+        <Property key="ImageTexture" value="ButtonsPanel.png"/>
+      </Widget>
+      <Widget type="ImageBox" skin="ImageBox" position="7 10 146 20" name="TimerPanel">
+        <Property key="ImageTexture" value="TimerPanel.png"/>
+      </Widget>
+      
+      <Widget type="ImageBox" skin="ImageBox" position="170 48 48 99" name="StrategicPanel">
+        <Property key="ImageTexture" value="StrategicPanel.png"/>
+      </Widget>
+      
+      <Widget type="ImageBox" skin="ImageBox" position="220 43 400 77" name="UnitPanel">
+        <Property key="ImageTexture" value="UnitPanel.png"/>  
+		
+         <Widget type="Widget" skin="PanelEmpty" position="1 1 78 71" name="UP_ModelPanel"/>
+		
+        <Widget type="ImageBox" skin="ImageBox" position="81 1 318 75" name="UnitStatsSubPanel">
+          <Property key="ImageTexture" value="UnitStatsSubPanel.png"/>
+          <Widget type="TextBox" skin="TextBox" position="1 1 157 24" name="UStatsSP_Text_Name">
+            <Property key="TextColour" value="1 1 1"/>
+            <Property key="FontHeight" value="16"/>
+          </Widget>
+          <Widget type="TextBox" skin="TextBox" position="1 26 157 24" name="UStatsSP_Text_Health">
+            <Property key="TextColour" value="1 1 1"/>
+            <Property key="FontHeight" value="16"/>
+          </Widget>
+        </Widget>
+        
+        <Widget type="ImageBox" skin="ImageBox" position="81 1 318 75" name="UnitConstructionSubPanel">
+          <Property key="ImageTexture" value="UnitConstructionSubPanel.png"/>
+          <Widget type="TextBox" skin="TextBox" position="50 1 218 20" name="UConstrusctionSP_Text_Name">
+            <Property key="TextColour" value="1 1 1"/>
+            <Property key="FontHeight" value="16"/>
+          </Widget>
+          <Widget type="TextBox" skin="TextBox" position="50 22 218 35" name="UConstrusctionSP_Text_Progress">
+            <Property key="TextColour" value="1 1 1"/>
+            <Property key="FontHeight" value="16"/>
+          </Widget>
+        </Widget>
+        
+        <Widget type="ImageBox" skin="ImageBox" position="81 1 318 75" name="UnitTrainingSubPanel">
+          <Property key="ImageTexture" value="UnitTrainingSubPanel.png"/>
+		  <Widget type="TextBox" skin="TextBox" position="72 3 238 16" name="UTrainingSSP_Text_Name">
+            <Property key="TextColour" value="1 1 1"/>
+            <Property key="FontHeight" value="14"/>
+          </Widget>
+		  <Widget type="TextBox" skin="TextBox" position="72 16 238 16" name="UTrainingSP_Text_Progress">
+            <Property key="TextColour" value="1 1 1"/>
+            <Property key="FontHeight" value="14"/>
+          </Widget>
+			<Widget type="Button" skin="ButtonImage" position="3 3 65 65" name="UTrainingSP_CurrentUnit">
+				<Property key="Button_ModeImage" value="true"/>
+			</Widget>
+			
+			<Widget type="Button" skin="ButtonImage" position="72 36 32 32" name="UTrainingSP_Queue0">
+				<Property key="Button_ModeImage" value="true"/>
+			</Widget>
+			<Widget type="Button" skin="ButtonImage" position="108 36 32 32" name="UTrainingSP_Queue1">
+				<Property key="Button_ModeImage" value="true"/>
+			</Widget>
+			<Widget type="Button" skin="ButtonImage" position="144 36 32 32" name="UTrainingSP_Queue2">
+				<Property key="Button_ModeImage" value="true"/>
+			</Widget>
+			<Widget type="Button" skin="ButtonImage" position="180 36 32 32" name="UTrainingSP_Queue3">
+				<Property key="Button_ModeImage" value="true"/>
+			</Widget>
+			<Widget type="Button" skin="ButtonImage" position="215 36 32 32" name="UTrainingSP_Queue4">
+				<Property key="Button_ModeImage" value="true"/>
+			</Widget>
+			
+        </Widget>
+		
+      </Widget>
+      
+      <Widget type="ImageBox" skin="ImageBox" position="220 43 400 77" name="SelectionPanel">
+        <Property key="ImageTexture" value="SelectionPanel.png"/>
+        <Widget type="Button" skin="ImageButton" position="383 1 15 38" name="SelectP_Next">
+          <Property key="Button_ImageResource" value="ArrowNextIcon"/>
+          <Property key="Button_ModeImage" value="true"/>
+        </Widget>
+        <Widget type="Button" skin="ImageButton" position="25 39 15 38" name="SelectP_Prev">
+          <Property key="Button_ImageResource" value="ArrowPrevIcon"/>
+          <Property key="Button_ModeImage" value="true"/>
+        </Widget>
+      </Widget>
+      <Widget type="ImageBox" skin="ImageBox" position="220 43 400 77" name="BuildingsPanel">
+        <Property key="ImageTexture" value="BuildingsPanel.png"/>
+        <Widget type="Button" skin="ImageButton" position="25 1 15 36" name="BuildP_PrevEco">
+          <Property key="Button_ImageResource" value="ArrowPrevIcon"/>
+          <Property key="Button_ModeImage" value="true"/>
+        </Widget>
+        <Widget type="Button" skin="ImageButton" position="383 1 15 36" name="BuildP_NextEco">
+          <Property key="Button_ImageResource" value="ArrowNextIcon"/>
+          <Property key="Button_ModeImage" value="true"/>
+        </Widget>
+        <Widget type="Button" skin="ImageButton" position="25 40 15 36" name="BuildP_PrevMilit">
+          <Property key="Button_ImageResource" value="ArrowPrevIcon"/>
+          <Property key="Button_ModeImage" value="true"/>
+        </Widget>
+        <Widget type="Button" skin="ImageButton" position="383 40 15 36" name="BuildP_NextMilit">
+          <Property key="Button_ImageResource" value="ArrowNextIcon"/>
+          <Property key="Button_ModeImage" value="true"/>
+        </Widget>
+      </Widget>
+
+      <Widget type="ImageBox" skin="ImageBox" position="220 122 400 23" name="FunctionalPanel">
+        <Property key="ImageTexture" value="FunctionalPanel.png"/>
+        <Widget type="Button" skin="Button" position="1 1 98 21" name="FunP_SelectionButton">
+          <Property key="Caption" value="Selection"/>
+          <Property key="TextColour" value="0 0 0"/>
+          <Property key="FontHeight" value="16"/>
+          <Property key="TextAlign" value="Center"/>
+		  <UserString key="ClickSound" value="ButtonClick2"/>
+        </Widget>
+        <Widget type="Button" skin="Button" position="101 1 98 21" name="FunP_BuildingsButton">
+          <Property key="Caption" value="Buildings"/>
+          <Property key="TextColour" value="0 0 0"/>
+          <Property key="FontHeight" value="16"/>
+          <Property key="TextAlign" value="Center"/>
+		  <UserString key="ClickSound" value="ButtonClick2"/>
+        </Widget>
+      </Widget>
+      <Widget type="ImageBox" skin="ImageBox" position="627 46 170 100" name="MinimapPanel">
+        <Property key="ImageTexture" value="MinimapPanel.png"/>
+		<Widget type="ImageBox" skin="ImageBox" position="50 5 90 90" name="MinimapPanel_Map"/>
+      </Widget>
+
+    </Widget>
+
+  </Widget>
+</MyGUI>

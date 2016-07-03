@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Faction name="Human" is_enabled="true">
+
+  <!-- Cursors for use if player plays this faction (if not specified default will be used ) -->
+  <!-- <CursorContext name="Faction_Human"/> -->
+  <!-- Gui layout used when player plays this faction (if not specified default will be used ) -->
+  <!-- <GuiLayout name="GameGui_Faction_Human"/> -->
+  <!-- SoundPack for notices/gui used when player plays this faction  -->
+  <!-- <GuiSounds pack="Gui.Faction_Human"/> -->
+  <!-- <NoticeSounds pack="Alerts.Faction_Human"/> -->
+  
+  <!-- All units that belong to fraction -->
+  <Units>
+    <Unit definition="QuadMech"/>
+    <Unit definition="Transporter"/>
+    <Unit definition="PowerPlant"/>
+    <Unit definition="Mine"/>
+    <Unit definition="Storage"/>
+    <Unit definition="QuadMech"/>
+    <Unit definition="Factory"/>
+    <Unit definition="LogisticsCenter"/>
+    <Unit definition="Turret"/>
+  </Units>
+
+  <!-- Technology tree for this faction -->
+  <Technology>
+    <!-- All buildings that belong to faction ( must be included in Units too ) -->
+    <Buildings>
+      <Building definition="LogisticsCenter" family="Economy">
+        <Requirements>
+        </Requirements>
+      </Building>
+	  
+      <Building definition="PowerPlant" family="Economy" planner="LCInRange"> 
+        <Requirements>
+          <Requirement name="PlayerHaveLogisticsCenter"/>
+        </Requirements>
+      </Building>
+
+      <Building definition="Storage" family="Economy" planner="LCInRange">
+        <Requirements>
+          <Requirement name="PlayerHaveLogisticsCenter"/>
+        </Requirements>
+      </Building>
+
+      <Building definition="Mine"  family="Economy">
+        <Requirements>
+          <Requirement name="PlayerHavePowerPlant"/>
+        </Requirements>
+      </Building>
+	  
+	   <Building definition="Factory"  family="Military" planner="LCInRange">
+        <Requirements>
+          <Requirement name="PlayerHavePowerPlant"/>
+          <Requirement name="PlayerHaveLogisticsCenter"/>
+        </Requirements>
+      </Building>
+	  
+      <Building definition="Turret" family="Military" planner="LCInRange">
+        <Requirements>
+          <Requirement name="PlayerHaveLogisticsCenter"/>
+          <Requirement name="PlayerHaveFactory"/>
+        </Requirements>
+      </Building>
+    </Buildings>
+    
+    <!-- All researches available for faction -->
+    <Researches>
+      
+    </Researches>
+    
+    <!-- All tech requirements of faction -->
+    <TechRequirements>
+	<Requirement name="PlayerHaveLogisticsCenter" custom="false" type="HaveAtLeastUnits">
+        <Params on_true="Available" on_false="Inavailable" unit_name="LogisticsCenter" count="1"/>
+        <Hint locale="true" loc="Hint_HaveLogisticsCenter" sec="Game.ReqsHints"/>
+      </Requirement>
+      <Requirement name="PlayerHavePowerPlant" custom="false" type="HaveAtLeastUnits">
+        <Params on_true="Available" on_false="Inavailable" unit_name="PowerPlant" count="1"/>
+        <Hint locale="true" loc="Hint_HavePowerPlant" sec="Game.ReqsHints"/>
+      </Requirement>
+      <Requirement name="PlayerHaveFactory" custom="false" type="HaveAtLeastUnits">
+        <Params on_true="Available" on_false="Inavailable" unit_name="Factory" count="1"/>
+        <Hint locale="true" loc="Hint_HavePowerFactory" sec="Game.ReqsHints"/>
+      </Requirement>
+    </TechRequirements>
+  </Technology>
+
+</Faction>

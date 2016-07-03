@@ -1,0 +1,507 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="ImageBox" skin="ImageBox" position="0 0 800 600" name="MainPanel" layer="Main">
+        <Property key="Alpha" value="1"/>
+        <Widget type="Button" skin="Button" position="650 555 140 38" name="ButtonReturn">
+            <Property key="Caption" value="Return"/>
+            <Property key="InheritsAlpha" value="false"/>
+            <Property key="FontHeight" value="18"/>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="25 10 300 30" name="LabelMaps">
+            <Property key="Caption" value="Choose Map"/>
+            <Property key="FontHeight" value="16"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="ReadOnly" value="true"/>
+            <Property key="Static" value="true"/>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="340 10 204 30" name="LabelPreview">
+            <Property key="FontHeight" value="16"/>
+            <Property key="Caption" value="Preview"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="ReadOnly" value="true"/>
+            <Property key="Static" value="true"/>
+        </Widget>
+        <Widget type="Button" skin="Button" position="500 554 138 38" name="ButtonStart">
+            <Property key="Caption" value="Start"/>
+            <Property key="FontHeight" value="18"/>
+        </Widget>
+        <Widget type="ImageBox" skin="ImageBox" position="340 50 200 200" name="ImageMapPreview"/>
+        <Widget type="ListBox" skin="ListBox" position="25 45 300 210" name="ListMaps"/>
+        <Widget type="EditBox" skin="EditBox" position="20 260 520 30" name="LabelPlayers">
+            <Property key="Caption" value="Players"/>
+            <Property key="FontHeight" value="16"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="ReadOnly" value="true"/>
+            <Property key="Static" value="true"/>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="550 145 240 30" name="LabelSettings">
+            <Property key="Caption" value="Game Settings"/>
+            <Property key="FontHeight" value="16"/>
+            <Property key="ReadOnly" value="true"/>
+            <Property key="Static" value="true"/>
+            <Property key="TextAlign" value="Center"/>
+        </Widget>
+        <Widget type="Widget" skin="PanelEmpty" position="550 175 240 370" name="PanelSettings">
+            <Widget type="EditBox" skin="EditBox" position="10 5 225 25" name="LabelGameMode">
+                <Property key="ReadOnly" value="true"/>
+                <Property key="Static" value="true"/>
+                <Property key="Caption" value="Game Mode"/>
+                <Property key="FontHeight" value="16"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="ComboBox" skin="ComboBox" position="10 30 225 30" name="ComboGameMode">
+                <Property key="Caption" value="MODES"/>
+                <Property key="FontHeight" value="16"/>
+                <Property key="ReadOnly" value="true"/>
+                <Property key="Static" value="true"/>
+            </Widget>
+            <Widget type="EditBox" skin="EditBox" position="10 65 225 25" name="LabelStartLocationsMode">
+                <Property key="Caption" value="Starting Locations"/>
+                <Property key="FontHeight" value="16"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="Static" value="true"/>
+                <Property key="ReadOnly" value="true"/>
+            </Widget>
+            <Widget type="ComboBox" skin="ComboBox" position="10 90 225 30" name="ComboStartingLocationsMode">
+                <Property key="Caption" value="MODES"/>
+                <Property key="FontHeight" value="16"/>
+                <Property key="Static" value="true"/>
+                <Property key="ReadOnly" value="true"/>
+            </Widget>
+            <Widget type="EditBox" skin="EditBox" position="10 125 225 25" name="LabelVisibilityMode">
+                <Property key="Caption" value="Visibility"/>
+                <Property key="FontHeight" value="16"/>
+                <Property key="TextAlign" value="Center"/>
+                <Property key="Static" value="true"/>
+                <Property key="ReadOnly" value="true"/>
+            </Widget>
+            <Widget type="ComboBox" skin="ComboBox" position="10 150 225 30" name="ComboVisibilityMode">
+                <Property key="Caption" value="MODES"/>
+                <Property key="FontHeight" value="16"/>
+                <Property key="Static" value="true"/>
+                <Property key="ReadOnly" value="true"/>
+            </Widget>
+            <Widget type="EditBox" skin="EditBox" position="10 185 225 25" name="LabelResourcesMode">
+                <Property key="Caption" value="Starting Resources"/>
+                <Property key="FontHeight" value="16"/>
+                <Property key="Static" value="true"/>
+                <Property key="ReadOnly" value="true"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="ComboBox" skin="ComboBox" position="10 210 225 30" name="ComboResourcesMode">
+                <Property key="Caption" value="MODES"/>
+                <Property key="FontHeight" value="16"/>
+                <Property key="Static" value="true"/>
+                <Property key="ReadOnly" value="true"/>
+            </Widget>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="560 10 230 30" name="LabelUsedMods">
+            <Property key="Caption" value="Mods Used In Map"/>
+            <Property key="FontHeight" value="16"/>
+            <Property key="TextAlign" value="Center"/>
+        </Widget>
+        <Widget type="ListBox" skin="ListBox" position="560 44 230 90" name="ListUsedMods"/>
+		
+        <Widget type="Widget" skin="PanelEmpty" position="24 290 516 256" name="PanelPlayers">
+            <Widget type="Widget" skin="PanelEmpty" position="0 0 515 32" name="PanelPlayer0">
+                <Widget type="ComboBox" skin="ComboBox" position="0 2 128 28" name="ComboSlot_Player0">
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="Caption" value="Slot_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                </Widget>
+                <Widget type="Button" skin="CheckBox" position="425 5 80 20" name="CheckReady_Player0">
+                    <Property key="Caption" value="Ready?"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="false"/>
+                </Widget>
+                <Widget type="Button" skin="WhiteSkin" position="130 2 28 28" name="Color_Player0">
+                    <Property key="Colour" value="0.0656296 0 0.988304"/>
+                </Widget>
+                <Widget type="ComboBox" skin="ComboBox" position="160 2 128 28" name="ComboFaction_Player0">
+                    <Property key="Caption" value="Faction_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="290 2 65 28" name="ButtonTeam_Player0">
+                    <Property key="Caption" value="Team:"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="FontHeight" value="16"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="329 1 30 28" name="LabelTeam_Player0">
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="355 2 65 28" name="ButtonStartLoc_Player0">
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="Caption" value="Start:"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="395 1 25 28" name="LabelStartLoc_Player0">
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                </Widget>
+            </Widget>
+			
+            <Widget type="Widget" skin="PanelEmpty" position="0 32 515 32" name="PanelPlayer1">
+                <Widget type="ComboBox" skin="ComboBox" position="0 2 128 28" name="ComboSlot_Player1">
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="Caption" value="Slot_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                </Widget>
+                <Widget type="Button" skin="CheckBox" position="425 5 80 20" name="CheckReady_Player1">
+                    <Property key="Caption" value="Ready?"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="false"/>
+                </Widget>
+                <Widget type="Button" skin="WhiteSkin" position="130 2 28 28" name="Color_Player1">
+                    <Property key="Colour" value="0.0656296 0 0.988304"/>
+                </Widget>
+                <Widget type="ComboBox" skin="ComboBox" position="160 2 128 28" name="ComboFaction_Player1">
+                    <Property key="Caption" value="Faction_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="290 2 65 28" name="ButtonTeam_Player1">
+                    <Property key="Caption" value="Team:"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="FontHeight" value="16"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="329 1 30 28" name="LabelTeam_Player1">
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="355 2 65 28" name="ButtonStartLoc_Player1">
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="Caption" value="Start:"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="395 1 25 28" name="LabelStartLoc_Player1">
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                </Widget>
+            </Widget>
+			
+            <Widget type="Widget" skin="PanelEmpty" position="0 64 515 32" name="PanelPlayer2">
+                <Widget type="ComboBox" skin="ComboBox" position="0 2 128 28" name="ComboSlot_Player2">
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="Caption" value="Slot_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                </Widget>
+                <Widget type="Button" skin="CheckBox" position="425 5 80 20" name="CheckReady_Player2">
+                    <Property key="Caption" value="Ready?"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="false"/>
+                </Widget>
+                <Widget type="Button" skin="WhiteSkin" position="130 2 28 28" name="Color_Player2">
+                    <Property key="Colour" value="0.0656296 0 0.988304"/>
+                </Widget>
+                <Widget type="ComboBox" skin="ComboBox" position="160 2 128 28" name="ComboFaction_Player2">
+                    <Property key="Caption" value="Faction_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="290 2 65 28" name="ButtonTeam_Player2">
+                    <Property key="Caption" value="Team:"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="FontHeight" value="16"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="329 1 30 28" name="LabelTeam_Player2">
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="355 2 65 28" name="ButtonStartLoc_Player2">
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="Caption" value="Start:"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="395 1 25 28" name="LabelStartLoc_Player2">
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                </Widget>
+            </Widget>
+			
+            <Widget type="Widget" skin="PanelEmpty" position="0 96 515 32" name="PanelPlayer3">
+                <Widget type="ComboBox" skin="ComboBox" position="0 2 128 28" name="ComboSlot_Player3">
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="Caption" value="Slot_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                </Widget>
+                <Widget type="Button" skin="CheckBox" position="425 5 80 20" name="CheckReady_Player3">
+                    <Property key="Caption" value="Ready?"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="false"/>
+                </Widget>
+                <Widget type="Button" skin="WhiteSkin" position="130 2 28 28" name="Color_Player3">
+                    <Property key="Colour" value="0.0656296 0 0.988304"/>
+                </Widget>
+                <Widget type="ComboBox" skin="ComboBox" position="160 2 128 28" name="ComboFaction_Player3">
+                    <Property key="Caption" value="Faction_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="290 2 65 28" name="ButtonTeam_Player3">
+                    <Property key="Caption" value="Team:"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="FontHeight" value="16"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="329 1 30 28" name="LabelTeam_Player3">
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="355 2 65 28" name="ButtonStartLoc_Player3">
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="Caption" value="Start:"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="395 1 25 28" name="LabelStartLoc_Player3">
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                </Widget>
+            </Widget>
+			
+            <Widget type="Widget" skin="PanelEmpty" position="0 128 515 32" name="PanelPlayer4">
+                <Widget type="ComboBox" skin="ComboBox" position="0 2 128 28" name="ComboSlot_Player4">
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="Caption" value="Slot_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                </Widget>
+                <Widget type="Button" skin="CheckBox" position="425 5 80 20" name="CheckReady_Player4">
+                    <Property key="Caption" value="Ready?"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="false"/>
+                </Widget>
+                <Widget type="Button" skin="WhiteSkin" position="130 2 28 28" name="Color_Player4">
+                    <Property key="Colour" value="0.0656296 0 0.988304"/>
+                </Widget>
+                <Widget type="ComboBox" skin="ComboBox" position="160 2 128 28" name="ComboFaction_Player4">
+                    <Property key="Caption" value="Faction_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="290 2 65 28" name="ButtonTeam_Player4">
+                    <Property key="Caption" value="Team:"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="FontHeight" value="16"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="329 1 30 28" name="LabelTeam_Player4">
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="355 2 65 28" name="ButtonStartLoc_Player4">
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="Caption" value="Start:"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="395 1 25 28" name="LabelStartLoc_Player4">
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                </Widget>
+            </Widget>
+			
+            <Widget type="Widget" skin="PanelEmpty" position="0 160 515 32" name="PanelPlayer5">
+                <Widget type="ComboBox" skin="ComboBox" position="0 2 128 28" name="ComboSlot_Player5">
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="Caption" value="Slot_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                </Widget>
+                <Widget type="Button" skin="CheckBox" position="425 5 80 20" name="CheckReady_Player5">
+                    <Property key="Caption" value="Ready?"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="false"/>
+                </Widget>
+                <Widget type="Button" skin="WhiteSkin" position="130 2 28 28" name="Color_Player5">
+                    <Property key="Colour" value="0.0656296 0 0.988304"/>
+                </Widget>
+                <Widget type="ComboBox" skin="ComboBox" position="160 2 128 28" name="ComboFaction_Player5">
+                    <Property key="Caption" value="Faction_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="290 2 65 28" name="ButtonTeam_Player5">
+                    <Property key="Caption" value="Team:"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="FontHeight" value="16"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="329 1 30 28" name="LabelTeam_Player5">
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="355 2 65 28" name="ButtonStartLoc_Player5">
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="Caption" value="Start:"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="395 1 25 28" name="LabelStartLoc_Player5">
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                </Widget>
+            </Widget>
+			
+            <Widget type="Widget" skin="PanelEmpty" position="0 192 515 32" name="PanelPlayer6">
+                <Widget type="ComboBox" skin="ComboBox" position="0 2 128 28" name="ComboSlot_Player6">
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="Caption" value="Slot_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                </Widget>
+                <Widget type="Button" skin="CheckBox" position="425 5 80 20" name="CheckReady_Player6">
+                    <Property key="Caption" value="Ready?"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="false"/>
+                </Widget>
+                <Widget type="Button" skin="WhiteSkin" position="130 2 28 28" name="Color_Player6">
+                    <Property key="Colour" value="0.0656296 0 0.988304"/>
+                </Widget>
+                <Widget type="ComboBox" skin="ComboBox" position="160 2 128 28" name="ComboFaction_Player6">
+                    <Property key="Caption" value="Faction_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="290 2 65 28" name="ButtonTeam_Player6">
+                    <Property key="Caption" value="Team:"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="FontHeight" value="16"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="329 1 30 28" name="LabelTeam_Player6">
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="355 2 65 28" name="ButtonStartLoc_Player6">
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="Caption" value="Start:"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="395 1 25 28" name="LabelStartLoc_Player6">
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                </Widget>
+            </Widget>
+			
+            <Widget type="Widget" skin="PanelEmpty" position="0 224 515 32" name="PanelPlayer7">
+                <Widget type="ComboBox" skin="ComboBox" position="0 2 128 28" name="ComboSlot_Player7">
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="Caption" value="Slot_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                </Widget>
+                <Widget type="Button" skin="CheckBox" position="425 5 80 20" name="CheckReady_Player7">
+                    <Property key="Caption" value="Ready?"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="false"/>
+                </Widget>
+                <Widget type="Button" skin="WhiteSkin" position="130 2 28 28" name="Color_Player7">
+                    <Property key="Colour" value="0.0656296 0 0.988304"/>
+                </Widget>
+                <Widget type="ComboBox" skin="ComboBox" position="160 2 128 28" name="ComboFaction_Player7">
+                    <Property key="Caption" value="Faction_0"/>
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Static" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="290 2 65 28" name="ButtonTeam_Player7">
+                    <Property key="Caption" value="Team:"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="FontHeight" value="16"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="329 1 30 28" name="LabelTeam_Player7">
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                </Widget>
+                <Widget type="Button" skin="Button" position="355 2 65 28" name="ButtonStartLoc_Player7">
+                    <Property key="FontHeight" value="16"/>
+                    <Property key="TextAlign" value="Left VCenter"/>
+                    <Property key="Caption" value="Start:"/>
+                </Widget>
+                <Widget type="EditBox" skin="EditBoxEmpty" position="395 1 25 28" name="LabelStartLoc_Player7">
+                    <Property key="Static" value="true"/>
+                    <Property key="ReadOnly" value="true"/>
+                    <Property key="Caption" value="0"/>
+                    <Property key="FontHeight" value="18"/>
+                    <Property key="TextAlign" value="Center"/>
+                </Widget>
+            </Widget>
+        </Widget>
+    </Widget>
+</MyGUI>

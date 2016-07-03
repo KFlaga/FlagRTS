@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\LogisticsCenter">
+      <UniqueIdentifier>{1fbcfbad-112d-407b-96b9-459bb9b1ed6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MetalMine">
+      <UniqueIdentifier>{ce44d260-6702-44a2-8c2a-0790580aa404}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LogisticsCenter">
+      <UniqueIdentifier>{827304db-ca4d-4777-96e1-3f3ad0c7c9cf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TransporterOrders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransporterStates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PackageStates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransporterData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PackageClassSuppliers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransporterClassSuppliers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceStoreStates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceStoreOrders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceStoreSuppliers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceStoreData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PackageData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EcoResources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerPlantStates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerPlantData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerPlantSuppliers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FactoryOrders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FactoryStates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FactoryData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FactoryClassSuppliers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LogisticsCenterStates.h">
+      <Filter>Header Files\LogisticsCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="LogisticsCenterOrders.h">
+      <Filter>Header Files\LogisticsCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="LogisticsCenterData.h">
+      <Filter>Header Files\LogisticsCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="LogisticsCenterClassSuppliers.h">
+      <Filter>Header Files\LogisticsCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="LogisticsCenterExtensionPlanner.h">
+      <Filter>Header Files\LogisticsCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="MetalMineData.h">
+      <Filter>Header Files\MetalMine</Filter>
+    </ClInclude>
+    <ClInclude Include="MetalMineClassSuppliers.h">
+      <Filter>Header Files\MetalMine</Filter>
+    </ClInclude>
+    <ClInclude Include="MetalMineOrders.h">
+      <Filter>Header Files\MetalMine</Filter>
+    </ClInclude>
+    <ClInclude Include="MetalMineStates.h">
+      <Filter>Header Files\MetalMine</Filter>
+    </ClInclude>
+    <ClInclude Include="MetalMinePlanner.h">
+      <Filter>Header Files\MetalMine</Filter>
+    </ClInclude>
+    <ClInclude Include="LogisticsCenterInRangePlanner.h">
+      <Filter>Header Files\LogisticsCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="FactionHumanPlugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TransporterOrders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MetalMineOrders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransporterStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MetalMineStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PackageStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MetalMineSuppliers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransporterSuppliers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PackageSuppliers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectsData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceStoreStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RsourceStoreOrders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceStoreSuppliers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EcoResources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerPlantSupplier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerPlantStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FactoryStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FactoryOrders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FactorySuppliers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LogisticsCenterInRangePlanner.cpp">
+      <Filter>Source Files\LogisticsCenter</Filter>
+    </ClCompile>
+    <ClCompile Include="LogisticsCenterSupplier.cpp">
+      <Filter>Source Files\LogisticsCenter</Filter>
+    </ClCompile>
+    <ClCompile Include="FactionHumanPlugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

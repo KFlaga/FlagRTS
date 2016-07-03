@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MyGUI type="Resource" version="3.2">
+	<Resource type="CursorImageWin32" name="Cursor_Default">
+		<Property key="SourceFile">Cursor_Normal_Default.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_Hand">
+		<Property key="SourceFile">normalnie.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_DarkHand">
+		<Property key="SourceFile">normalnie_ciemny.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_BadHand">
+		<Property key="SourceFile">zle.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_Glass">
+		<Property key="SourceFile">lupa.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_Fist">
+		<Property key="SourceFile">piesc.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_Scroll">
+		<Property key="SourceFile">ciagnij.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_Point">
+		<Property key="SourceFile">wskaz_punkt.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_ArrowRed">
+		<Property key="SourceFile">ArrowRed.cur</Property>
+	</Resource>
+
+	<Resource type="CursorImageWin32" name="Cursor_ArrowBlue">
+		<Property key="SourceFile">ArrowBlue.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_ArrowGreen">
+		<Property key="SourceFile">ArrowGreen.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_ArrowYellow">
+		<Property key="SourceFile">ArrowYellow.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_ArrowWhite">
+		<Property key="SourceFile">ArrowWhite.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_ArrowGrey">
+		<Property key="SourceFile">ArrowGrey.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_ArrowBad">
+		<Property key="SourceFile">ArrowBad.cur</Property>
+	</Resource>
+
+	<Resource type="CursorImageWin32" name="Cursor_Heal">
+		<Property key="SourceFile">Heal.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_HealAni">
+		<Property key="SourceFile">Heal.ani</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_TargetRed">
+		<Property key="SourceFile">TargetRectRed.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_TargetBlue">
+		<Property key="SourceFile">TargetRectBlue.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_TargetGreen">
+		<Property key="SourceFile">TargetRectGreen.cur</Property>
+	</Resource>
+
+	<Resource type="CursorImageWin32" name="Cursor_TargetYellow">
+		<Property key="SourceFile">TargetRectYellow.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_TargetWhite">
+		<Property key="SourceFile">TargetRectWhite.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_FlagRed">
+		<Property key="SourceFile">FlagRed.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_FlagBlue">
+		<Property key="SourceFile">FlagBlue.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_FlagGreen">
+		<Property key="SourceFile">FlagGreen.cur</Property>
+	</Resource>
+	
+	<Resource type="CursorImageWin32" name="Cursor_Repair">
+		<Property key="SourceFile">wrench.cur</Property>
+	</Resource>
+
+	<Resource type="CursorImageWin32" name="Cursor_LoadPack">
+		<Property key="SourceFile">LoadPackage.ani</Property>
+	</Resource>
+
+	<Resource type="CursorImageWin32" name="Cursor_ReturnPack">
+		<Property key="SourceFile">ReturnPackage.ani</Property>
+	</Resource>
+
+	<Resource type="CursorImageWin32" name="Cursor_Text">
+		<Property key="SourceFile">ArrowWhite.cur</Property>
+	</Resource>
+	
+</MyGUI>

@@ -1,0 +1,60 @@
+[Gui.MainMenu]
+ButtonStart=Start
+ButtonOptions=Opcje
+ButtonQuit=Koniec
+
+[Gui.MainMenu.Options]
+ButtonAccept=Zastosuj
+ButtonBack=Powrot
+ButtonVideoSettings=Obraz
+ButtonAudioSettings=Dzwiek
+ButtonGameSetttings=Rozgrywka
+ButtonInputSettings=Sterowanie
+
+[Gui.MainMenu.Options.Video]
+ButtonApply=Zastosuj
+LabelRenderer=Silnik Renderowania
+LabelResolution=Rozdzielczosc
+LabelFullscreen=Pelny Ekran
+LabelVSync=VSync
+LabelFSAA=FSAA
+Text_NeedRestart=Nalezy uruchomic ponownie, aby czesc zmian zosatala zastosowana
+
+[Gui.MainMenu.QuitConfirmDialog]
+DialogText=Potwierdz wyjscie
+ButtonAccept=Wyjdz
+ButtonCancel=Wroc
+
+[Gui.MainMenu.CreateGameScreen]
+ButtonStart=Start
+ButtonReturn=Powrot
+LabelMapList=Dostepne Mapy
+LabelMapPreview=Podglad
+LabelPlayers=Gracze
+LabelSettings=Ustawienia Gry
+LabelGameMode=Tryb Gry
+LabelStartLocMode=Pozycje Poczatkowe
+LabelVisibilityMode=Widocznosc
+LabelResourcesMode=Zasoby Poczatokowe
+
+[Game.UnitNames]
+UnitName_Robot=Robot
+UnitName_QuadMech=Mech Bojowy
+UnitName_Mine=Kopalnia
+UnitName_Transporter=Ciezarowka
+UnitName_Store=Magazyn
+UnitName_PowerPlant=Elektrownia
+UnitName_Factory=Fabryka
+UnitName_LogisticsCenter=Centrum Logistyczne
+
+[Game.CommandButtons]
+CommandButtonName_Move=Ruch
+CommandButtonDesc_Move=CommandButtonDesc_Move
+CommandButtonName_Attack=Atak
+CommandButtonDesc_Attack=CommandButtonDesc_Attack
+CommandButtonName_TransportPack=Transportuj Surowce
+CommandButtonDesc_TransportPack=CommandButtonDesc_TransportPack
+
+[Game.ReqsHints]
+Hint_HavePowerPlant=Nalezy zbudowac Elektrownie
+Hint_HaveLogisticsCenter=Nalezy zbudowac Centrum Logistyczne

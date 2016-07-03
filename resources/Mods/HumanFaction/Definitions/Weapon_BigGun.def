@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Weapon_BigGun" family="Weapon">
+
+  <Icon name="BigGunIcon.png"/>
+  <Name locale="false" text="BigGun"/>
+  <Type value="Missle"/>
+  <Action value="AttackRanged"/>
+  <AttackTime value="0.1"/>
+  <AttackAngle value="5"/>
+
+
+  <Stats
+       range="300"
+       damage="15"
+       count="1"
+       delay="2.0"
+    />
+
+  <OnAttack effect="Effect_BigGunAttack"/>
+  <Missle effect="Effect_LaunchBigGunBullet"/>
+ 
+</ObjectDefinition>

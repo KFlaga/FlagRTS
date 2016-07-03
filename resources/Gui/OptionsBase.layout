@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="ImageBox" skin="ImageBox" position_real="0 0 1 1" name="OptionsMainPanel" layer="Main">
+        <Property key="Visible" value="false"/>
+	<Widget type="Button" skin="Button" position_real="0.0497804 0.0496689 0.29429 0.0960265"  name="ButtonVideoSettings">
+            <Property key="Caption" value="Video"/>
+        </Widget>
+        <Widget type="Button" skin="Button" position_real="0.0497804 0.167219 0.29429 0.0960265"  name="ButtonAudioSettings">
+            <Property key="Caption" value="Dzwiek"/>
+        </Widget>
+        <Widget type="Button" skin="Button" position_real="0.0497804 0.286424 0.29429 0.0960265" name="ButtonInputSettings">
+            <Property key="Caption" value="Sterowanie"/>
+        </Widget>
+        <Widget type="Button" skin="Button" position_real="0.0497804 0.407285 0.29429 0.0960265" name="ButtonGameSettings">
+            <Property key="Caption" value="Rozgrywka"/>
+        </Widget>
+        <Widget type="Button" skin="Button" position_real="0.0805271 0.852649 0.212299 0.0827815" name="ButtonReturn">
+            <Property key="Caption" value="Powrot"/>
+        </Widget>
+    </Widget>
+</MyGUI>

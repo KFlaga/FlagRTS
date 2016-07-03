@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Effect_InflictDamage" family="Effect" type="InflictDamage" final_type="InflictDamage">
+
+</ObjectDefinition>

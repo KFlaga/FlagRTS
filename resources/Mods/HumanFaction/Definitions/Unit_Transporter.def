@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="Transporter" family="SceneObject" type="PhysicalObject" final_type="Unit" data="Transporter">
+
+  <Flags>
+    <IsIndependent value="true"/>
+    <InheritsScale value="true"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <ObjectClasses>
+    <Class name="MoveGround"/> <!-- Default ground movement (implies unit is ground) state -->
+    <Class name="Passive"/> <!-- Unit do not engage enemies -->
+    <!-- Class name="Worker" -->
+    <Class name="Transporter"/>
+  </ObjectClasses>
+
+  <PhysicalObject type="Unit">
+    <Mesh name="Transporter.mesh" group="HumanFaction"/>
+    <Size x="25" y="15" z="45"/>
+
+    <Flags>
+      <IsHoverable value="true"/>
+      <IsSelectable value="true"/>
+    </Flags>
+    
+    <Unit>
+      <Icon name="TransporterIcon"/> <!-- Icon to be shown on hud -->
+      <GuiName locale="true" loc="UnitName_Transporter" sec="Game.UnitNames"/>
+      
+      <Flags>
+        <ShowOnMinimap value="true"/> <!-- False for things like animals -->
+      </Flags>
+
+      <Stats>
+        <Life value="50"/>
+        <MoveSpeed value="80"/> <!-- in map-units per second -->
+        <RotateSpeed value="1800"/> <!-- in degrees per second -->
+
+        <Cost>
+          <Time value="10000"/>
+          <Resource name="Metal" value="50" return="false"/>
+          <Resource name="Energy" value="500" return="false"/>
+          <Resource name="Command Points" value="1" return="true"/>
+        </Cost>
+      </Stats>
+
+      <MoveStrategy name="Move_FaceAndGo"/>
+      
+      <Weapons>
+      </Weapons>
+
+      <Commands>
+        <Command type="Move" custom="false"> <!-- if command is not custom, its default based on unit class -->
+          <Button definition="Button_Move" key="m" x="0" y="0"/>
+        </Command>
+      </Commands>
+
+      <!--
+      <SoundSet>
+        <Sound action="OnSelected1" name="Transporter_Select1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnSelected2" name="Transporter_Select1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnSelected3" name="Transporter_Select1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnMoveCommand1" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnMoveCommand2" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnMoveCommand3" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnAttackCommand1" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnAttackCommand2" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnAttackCommand3" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnOtherCommand1" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnOtherCommand2" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnOtherCommand3" name="Transporter_Order1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnConstructed1" name="Transporter_Created1" pack="GameUnitSounds" gain="1.0"/>
+        <Sound action="OnConstructed2" name="Transporter_Created1" pack="GameUnitSounds" gain="1.0"/>
+      </SoundSet>
+      -->
+
+      <SelectionMarker definition="MMarker_SelectionSmall" type="ModelMarker">
+        <Size x="50" y="1" z="50"/>
+        <Position x="0" y="5" z="-3"/> 
+      </SelectionMarker>
+      
+    </Unit>
+
+    <Pathing>
+      <!-- If true object will be added to pathing graph, so it will be able to move and influence other objects movement -->
+      <AddToGraph value="true"/>
+      <Shape value="Box"/>
+      <PathingGroups>
+        <Group name="Ground"/>
+      </PathingGroups>
+      <BlockedGroups>
+        <Group name="Ground"/>
+        <Group name="Naval"/>
+        <Group name="Building"/>
+        <Group name="Missle"/>
+      </BlockedGroups>
+      <UseFootprint value="false"/>
+    </Pathing>
+
+    <PortraitObject definition="PortraitTransporter" type="MapDecorator">
+      <Position x="0" y="-3" z="-60"/>
+      <Orientation w="0.924" x="0.383" y="0" z="0"/>
+    </PortraitObject>
+
+      <PlayerColorMaterial name="TruckPlayerColor"/>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Skeletal" name="IdleHold" action="Default"/>
+        <Animation type="Skeletal" name="IdleHold" action="Bored"/>
+      </State>
+      <State name="Move">
+        <Animation type="Skeletal" name="Move" action="Default"/>
+      </State>
+      <State name="Dying">
+        <Animation type="Transform" name="Dying" action="Default">
+          <KeyFrame length="500">
+            <Translation x="0.0" y="0.0" z="0.0"/>
+            <Rotation x="1.0" y="0.0" z="0.0" a="0.0"/>
+          </KeyFrame>
+        </Animation>
+      </State>
+      <State name="Internal">
+        <Animation type="Transform" name="Walk" action="MineDriveIn">
+          <KeyFrame length="125">
+            <Rotation x="1.0" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="0.0" z="-8.0"/>
+          </KeyFrame>
+          <KeyFrame length="500">
+            <Rotation x="1.0" y="0.0" z="0.0" a="16.5"/>
+            <Translation x="0.0" y="3.0" z="-22.0"/>
+          </KeyFrame>
+          <KeyFrame length="175">
+            <Rotation x="1.0" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="2.5" z="-7.0"/>
+          </KeyFrame>
+          <KeyFrame length="50">
+            <Rotation x="1.0f" y="0.0" z="0.0" a="-16.5"/>
+            <Translation x="0.0" y="0.0" z="-1.0"/>
+          </KeyFrame>
+          <KeyFrame length="550">
+            <Rotation x="1.0f" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="0.0" z="-22.0"/>
+          </KeyFrame>
+        </Animation>
+        <Animation type="Transform" name="Walk" action="MineDriveOut">
+          <KeyFrame length="550">
+            <Rotation x="1.0f" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="0.0" z="22.0"/>
+          </KeyFrame>
+          <KeyFrame length="50">
+            <Rotation x="1.0f" y="0.0" z="0.0" a="16.5"/>
+            <Translation x="0.0" y="0.0" z="1.0"/>
+          </KeyFrame>
+          <KeyFrame length="175">
+            <Rotation x="1.0" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="2.5" z="7.0"/>
+          </KeyFrame>
+          <KeyFrame length="500">
+            <Rotation x="1.0" y="0.0" z="0.0" a="-16.5"/>
+            <Translation x="0.0" y="3.0" z="22.0"/>
+          </KeyFrame>
+          <KeyFrame length="125">
+            <Rotation x="1.0" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="0.0" z="8.0"/>
+          </KeyFrame>
+        </Animation>
+        <Animation type="Transform" name="Walk" action="StoreDriveIn">
+          <KeyFrame length="1200">
+            <Rotation x="1.0" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="0.0" z="70.0"/>
+          </KeyFrame>
+        </Animation>
+        <Animation type="Transform" name="Walk" action="StoreDriveOut">
+          <KeyFrame length="1200">
+            <Rotation x="1.0f" y="0.0" z="0.0" a="0.0"/>
+            <Translation x="0.0" y="0.0" z="70.0"/>
+          </KeyFrame>
+        </Animation>
+      </State>
+      <State name="Attack">
+        <Animation type="Skeletal" name="Operate" action="AttackMelee"/>
+        <Animation type="Skeletal" name="Operate" action="AttackRanged"/>
+      </State>
+    </Animations>
+
+  </PhysicalObject>
+
+  <Minimap>
+    <Flags>
+      <RevealedVisible/>
+      <RadarVisible/>
+      <MinimapSelectable/>
+    </Flags>
+    <Size x="40.f" y="40.f"/>
+  </Minimap>
+
+</ObjectDefinition>

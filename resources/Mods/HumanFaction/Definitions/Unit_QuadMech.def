@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectDefinition name="QuadMech" family="SceneObject" type="PhysicalObject" final_type="Unit">
+
+  <Flags>
+    <IsSpawnable value="true"/>
+    <IsIndependent value="true"/>
+    <CanBeVisible value="true"/>
+  </Flags>
+
+  <Properties>
+    <FogVisibility value="Visible"/>
+  </Properties>
+
+  <ObjectClasses>
+    <Class name="MoveGround"/> <!-- Default ground movement (implies unit is ground) state -->
+    <Class name="AttackGround"/> <!-- Default attack ground targets state -->
+    <Class name="Aggressive"/> <!-- Unit attacks enemy on sight -->
+  </ObjectClasses>
+
+  <PhysicalObject type="Unit">
+    <Mesh name="Gun.mesh" group="HumanFaction"/>
+    <Size x="60" y="50" z="62"/>
+
+    <Flags>
+      <IsHoverable value="true"/>
+      <IsSelectable value="true"/>
+    </Flags>
+
+    <Animations>
+      <State name="Idle">
+        <Animation type="Skeletal" name="IdleHold" action="Default"/>
+        <Animation type="Skeletal" name="Idle1" action="Bored"/>
+      </State>
+      <State name="Move">
+        <Animation type="Skeletal" name="Walk" action="Default"
+                   interruptable="true" fade_in="false" fade_out="false" speed="4.0"/>
+      </State>
+      <State name="Attack">
+        <Animation type="Skeletal" name="Trump" action="AttackMelee"/>
+        <Animation type="Skeletal" name="Fire" action="AttackRanged"/>
+        <Animation type="Skeletal" name="IdleHold" action="Cooldown"/>
+      </State>
+      <State name="Dying">
+        <Animation type="Empty" name="IdleHold" action="Default"/>
+      </State>
+    </Animations>
+    
+    <Unit>
+      <Icon name="QuadMechIcon"/> <!-- Icon to be shown on hud -->
+      <GuiName locale="true" loc="UnitName_QuadMech" sec="Game.UnitNames"/>
+      
+      <Flags>
+        <ShowOnMinimap value="true"/> <!-- False for things like animals -->
+      </Flags>
+
+      <Properties>
+      </Properties>
+
+      <Stats>
+        <Life value="120"/>
+        <MoveSpeed value="40"/> <!-- in map-units per second -->
+        <RotateSpeed value="120"/> <!-- in degreed per second -->
+      
+      <Cost>
+          <Time value="30000"/>
+          <Resource name="Metal" value="100" return="false"/>
+          <Resource name="Energy" value="600" return="false"/>
+          <Resource name="Command" value="2" return="true"/>
+        </Cost>
+      </Stats>
+
+      <MoveStrategy name="Move_FaceAndGo"/>
+      
+      <Weapons>
+       <!-- <Weapon definition="Weapon_RobotSmash" active="true"/> -->
+        <Weapon definition="Weapon_BigGun" active="true"/>
+      </Weapons>
+      
+      <Commands>
+        <Command type="Move" custom="false"> <!-- if command is not custom, its default based on unit class -->
+          <Button definition="Button_Move" key="m" x="0" y="0"/>
+        </Command>
+        <Command type="Attack" custom="false">
+          <Button definition="Button_Attack" key="a" x="2" y="0"/>
+        </Command>
+      </Commands>
+    
+      <SelectionMarker definition="MMarker_SelectionSmall" type="ModelMarker">
+        <Size x="90" y="1" z="90"/>
+        <Position x="0" y="1" z="0"/> 
+      </SelectionMarker>
+    </Unit>
+
+    <Pathing>
+      <AddToGraph value="true"/>
+      <PathingGroups>
+        <Group name="Ground"/>
+      </PathingGroups>
+      <BlockedGroups>
+        <Group name="Ground"/>
+        <Group name="Naval"/>
+        <Group name="Building"/>
+        <Group name="Missle"/>
+      </BlockedGroups>
+      <UseFootprint value="false"/>
+    </Pathing>
+
+    <PortraitObject definition="PortraitQuadMech" type="MapDecorator">
+      <Position x="0" y="-15" z="-100"/>
+      <Orientation w="0.924" x="0.383" y="0" z="0"/>
+    </PortraitObject>
+
+      <PlayerColorMaterial name="Gun"/>
+
+  </PhysicalObject>
+
+  <Minimap>
+    <Flags>
+      <RevealedVisible/>
+      <RadarVisible/>
+      <MinimapSelectable/>
+    </Flags>
+    <Size x="50.f" y="50.f"/>
+    <!-- Size of minimap icon -> should be about same size as mesh -->
+  </Minimap>
+
+</ObjectDefinition>
