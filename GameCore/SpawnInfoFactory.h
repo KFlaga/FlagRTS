@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SpawnInfo.h"
-#include <IFactory.h>
 #include <Xml.h>
 
 namespace FlagRTS

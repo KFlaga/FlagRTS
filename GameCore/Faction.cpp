@@ -2,9 +2,8 @@
 
 #include "Faction.h"
 #include "TechRequirement.h"
-#include "TechRequirementFactory.h"
 #include "GameWorld.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 #include "ConstructionManager.h"
 #include "Unit.h"
 #include <StringUtils.h>
@@ -104,21 +103,21 @@ namespace FlagRTS
 
 		TechBuilding* building(xNew0(TechBuilding));
 
-		auto createTechBuilding = [this, defName, familyName, plannerName, building]() 
+		auto createTechBuilding = [this, defName, familyName, plannerName, building](IObjectDefinitionManager* mgr) 
 		{	
-			UnitDefinition* buildDef = static_cast<UnitDefinition*>(GameWorld::GlobalWorld->
-				GetSceneObjectDefinition("Unit", defName));
+			UnitDefinition* buildDef = static_cast<UnitDefinition*>(mgr->
+				GetObjectDefinitionByName("Unit", defName));
 			TechBuildingFamily family = ParseBuildingFamily(familyName.c_str());
 			ConstructionPlanner* planner = GameWorld::GlobalWorld->GetConstructionManager()->
 				FindConstructionPlanner(plannerName.c_str());
-
-
+			
 			building->Building = buildDef;
 			building->Family = family;
 			building->UsedPlanner = planner;
 		};
-		MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-			xNew1(DelegateEventHandler<decltype(createTechBuilding)>,createTechBuilding);
+		typedef DelegateEventHandler<decltype(createTechBuilding), IObjectDefinitionManager*> DefinitionsLoadedHandler;		
+		GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+			xNew1(DefinitionsLoadedHandler, createTechBuilding);
 
 		_factionBuildings.push_back(building);
 
@@ -149,7 +148,7 @@ namespace FlagRTS
 	{
 		const char* reqName = XmlUtility::XmlGetString(reqNode, "name");
 
-		TechRequirement* req = _reqsFactory->CreateCast(reqNode);
+		TechRequirement* req = (TechRequirement*)_reqsFactory->Create(reqNode);
 		_factionTechRequirements.insert(CopyChar(reqName), req);
 	}
 }

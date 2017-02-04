@@ -10,9 +10,10 @@
 #include "BillboardMarker.h"
 #include "GameWorld.h"
 #include "Map.h"
-#include "MapTerrain.h"
+#include "TerrainBase.h"
 #include "GameCamera.h"
-#include "MainGameObjectPool.h"
+#include "IGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 
 namespace FlagRTS
 {
@@ -194,8 +195,8 @@ namespace FlagRTS
 		// Get global minimap billboard marker definition and change material used
 		// Dont create it via GameWorld, as different scene manager is used for ogre loading
 		BillboardMarker* marker = static_cast<BillboardMarker*>(
-			GameWorld::GlobalWorld->GetObjectPool()->Create(
-			GameWorld::GlobalWorld->GetSceneObjectDefinition("BillboardMarker", "MinimapMarker"),
+			GameInterfaces::GetGameObjectPool()->Create(
+			GameInterfaces::GetObjectDefinitionManager()->GetObjectDefinitionByName("BillboardMarker", "MinimapMarker"),
 			NEUTRAL_PLAYERNUM));
 		marker->LoadResources(_ogreMgr);
 

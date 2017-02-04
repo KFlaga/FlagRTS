@@ -25,7 +25,7 @@
 #include "PathRequestHandler.h"
 
 #include "CollisionGroup.h"
-#include "MapTerrain.h"
+#include "TerrainBase.h"
 #include <PathFindingHeightMapConverter.h>
 
 namespace FlagRTS
@@ -152,7 +152,7 @@ namespace FlagRTS
 		Ogre::SceneManager* ogreMgr,
 		const int cellCountX, 
 		const int cellCountY,
-		const Vector2& cellSize) :
+		const float cellSize) :
 	_ogreMgr(ogreMgr),
 		_debugNode(0),
 		_localFinder(0),
@@ -184,7 +184,7 @@ namespace FlagRTS
 	}
 
 	void PathingSystem::CreatePathingMap(XmlNode* rootNode, 
-		int x, int y, const Vector2& cellSize)
+		int x, int y, float cellSize)
 	{
 		XmlNode* mapNode = rootNode->first_node("MapRepresentation");
 
@@ -214,10 +214,10 @@ namespace FlagRTS
 		}
 
 		_pathingMap = xNew4(UniformGridPathingMap,
-			x, y, cellSize, filter);
+			x, y, PFVector2(cellSize, cellSize), filter);
 	}
 
-	void PathingSystem::CreateSlopeObstacles(MapTerrain* terrain)
+	void PathingSystem::CreateSlopeObstacles(TerrainBase* terrain)
 	{
 		RefPtr<XmlDocument> pathingConfig = XmlUtility::XmlDocFromOgreResource("PathingConfig.xml", "Base");
 		XmlNode* rootNode = pathingConfig->first_node("PathingConfig");

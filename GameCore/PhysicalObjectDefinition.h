@@ -110,4 +110,10 @@ namespace FlagRTS
 		void ParsePathing(XmlNode* pathingNode);
 		void ParseDisplayObject(XmlNode* dobjNode);
 	};
+
+	class PhysicalObjectDefinitionFactory : public SubClassXmlFactory
+	{
+	public:
+		PhysicalObjectDefinitionFactory();
+	};
 }

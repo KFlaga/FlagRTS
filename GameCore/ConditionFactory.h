@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ICondition.h"
-#include <IFactory.h>
 #include <Xml.h>
 #include <HashMap.h>
 

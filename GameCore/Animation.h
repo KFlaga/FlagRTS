@@ -1,7 +1,6 @@
 #pragma once
 
 #include "AnimationDefinition.h"
-#include <ArrayMap.h>
 
 namespace FlagRTS
 {

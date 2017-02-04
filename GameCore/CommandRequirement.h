@@ -39,14 +39,14 @@ namespace FlagRTS
 			TechRequirement(onTrue, onFalse, condition),
 			_command(0)
 		{ 
-			SetHandleTypePart(CommandState);
+			//SetFinalType(CommandState);
 		}
 
 		CommandRequirement(TechAvailability onTrue, TechAvailability onFalse, ICommandCondition* condition, Command* command) :
 			TechRequirement(onTrue, onFalse, condition),
 			_command(command)
 		{ 
-			SetHandleTypePart(CommandState);
+			//SetHandleTypePart(CommandState);
 		}
 
 		~CommandRequirement()

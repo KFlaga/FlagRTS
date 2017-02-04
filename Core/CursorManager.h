@@ -7,6 +7,7 @@
 #include "ConfigurationManager.h"
 #include <map>
 #include <fstream>
+#include "StringUtils.h"
 
 namespace FlagRTS
 {
@@ -18,7 +19,7 @@ namespace FlagRTS
 		//CursorMap _cursors; // Map containing cursor for different contexts -> cursors are get from ResourceManager
 		//typedef std::list<Cursor*> CursorQueue;
 		//CursorQueue _cursorQueue;
-		typedef std::map<string, size_t, string_less> CursorHandleMap;
+		typedef std::map<string, size_t, StringLess> CursorHandleMap;
 		CursorHandleMap _cursorHandles;
 		CursorContext* _currentContext;
 		CursorContext* _previousContext;

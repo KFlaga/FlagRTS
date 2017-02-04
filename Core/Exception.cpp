@@ -1,11 +1,22 @@
 #include "Exception.h"
-#include <Windows.h>
 #include "LogManager.h"
+#include <Windows.h>
 
 namespace FlagRTS
 {
 	Exception::Exception(const char* reason, const char* file, int line, bool isFatal, bool autoLog) _NOEXCEPT :
 		_reason(reason),
+		_file(file),
+		_line(line),
+		_isFatal(isFatal),
+		_autoLog(autoLog)
+	{
+		if(_autoLog)
+			AddLog();
+	}
+
+	Exception::Exception(const std::string& reason, const char* file, int line, bool isFatal, bool autoLog) _NOEXCEPT :
+		_reason(reason.c_str()),
 		_file(file),
 		_line(line),
 		_isFatal(isFatal),

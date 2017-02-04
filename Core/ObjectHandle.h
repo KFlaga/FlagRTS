@@ -1,6 +1,5 @@
 #pragma once
 
-// Simple types for use in various places
 namespace FlagRTS
 {
 	// Arbitrary objects handles for use by factories etc.

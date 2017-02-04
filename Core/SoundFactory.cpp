@@ -10,8 +10,7 @@ namespace FlagRTS
 {
 	using namespace Media;
 
-	SoundFactory::SoundFactory() :
-		IFactoryCast("Sound")
+	SoundFactory::SoundFactory()
 	{
 
 	}
@@ -21,7 +20,7 @@ namespace FlagRTS
 
 	}
 
-	IGameObject* SoundFactory::Create(XmlNode* soundNode)
+	Sound* SoundFactory::Create(XmlNode* soundNode)
 	{
 		Sound* sound = 0;
 
@@ -43,8 +42,7 @@ namespace FlagRTS
 		return sound;
 	}
 
-	SoundPlayerFactory::SoundPlayerFactory() :
-		IFactoryCast("ISoundPlayer")
+	SoundPlayerFactory::SoundPlayerFactory()
 	{
 
 	}
@@ -54,7 +52,7 @@ namespace FlagRTS
 
 	}
 
-	IGameObject* SoundPlayerFactory::Create(XmlNode* soundNode)
+	ISoundPlayer* SoundPlayerFactory::Create(XmlNode* soundNode)
 	{
 		ISoundPlayer* soundplayer = 0;
 

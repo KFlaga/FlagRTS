@@ -1,6 +1,5 @@
 #include "CommandRequirement.h"
-#include <IFactory.h>
-#include <Xml.h>
+#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -26,12 +25,9 @@ namespace FlagRTS
 		~ReqClassName() { } \
 		void SetPlayer(uint8 player) { } \
 		TechRequirement* GetCopy() { return xNew2(ReqClassName, _stateOnTrue, _stateOnFalse); } \
-		class Factory : public IFactoryCast<TechRequirement, XmlNode*> \
+		class Factory : public IGameObjectFactory<XmlNode*> \
 		{ \
 		public: \
-			Factory() : \
-				IFactoryCast("CommandRequirement") \
-			{ } \
 			IGameObject* Create(XmlNode* node)  \
 			{ \
 				TechAvailability onTrue = ParseTechAvailability(XmlUtility::XmlGetString(node, "on_true")); \

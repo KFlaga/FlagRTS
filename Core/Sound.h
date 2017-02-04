@@ -2,7 +2,6 @@
 
 #include "AudioPreReqs.h"
 #include "Pointers.h"
-#include "IGameObject.h"
 #include <OgreVector3.h>
 
 namespace FlagRTS
@@ -12,7 +11,7 @@ namespace FlagRTS
 		// Basic sound : countains info about
 		// sound name, file and soundpack and OpenAL info
 		// It does not play sound itself - to do so its buffer need to be bind to some ALSource
-		class Sound : public IGameObject
+		class Sound
 		{
 		protected:
 			string _name; // Name of sound

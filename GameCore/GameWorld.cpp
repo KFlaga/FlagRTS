@@ -5,7 +5,6 @@
 #include <OgreSceneManager.h>
 #include <OgreSceneNode.h>
 #include "Map.h"
-#include "MainGameObjectPool.h"
 #include "SceneObjectPools.h"
 #include "SpawnInfoFactory.h"
 #include "PathingSystem.h"
@@ -25,6 +24,10 @@
 #include "Minimap.h"
 #include "InGameSettings.h"
 
+#include "IObjectDefinitionManager.h"
+#include "IGameObjectPoolManager.h"
+#include "IGameObjectPool.h"
+
 namespace FlagRTS
 {
 	GameWorld* GameWorld::GlobalWorld = 0;
@@ -42,14 +45,15 @@ namespace FlagRTS
 		Array<const char*> ClassSupsNames;
 	};
 
-	GameWorld::GameWorld(Ogre::SceneManager* ogreMgr, 
-		Ogre::RenderWindow* gameWindow, 
-		MainGameObjectPool* objectPool,
-		GlobalStatisticsManager* statsMgr
-		) :
-	_ogreSceneMgr(ogreMgr),
-		_gameWindow(gameWindow),
-		_objectPool(objectPool),
+	GameWorld::GameWorld(Ogre::SceneManager* ogreMgr,
+			IObjectDefinitionManager* objectDefinitionManager,
+			IGameObjectPoolManager* objectPoolManager,
+			IGameObjectPool* mainObjectPool,
+			GlobalStatisticsManager* statsMgr ) :
+		_ogreSceneMgr(ogreMgr),
+		_objectDefinitionManager(objectDefinitionManager),
+		_objectPoolManager(objectPoolManager),
+		_mainObjectPool(mainObjectPool),
 		_statsManager(statsMgr),
 		_map(xNew1(Map, ogreMgr)),
 		_pathing(0),
@@ -124,7 +128,7 @@ namespace FlagRTS
 				_mapInitObjects.push_back(std::make_pair(
 					std::make_pair(spawnInfo, owner),
 					static_cast<SceneObjectDefinition*>(
-					_objectPool->GetObjectDefinitionByName(defName,defType))));
+					_objectDefinitionManager->GetObjectDefinitionByName(defName,defType))));
 			}
 			// Get next SceneObject
 			objNode = objNode->next_sibling("SceneObject");
@@ -133,18 +137,12 @@ namespace FlagRTS
 
 	void GameWorld::LoadTerrain()
 	{
-		XmlNode* mapNode = _gameSettings->MapFile->first_node("Map",3);
-
-		RefPtr<MapTerrain> terrain(xNew3(MapTerrain, _ogreSceneMgr, 
-			_map->GetCellSize().x, 
-			_map->GetTileSize().X));
-		terrain->ReadTerrainInfo(mapNode);
-		_map->SetTerrain(terrain);
+		XmlNode* mapNode = _gameSettings->MapFile->first_node("Map");
+		_map->InitTerrain(mapNode);
 	}
 
 	void GameWorld::CreateGameManagers()
 	{
-
 		CreatePathingSystem();
 
 		_constructionMgr = xNew2(ConstructionManager,
@@ -162,8 +160,8 @@ namespace FlagRTS
 		string mapPreiviewImageName = XmlUtility::XmlGetString(
 			mapNode->first_node("MinimapImage"), "name");
 
-		_minimap = xNew4(Minimap, _map->GetTerrainSize(), 
-			IntVector2(512, (int)(512.f * (_map->GetTerrainSize().y / _map->GetTerrainSize().x))),
+		_minimap = xNew4(Minimap, _map->GetWorldSizeOfTerrain(), 
+			IntVector2(512, (int)(512.f * (_map->GetWorldSizeOfTerrain().y / _map->GetWorldSizeOfTerrain().x))),
 			mapPreiviewImageName, "Maps");
 
 		_minimap->SetUseTerrainTexture();
@@ -174,21 +172,20 @@ namespace FlagRTS
 		auto& terrInfo = _map->GetTerrain()->GetTerrainInfo();
 		_pathing = xNew4(PathingSystem,
 			_ogreSceneMgr,
-			terrInfo.GetTilesX()*terrInfo.GetTileCellSize(), 
-			terrInfo.GetTilesZ()*terrInfo.GetTileCellSize(),
-			_map->GetCellSize());
+			terrInfo.GetTilesX()*terrInfo.GetCellCountInTile(), 
+			terrInfo.GetTilesZ()*terrInfo.GetCellCountInTile(),
+			_map->GetWorldSizeOfCell());
 		_pathing->SetRootDebugNode(_ogreSceneMgr->getRootSceneNode());
 	}
 
 	void GameWorld::CreateWorld()
 	{
-		// Load actual terrain
-		_map->CreateTerrain();
+		_map->LoadAndSpawnTerrain();
 
 		CreateMinimap();
 
 		// As terrains are loaded, may create terrain obstacles
-		_pathing->CreateSlopeObstacles(_map->GetTerrain().GetRawPtr());
+		_pathing->CreateSlopeObstacles(_map->GetTerrain());
 
 		// Set players technology
 		for(int i = 0; i < _players->GetPlayersCount(); ++i)
@@ -234,7 +231,7 @@ namespace FlagRTS
 	SceneObject* GameWorld::CreateSceneObject(SceneObjectDefinition* objectDef, int owner)
 	{
 		SceneObject* object = 
-			static_cast<SceneObject*>(_objectPool->Create(objectDef, owner));
+			static_cast<SceneObject*>(_mainObjectPool->Create(objectDef, owner));
 		object->LoadResources(_ogreSceneMgr);
 		object->ChangeState(SceneObjectStates::NotSpawned);
 		return object;
@@ -242,7 +239,7 @@ namespace FlagRTS
 
 	SceneObject* GameWorld::CreateSceneObject(ObjectHandle objectDefHandle, int owner)
 	{
-		ObjectDefinition* objectDef = _objectPool->GetObjectDefinitionByHandle(objectDefHandle);
+		ObjectDefinition* objectDef = _objectDefinitionManager->GetObjectDefinitionByHandle(objectDefHandle);
 		return CreateSceneObject(static_cast<SceneObjectDefinition*>(objectDef), owner);
 	}
 
@@ -265,7 +262,7 @@ namespace FlagRTS
 	{
 		// DespawnObject(object)
 		object->UnloadResources(_ogreSceneMgr);
-		_objectPool->Destroy(object);
+		_mainObjectPool->Destroy(object);
 	}
 
 	void GameWorld::DestroySceneObject(ObjectHandle objectHandle)
@@ -363,7 +360,7 @@ namespace FlagRTS
 	SceneObjectDefinition* GameWorld::GetSceneObjectDefinition(ObjectHandle defHandle)
 	{
 		return static_cast<SceneObjectDefinition*>(
-			_objectPool->GetObjectDefinitionByHandle(defHandle));
+			_objectDefinitionManager->GetObjectDefinitionByHandle(defHandle));
 	}
 
 	SceneObjectDefinition* GameWorld::GetSceneObjectDefinition(
@@ -371,41 +368,41 @@ namespace FlagRTS
 		const string& objectKindName)
 	{
 		return static_cast<SceneObjectDefinition*>(
-			_objectPool->GetObjectDefinitionByName(objectKindName, objectFamilyName));
+			_objectDefinitionManager->GetObjectDefinitionByName(objectKindName, objectFamilyName));
 	}
 
 	IGameObject* GameWorld::CreateGameObject(ObjectDefinition* objectDef)
 	{
-		return _objectPool->Create(objectDef, NEUTRAL_PLAYERNUM);
+		return _mainObjectPool->Create(objectDef, NEUTRAL_PLAYERNUM);
 	}
 
 	IGameObject* GameWorld::CreateGameObject(ObjectHandle objectDefHandle)
 	{
-		ObjectDefinition* objectDef = _objectPool->GetObjectDefinitionByHandle(objectDefHandle);
-		return _objectPool->Create(objectDef, NEUTRAL_PLAYERNUM);
+		ObjectDefinition* objectDef = _objectDefinitionManager->GetObjectDefinitionByHandle(objectDefHandle);
+		return _mainObjectPool->Create(objectDef, NEUTRAL_PLAYERNUM);
 	}
 
 	void GameWorld::DestroyGameObject(IGameObject* object)
 	{
-		_objectPool->Destroy(object);
+		_mainObjectPool->Destroy(object);
 	}
 
 	void GameWorld::DestroyGameObject(ObjectHandle objectHandle)
 	{
 		IGameObject* baseObject = reinterpret_cast<IGameObject*>(objectHandle.Object);
-		_objectPool->Destroy(baseObject);
+		_mainObjectPool->Destroy(baseObject);
 	}
 
 	ObjectDefinition* GameWorld::GetGameObjectDefinition(ObjectHandle defHandle)
 	{
-		return _objectPool->GetObjectDefinitionByHandle(defHandle);
+		return _objectDefinitionManager->GetObjectDefinitionByHandle(defHandle);
 	}
 
 	ObjectDefinition* GameWorld::GetGameObjectDefinition(
 		const string& objectFamilyName, 
 		const string& objectKindName)
 	{
-		return _objectPool->GetObjectDefinitionByName(objectKindName, objectFamilyName);
+		return _objectDefinitionManager->GetObjectDefinitionByName(objectKindName, objectFamilyName);
 	}
 
 	void GameWorld::SetNewResourcesData(Resources* resources)
@@ -419,32 +416,33 @@ namespace FlagRTS
 
 	void GameWorld::ActivateAllRegisteredSuppliers()
 	{
-		for(unsigned int dataSup = 0; dataSup < _registeredSups->KindDataSups.size(); ++dataSup)
-		{
-			IKindSpecificDataSupplier* kdsup =	_registeredSups->KindDataSups[dataSup];
-			IObjectSpecificDataSupplier* odsup = _registeredSups->ObjectDataSups[dataSup];
-			string name = _registeredSups->DataSupsNames[dataSup];
-			auto setKindData = [ this, name, kdsup, odsup ]() 
-			{
-				// For each definition check if it have given ObjectData name
-				auto allDefs = _objectPool->GetDefinitionsCreator()->GetAllDefinitions();
-				for(unsigned int i = 0; i < allDefs->size(); ++i)
-				{
-					auto& def = (*allDefs)[i];
-					if( def->GetObjectDataName().compare(name) == 0 )
-					{
-						def->SetKindDataHandleSupplier(kdsup);
-						def->SetObjectDataHandleSupplier(odsup);
-						def->SetKindSpecificDataHandle(kdsup->GetKindSpecificDataHandle());
-					}
-				}
-			};
+		//for(unsigned int dataSup = 0; dataSup < _registeredSups->KindDataSups.size(); ++dataSup)
+		//{
+		//	IKindSpecificDataSupplier* kdsup =	_registeredSups->KindDataSups[dataSup];
+		//	IObjectSpecificDataSupplier* odsup = _registeredSups->ObjectDataSups[dataSup];
+		//	string name = _registeredSups->DataSupsNames[dataSup];
+		//	auto setKindData = [ this, name, kdsup, odsup ](IObjectDefinitionManager* mgr) 
+		//	{
+		//		// For each definition check if it have given ObjectData name
+		//		auto allDefs = mgr->GetAllDefinitions();
+		//		for(unsigned int i = 0; i < allDefs->size(); ++i)
+		//		{
+		//			auto& def = (*allDefs)[i];
+		//			if( def->GetObjectDataName().compare(name) == 0 )
+		//			{
+		//				def->SetKindDataHandleSupplier(kdsup);
+		//				def->SetObjectDataHandleSupplier(odsup);
+		//				def->SetKindSpecificDataHandle(kdsup->GetKindSpecificDataHandle());
+		//			}
+		//		}
+		//	};
 
-			_objectPool->OnAllDefinitionsLoaded() +=
-				xNew1(DelegateEventHandler<decltype(setKindData)>, setKindData);
-		}
+		//	typedef DelegateEventHandler<decltype(setKindData), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+		//	_objectPool->OnAllDefinitionsLoaded() +=
+		//		xNew1(DefinitionsLoadedHandler, setKindData);
+		//}
 
-		UnitPool* unitPool = (UnitPool*)_objectPool->GetObjectPool(GetTypeId<Unit>());
+		/*UnitPool* unitPool = (UnitPool*)_objectPool->GetObjectPool(GetTypeId<Unit>());
 
 		for(unsigned int sup = 0; sup < _registeredSups->StatesSups.size(); ++sup)
 		{
@@ -469,12 +467,12 @@ namespace FlagRTS
 			const char* name = _registeredSups->ClassSupsNames[sup];
 
 			unitPool->RegisterUnitClassSupplier(name, supplier);
-		}
+		}*/
 	}
 
 	void GameWorld::DeactivateAllRegisteredSuppliers()
 	{
-		UnitPool* unitPool = (UnitPool*)_objectPool->GetObjectPool(GetTypeId<Unit>());
+		/*UnitPool* unitPool = (UnitPool*)_objectPool->GetObjectPool(GetTypeId<Unit>());
 
 		for(unsigned int sup = 0; sup < _registeredSups->DataSupsNames.size(); ++sup)
 		{
@@ -513,7 +511,7 @@ namespace FlagRTS
 		_registeredSups->StatesSups.clear();
 		_registeredSups->StatesSupsTargets.clear();
 		_registeredSups->ClassSups.clear();
-		_registeredSups->ClassSupsNames.clear();
+		_registeredSups->ClassSupsNames.clear();*/
 	}
 
 	void GameWorld::RegisterDataSupplier(const string& supname,

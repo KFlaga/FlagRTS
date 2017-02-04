@@ -2,9 +2,9 @@
 
 #include "DataTypes.h"
 #include "ObjectDefinition.h"
-#include <Xml.h>
 #include <List.h>
 #include <map>
+#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -41,6 +41,12 @@ namespace FlagRTS
 
 		virtual void SetLoop(bool value) { _loop = value; }
 		virtual bool GetLoop() const { return _loop; }
+	};
+
+	class AnimationDefinitionFactory : public SubClassXmlFactory
+	{
+	public:
+		AnimationDefinitionFactory();
 	};
 
 	// List of animations

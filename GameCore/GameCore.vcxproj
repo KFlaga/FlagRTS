@@ -17,6 +17,14 @@
       <Configuration>DllExport</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Editor_d|Win32">
+      <Configuration>Editor_d</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Editor_d|x64">
+      <Configuration>Editor_d</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="PFTest|Win32">
       <Configuration>PFTest</Configuration>
       <Platform>Win32</Platform>
@@ -53,6 +61,12 @@
     <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Editor_d|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -72,6 +86,12 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Editor_d|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
@@ -115,6 +135,9 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Editor_d|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -125,6 +148,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Editor_d|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|x64'" Label="PropertySheets">
@@ -149,6 +175,12 @@
     <IncludePath>$(SolutionDir)Core;$(SolutionDir)PathFinding;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Editor_d|Win32'">
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+    <TargetName>FlagRTSGameCore_d</TargetName>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)PathFinding;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PFTest|Win32'">
     <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
     <TargetName>ORTSGameCore_d</TargetName>
@@ -168,6 +200,11 @@
     <LibraryPath>$(SolutionDir)lib\Debug;$(SolutionDir)dependencies\lib\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>ORTSGameCore_d</TargetName>
+    <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Editor_d|x64'">
     <TargetName>ORTSGameCore_d</TargetName>
     <IncludePath>$(SolutionDir)Core;$(SolutionDir)MathGeo;$(SolutionDir)PathFinding;$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\include\Ogre;$(SolutionDir)dependencies\include\boost;$(SolutionDir)dependencies\include\OIS;$(SolutionDir)dependencies\include\OpenAL;$(SolutionDir)dependencies\include\OgreAL;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\$(Configuration);$(SolutionDir)dependencies\lib\$(Configuration);$(LibraryPath)</LibraryPath>
@@ -201,6 +238,24 @@
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+      <DisableSpecificWarnings>4221; 4006</DisableSpecificWarnings>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointExceptions>true</FloatingPointExceptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>$(SolutionDir)lib\Debug\PathFinding_d.lib;$(SolutionDir)dependencies\lib\debug\OgreTerrain_d.lib;$(SolutionDir)dependencies\lib\debug\OgreOverlay_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4221 /ignore:4006 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Editor_d|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
@@ -273,6 +328,21 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\ORTSCore_d.lib;C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\lib\Debug\PathFinding_d.lib;C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\dependencies\lib\debug\OgreTerrain_d.lib;C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\dependencies\lib\debug\OgreOverlay_d.lib;C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\dependencies\lib\debug\LinearMath_d.lib;C:\Users\Kamil\Documents\Visual Studio 2012\Projects\ORTS\dependencies\lib\debug\BulletCollision_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4221 /ignore:4006 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Editor_d|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
@@ -390,8 +460,12 @@
     <ClInclude Include="ConstructionSiteFactory.h" />
     <ClInclude Include="DamageRetrievers.h" />
     <ClInclude Include="DefaultCommandReqs.h" />
-    <ClInclude Include="DefaultTechReqs.h" />
-    <ClInclude Include="EffectFactory.h" />
+    <ClInclude Include="GameObjectPool.h" />
+    <ClInclude Include="IGameObjectPoolManager.h" />
+    <ClInclude Include="ObjectDataHolder.h" />
+    <ClInclude Include="IObjectDefinitionManager.h" />
+    <ClInclude Include="PlayerUnitKindRequirement.h" />
+    <ClInclude Include="ETMTerrain.h" />
     <ClInclude Include="ExtensionPlanner.h" />
     <ClInclude Include="Faction.h" />
     <ClInclude Include="FactionRetreivers.h" />
@@ -403,7 +477,6 @@
     <ClInclude Include="FXObject.h" />
     <ClInclude Include="FXObjectActions.h" />
     <ClInclude Include="FXObjectDefinition.h" />
-    <ClInclude Include="FXObjectDefinitionFactory.h" />
     <ClInclude Include="FXObjectPools.h" />
     <ClInclude Include="FXParticles.h" />
     <ClInclude Include="FXParticlesDefinition.h" />
@@ -417,6 +490,8 @@
     <ClInclude Include="GenericParamterisedEvent.h" />
     <ClInclude Include="IEffect.h" />
     <ClInclude Include="IEvent.h" />
+    <ClInclude Include="IGameObject.h" />
+    <ClInclude Include="GameObjectFactory.h" />
     <ClInclude Include="IMover.h" />
     <ClInclude Include="InflictDamagaEffect.h" />
     <ClInclude Include="InputEvents.h" />
@@ -424,7 +499,9 @@
     <ClInclude Include="IObjectRetriever.h" />
     <ClInclude Include="IPathingQuery.h" />
     <ClInclude Include="ISceneObjectRetriever.h" />
+    <ClInclude Include="OgreTerrain.h" />
     <ClInclude Include="SceneObjectActions.h" />
+    <ClInclude Include="TerrainBase.h" />
     <ClInclude Include="Variable.h" />
     <ClInclude Include="KillReason.h" />
     <ClInclude Include="KillReasonRetriever.h" />
@@ -440,13 +517,11 @@
     <ClInclude Include="ModelMarkerDefinition.h" />
     <ClInclude Include="ModelTexture.h" />
     <ClInclude Include="Movers.h" />
-    <ClInclude Include="MoveStrategyFactory.h" />
     <ClInclude Include="NoticeMessages.h" />
     <ClInclude Include="ObjectOutline.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandButton.h" />
     <ClInclude Include="CommandButtonDefinition.h" />
-    <ClInclude Include="CommandButtonDefinitionFactory.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="CommandTarget.h" />
     <ClInclude Include="DefaultCommands.h" />
@@ -456,7 +531,6 @@
     <ClInclude Include="DllGameMod.h" />
     <ClInclude Include="EmptyAnimation.h" />
     <ClInclude Include="EmptyAnimationDefinition.h" />
-    <ClInclude Include="EmptyAnimationDefinitionFactory.h" />
     <ClInclude Include="EventArgsRetriever.h" />
     <ClInclude Include="HoverTargetTypes.h" />
     <ClInclude Include="ICondition.h" />
@@ -467,7 +541,6 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="AnimationDefinition.h" />
-    <ClInclude Include="AnimationDefinitionFactory.h" />
     <ClInclude Include="IAction.h" />
     <ClInclude Include="ActionQueue.h" />
     <ClInclude Include="IEventPool.h" />
@@ -492,7 +565,6 @@
     <ClInclude Include="Technology.h" />
     <ClInclude Include="TechnologyManager.h" />
     <ClInclude Include="TechRequirement.h" />
-    <ClInclude Include="TechRequirementFactory.h" />
     <ClInclude Include="TerrainProjectionMarker.h" />
     <ClInclude Include="TerrainProjectionMarkerDefinition.h" />
     <ClInclude Include="TrainingQueue.h" />
@@ -501,7 +573,6 @@
     <ClInclude Include="UnitClassSupplier.h" />
     <ClInclude Include="IUnitCommandSupplier.h" />
     <ClInclude Include="MissleDefinition.h" />
-    <ClInclude Include="MoverFactory.h" />
     <ClInclude Include="MoverRetrievers.h" />
     <ClInclude Include="IObjectStateSupplier.h" />
     <ClInclude Include="ObjectTypes.h" />
@@ -519,11 +590,10 @@
     <ClInclude Include="SelectionFlags.h" />
     <ClInclude Include="TransformAnimation.h" />
     <ClInclude Include="TransformAnimationDefinition.h" />
-    <ClInclude Include="TransformAnimationDefinitionFactory.h" />
     <ClInclude Include="Trigger.h" />
     <ClInclude Include="MainEventPool.h" />
     <ClInclude Include="MainGameObjectPool.h" />
-    <ClInclude Include="ArtefixMapTerrainLoader.h" />
+    <ClInclude Include="OgreTerrainLoader.h" />
     <ClInclude Include="GameCameraDefinition.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameWorld.h" />
@@ -534,20 +604,16 @@
     <ClInclude Include="MapDecorator.h" />
     <ClInclude Include="MapDecoratorDefinition.h" />
     <ClInclude Include="MapDecoratorStates.h" />
-    <ClInclude Include="MapTerrain.h" />
-    <ClInclude Include="ITerrainLoader.h" />
     <ClInclude Include="ObjectDefinition.h" />
     <ClInclude Include="ObjectTypeHelper.h" />
     <ClInclude Include="PhysicalObject.h" />
     <ClInclude Include="PhysicalObjectDefinition.h" />
-    <ClInclude Include="PhysicalObjectDefinitionFactory.h" />
-    <ClInclude Include="ObjectDefinitionsCreator.h" />
+    <ClInclude Include="ObjectDefinitionsManager.h" />
     <ClInclude Include="SceneObjectPools.h" />
     <ClInclude Include="SceneObjectState.h" />
     <ClInclude Include="SceneObjectStates.h" />
     <ClInclude Include="SceneObjectSelfActionFactory.h" />
     <ClInclude Include="SceneObjectDefinition.h" />
-    <ClInclude Include="SceneObjectDefinitionFactory.h" />
     <ClInclude Include="IRegion.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="DataTypes.h" />
@@ -557,10 +623,9 @@
     <ClInclude Include="SceneObjectStateMachine.h" />
     <ClInclude Include="SkeletalAnimation.h" />
     <ClInclude Include="SkeletalAnimationDefinition.h" />
-    <ClInclude Include="SkeletalAnimationDefinitionFactory.h" />
     <ClInclude Include="SpawnInfo.h" />
     <ClInclude Include="SpawnInfoFactory.h" />
-    <ClInclude Include="TerrainGrid.h" />
+    <ClInclude Include="OgreTerrainGrid.h" />
     <ClInclude Include="TerrainInfo.h" />
     <ClInclude Include="Tileset.h" />
     <ClInclude Include="Unit.h" />
@@ -586,7 +651,10 @@
     <ClCompile Include="AnimationDefinition.cpp" />
     <ClCompile Include="AnimationDefinitionFactory.cpp" />
     <ClCompile Include="AnimationController.cpp" />
-    <ClCompile Include="ArtefixMapTerrainLoader.cpp" />
+    <ClCompile Include="ETMTerrain.cpp" />
+    <ClCompile Include="GameObjectFactory.cpp" />
+    <ClCompile Include="ObjectDataHolder.cpp" />
+    <ClCompile Include="OgreTerrainLoader.cpp" />
     <ClCompile Include="BaseEffects.cpp" />
     <ClCompile Include="BillboardMarker.cpp" />
     <ClCompile Include="BillboardMarkerDefinition.cpp" />
@@ -609,9 +677,8 @@
     <ClCompile Include="DefaultCommandSuppliers.cpp" />
     <ClCompile Include="DefaultMoveStrategies.cpp" />
     <ClCompile Include="DefaultStateSuppliers.cpp" />
-    <ClCompile Include="DefaultTechReqs.cpp" />
+    <ClCompile Include="PlayerUnitKindRequirement.cpp" />
     <ClCompile Include="EffectFactory.cpp" />
-    <ClCompile Include="EmptyAnimationDefinitionFactory.cpp" />
     <ClCompile Include="EmptyAnimationDefiniton.cpp" />
     <ClCompile Include="EventArgsRetriever.cpp" />
     <ClCompile Include="Faction.cpp" />
@@ -646,7 +713,7 @@
     <ClCompile Include="MapDecorator.cpp" />
     <ClCompile Include="MapDecoratorDefinition.cpp" />
     <ClCompile Include="MapDecoratorStates.cpp" />
-    <ClCompile Include="MapTerrain.cpp" />
+    <ClCompile Include="OgreTerrain.cpp" />
     <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Missle.cpp" />
     <ClCompile Include="MissleDefinition.cpp" />
@@ -659,7 +726,7 @@
     <ClCompile Include="Movers.cpp" />
     <ClCompile Include="MoveStrategyFactory.cpp" />
     <ClCompile Include="ObjectDefinition.cpp" />
-    <ClCompile Include="ObjectDefinitionsCreator.cpp" />
+    <ClCompile Include="ObjectDefinitionsManager.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="ObjectOutline.cpp" />
     <ClCompile Include="ObjectTypeHelper.cpp" />
@@ -695,21 +762,21 @@
     <ClCompile Include="SceneObjectStateMachine.cpp" />
     <ClCompile Include="SelectionBox.cpp" />
     <ClCompile Include="SkeletalAnimation.cpp" />
-    <ClCompile Include="SkeletalAnimationDefinitonFactory.cpp" />
     <ClCompile Include="SkeletalAnimationDefintion.cpp" />
     <ClCompile Include="SpawnInfoFactory.cpp" />
     <ClCompile Include="SpawnObjectEffect.cpp" />
     <ClCompile Include="Technology.cpp" />
     <ClCompile Include="TechnologyManager.cpp" />
+    <ClCompile Include="TechRequirement.cpp" />
     <ClCompile Include="TechRequirementFactory.cpp" />
     <ClCompile Include="TerrainGrid.cpp" />
+    <ClCompile Include="TerrainInfo.cpp" />
     <ClCompile Include="TerrainProjectionMarker.cpp" />
     <ClCompile Include="TerrainProjectionMarkerDefinition.cpp" />
     <ClCompile Include="Tileset.cpp" />
     <ClCompile Include="TrainingQueue.cpp" />
     <ClCompile Include="TransformAnimation.cpp" />
     <ClCompile Include="TransformAnimationDefinition.cpp" />
-    <ClCompile Include="TransformAnimationDefinitionFactory.cpp" />
     <ClCompile Include="Trigger.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitActions.cpp" />

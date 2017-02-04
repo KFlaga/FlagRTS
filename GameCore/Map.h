@@ -9,7 +9,7 @@
 #include <map>
 
 #include "SpawnInfo.h"
-#include "MapTerrain.h"
+#include "TerrainBase.h"
 
 namespace FlagRTS
 {
@@ -21,16 +21,17 @@ namespace FlagRTS
 		typedef List<SceneObject*> SceneObjectsMap;
 
 	private:
-		Ogre::SceneManager* _ogreSceneMgr;
+		Ogre::SceneManager* _ogreMgr;
 		Ogre::SceneNode* _mapNode;
 
 		SceneObjectsMap _spawnedObjects;
-		RefPtr<MapTerrain> _terrain;
+		TerrainBase* _terrain;
+		Ogre::Light* _globalLight;
 
 		bool _destroyed; // Prevent multiple calls to DestoryMap()
-		
-		IntVector2 _tileSize; // Size of one terrain tile in cells
-		Vector2 _cellSize; // Size of one terrain cell in units
+
+		int _tileSize;
+		float _cellSize;
 
 	public:
 		Map(Ogre::SceneManager*);
@@ -38,19 +39,6 @@ namespace FlagRTS
 
 		Ogre::SceneNode* GetRootNode() { return _mapNode; }
 		
-		// Adds terrain to map
-		// Only one terrain can be added, so it unloads previous one if was set
-		void SetTerrain(RefPtr<MapTerrain>);
-
-		// Removes terrain from map
-		void ClearTerrain();
-
-		// Builds loaded terrain ( it must be set prior to call )
-		void CreateTerrain();
-
-		// Returns added terrain
-		const RefPtr<MapTerrain>& GetTerrain() const { return _terrain; }
-
 		// Spawns ready to spawn object 
 		// ( attaches to root if detached and calls spawn on it )
 		void SpawnObject(SceneObject* object, const SpawnInfo& si);
@@ -62,6 +50,19 @@ namespace FlagRTS
 		// Despawns all objects and removes terrain
 		void DestroyMap();
 
+		// Creates and initializes terrain with info from map node
+		// Only one terrain can be added, so it unloads previous one if was set
+		void InitTerrain(XmlNode* mapNode);
+
+		// Removes terrain from map
+		void ClearTerrain();
+
+		// Loads and spawns terrain
+		void LoadAndSpawnTerrain();
+
+		// Returns added terrain
+		TerrainBase* GetTerrain() { return _terrain; }
+
 		// Returns point where ray intersects terrain. Negative values if does not intersect
 		Vector3 GetTerrainInterscetion(Ogre::Ray ray) const { return _terrain->GetTerrainInterscetion(ray); }
 		// Returns height of terrain on given (x,z) point ( average of 4 closest vertices )
@@ -72,15 +73,28 @@ namespace FlagRTS
 			return _terrain->GetTerrainVertexHeight(vx,vy);
 		}
 
-		const Vector2& GetTerrainSize() const
+		const Vector2& GetWorldSizeOfTerrain() const
 		{
-			return _terrain->GetTerrainSize();
+			return _terrain->GetTerrainInfo().GetWorldSize();
 		}
 
-		const IntVector2& GetTileSize() const { return _tileSize; }
-		const Vector2& GetCellSize() const { return _cellSize; }
+		int GetCellCountInTerrainTile() const 
+		{ 
+			return _tileSize;
+		}
+
+		float GetWorldSizeOfCell() const 
+		{ 
+			return _cellSize; 
+		}
 		
 		Array2d<float>& GetFinalHeightMap() { return _terrain->GetFinalHeightMap(); }
 		const Array2d<float>& GetFinalHeightMap() const { return _terrain->GetFinalHeightMap(); }
+		
+		// Gets global light
+		Ogre::Light* GetGlobalLight() const { return _globalLight; }
+
+	private:
+		void CreateGlobalLight(XmlNode* lightNode);
 	};
 }

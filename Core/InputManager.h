@@ -6,7 +6,7 @@
 #include <OgreVector3.h>
 
 #include "Pointers.h"
-#include "InputState.h"
+#include "Input.h"
 
 namespace OIS
 {

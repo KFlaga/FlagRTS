@@ -1,5 +1,4 @@
 #include "ModelMarkerDefinition.h"
-#include "AnimationDefinitionFactory.h"
 #include <OgreMeshManager.h>
 #include "SceneObjectState.h"
 #include <Exception.h>

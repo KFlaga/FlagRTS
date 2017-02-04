@@ -1,8 +1,10 @@
 #pragma once
 
 #include "TypeDefs.h"
+#include "StringUtils.h"
 #include "Array.h"
 #include "Iterators.h"
+#include <type_traits>
 
 #ifdef MAP_DEBUG_NEW
 #define mapNew0 xNew0
@@ -88,7 +90,10 @@ namespace FlagRTS
 		};
 	};
 
-	template<typename KeyT, typename ValT, typename Hash = HashMapBase::HashInteger, typename IsKeyEqual = std::equal_to<KeyT>>
+	template<typename KeyT, typename ValT, 
+		typename Hash = typename std::conditional<std::is_integral<KeyT>::value,
+			HashMapBase::HashInteger, void>::type,
+		typename IsKeyEqual = std::equal_to<KeyT>>
 	class HashedMap : public HashMapBase
 	{
 	public:

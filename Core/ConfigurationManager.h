@@ -3,11 +3,11 @@
 #include "Configuration.h"
 #include "GenericManager.h"
 #include "Pointers.h"
-#include "TypeDefs.h"
+#include "StringUtils.h"
 
 namespace FlagRTS
 {
-	typedef std::map<std::string, RefPtr<Configuration>, string_less> ConfigMap;
+	typedef std::map<std::string, RefPtr<Configuration>, StringLess> ConfigMap;
 
 	class ConfigurationManager : public GenericManager<ConfigurationManager>
 	{

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ObjectDefinition.h"
+#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -46,5 +47,11 @@ namespace FlagRTS
 		{
 			return _remAngle;
 		}
+	};
+
+	class MoveStrategyFactory : public SubClassXmlFactory
+	{
+	public:
+		MoveStrategyFactory();
 	};
 }

@@ -1,11 +1,11 @@
-#include "TerrainGrid.h"
+#include "OgreTerrainGrid.h"
 #include <OgreResourceGroupManager.h>
 #include <OgreRay.h>
 #include <Profiler.h>
 
 namespace FlagRTS
 {
-	TerrainGrid::TerrainGrid(Ogre::SceneManager* ogreMgr) :
+	OgreTerrainGrid::OgreTerrainGrid(Ogre::SceneManager* ogreMgr) :
 		_ogreMgr(ogreMgr),
 		_bufferAlloc(xNew0(Ogre::Terrain::DefaultGpuBufferAllocator)),
 		_finalHeightMap(1,1)
@@ -13,7 +13,7 @@ namespace FlagRTS
 		SetOriginAtTopLeft();
 	}
 
-	TerrainGrid::~TerrainGrid()
+	OgreTerrainGrid::~OgreTerrainGrid()
 	{
 		if(_terrains.size() > 0)
 		{
@@ -22,7 +22,7 @@ namespace FlagRTS
 		xDelete(_bufferAlloc);
 	}
 
-	Vector3 TerrainGrid::GetTerrainInterscetion(Ogre::Ray ray) const
+	Vector3 OgreTerrainGrid::GetTerrainInterscetion(Ogre::Ray ray) const
 	{
 		for(int x = 0; x < _terrInfo.GetTilesX(); x++)
 			for(int z = 0; z < _terrInfo.GetTilesZ(); z++)
@@ -36,7 +36,7 @@ namespace FlagRTS
 			return Vector3(-1,-1,-1);
 	}
 
-	void TerrainGrid::PrepareTerrains()
+	void OgreTerrainGrid::PrepareTerrains()
 	{
 		SetLayers();
 
@@ -49,8 +49,8 @@ namespace FlagRTS
 
 				// Compute correct tile center = center for topleft (0,0) + _origin
 				_data.pos = Vector3( 
-					_terrInfo.GetTileWorldSize()*((float)x+0.5f) + _origin.x, 0,
-					_terrInfo.GetTileWorldSize()*((float)z+0.5f) + _origin.z);
+					_terrInfo.GetWorldSizeOfTile()*((float)x+0.5f) + _origin.x, 0,
+					_terrInfo.GetWorldSizeOfTile()*((float)z+0.5f) + _origin.z);
 
 				terrain->setResourceGroup(_resourceGroup);
 				terrain->setGpuBufferAllocator(_bufferAlloc);
@@ -61,7 +61,7 @@ namespace FlagRTS
 			SetNeighbours();
 	}
 
-	void TerrainGrid::SetLayers()
+	void OgreTerrainGrid::SetLayers()
 	{
 		for (int i = 0; i < _terrInfo.GetTileset()->GetLoadedTexturesCount(); i++) 
 		{
@@ -74,7 +74,7 @@ namespace FlagRTS
 		}
 	}
 
-	void TerrainGrid::SetNeighbours()
+	void OgreTerrainGrid::SetNeighbours()
 	{
 		// Set correct neightbours
 		for(int z = 0; z < _terrInfo.GetTilesZ(); z++)
@@ -104,14 +104,14 @@ namespace FlagRTS
 			}
 	}
 
-	void TerrainGrid::LoadTerrain(uint32 x, uint32 z)
+	void OgreTerrainGrid::LoadTerrain(uint32 x, uint32 z)
 	{
 		Ogre::Terrain* terrain = GetTerrain(x,z);
 
 		terrain->load(0,true);
 	}
 
-	void TerrainGrid::LoadAllTerrains()
+	void OgreTerrainGrid::LoadAllTerrains()
 	{
 		for(int z = 0; z < _terrInfo.GetTilesZ(); z++)
 			for(int x = 0; x < _terrInfo.GetTilesX(); x++)
@@ -122,11 +122,11 @@ namespace FlagRTS
 			ComputeHeightMap();
 	}
 
-	void TerrainGrid::SetTerrainInfo(const TerrainInfo& tinfo)
+	void OgreTerrainGrid::SetTerrainInfo(const TerrainInfo& tinfo)
 	{
 		_terrInfo = tinfo;
 
-		_data.worldSize = _terrInfo.GetTileWorldSize();
+		_data.worldSize = _terrInfo.GetWorldSizeOfTile();
 		_data.inputScale = (float)_terrInfo.GetHeightScale();
 		_data.inputBias = (float)_terrInfo.GetBaseHeight();
 		_data.maxBatchSize = 65;
@@ -148,7 +148,7 @@ namespace FlagRTS
 			_heightMaps.resize(_terrains.size());
 	}
 
-	void TerrainGrid::UnloadAllTerrain()
+	void OgreTerrainGrid::UnloadAllTerrain()
 	{
 		for(uint32 i = 0; i < _terrains.size(); i++)
 		{
@@ -163,7 +163,7 @@ namespace FlagRTS
 		_heightMaps.clear();
 	}
 
-	bool TerrainGrid::LoadTerrainFromFileIfExists()
+	bool OgreTerrainGrid::LoadTerrainFromFileIfExists()
 	{
 		// File names convention : mapname_terrain_'x'_'z'.trr
 		string baseName = _terrInfo.GetName() + "_terrain_";
@@ -192,7 +192,7 @@ namespace FlagRTS
 				return true;
 	}
 
-	void TerrainGrid::SaveTerrainToFile()
+	void OgreTerrainGrid::SaveTerrainToFile()
 	{
 		auto pathList = Ogre::ResourceGroupManager::getSingleton().getResourceLocationList("Maps");
 
@@ -219,7 +219,7 @@ namespace FlagRTS
 		}
 	}
 
-	void TerrainGrid::FreeTemporaryResources()
+	void OgreTerrainGrid::FreeTemporaryResources()
 	{
 		for(int z = 0; z < _terrInfo.GetTilesZ(); z++)
 			for(int x = 0; x < _terrInfo.GetTilesX(); x++)
@@ -234,16 +234,18 @@ namespace FlagRTS
 		return Vector3(x*cellSize, hMap(z, x), z*cellSize);
 	}
 
-	float TerrainGrid::GetTerrainHeight(float x, float z)
+	float OgreTerrainGrid::GetTerrainHeight(float x, float z)
 	{
 		PROFILE_REGISTER_CLOCK(pclock, "GetTerrrainHeight");
 		PROFILE_START(pclock);
 		x = std::max(0.f, x);
 		z = std::max(0.f, z);
-		x = std::min(_terrInfo.GetTileWorldSize() * _terrInfo.GetTilesCount().X, x);
-		z = std::min(_terrInfo.GetTileWorldSize() * _terrInfo.GetTilesCount().Y, z);
-		int leftCell = (int)(x / _terrInfo.GetCellSize());
-		int topCell = (int)(z / _terrInfo.GetCellSize());
+		x = std::min(_terrInfo.GetWorldSizeOfTile() * _terrInfo.GetTilesCount().X, x);
+		z = std::min(_terrInfo.GetWorldSizeOfTile() * _terrInfo.GetTilesCount().Y, z);
+		int leftCell = (int)(x / _terrInfo.GetWorldSizeOfCell());
+		int topCell = (int)(z / _terrInfo.GetWorldSizeOfCell());
+
+		float cellSize = _terrInfo.GetWorldSizeOfCell();
 
 		// 3 vertices creating triangle point (x,z) is over
 		Vector3 v1,v2,v3;
@@ -259,40 +261,38 @@ namespace FlagRTS
 		if((topCell & 1) != 0)
 		{
 			// EVEN IN OGRE
-			v1 = GetPointCoords(leftCell, topCell+1, _terrInfo.GetCellSize(), _finalHeightMap);
-			v2 = GetPointCoords(leftCell+1, topCell, _terrInfo.GetCellSize(), _finalHeightMap);
+			v1 = GetPointCoords(leftCell, topCell+1, cellSize, _finalHeightMap);
+			v2 = GetPointCoords(leftCell+1, topCell, cellSize, _finalHeightMap);
 
 			// Find triangle the point is over ( top-left or bot-right ) : dividing line have equation x+y=csize
-			if( x - leftCell * _terrInfo.GetCellSize() + 
-				z - topCell * _terrInfo.GetCellSize() > 
-				_terrInfo.GetCellSize())
+			if( x - leftCell * cellSize + z - topCell * cellSize > 	cellSize)
 			{
 				// Point is over bottom triangle
-				v3 = GetPointCoords(leftCell+1, topCell+1, _terrInfo.GetCellSize(), _finalHeightMap);
+				v3 = GetPointCoords(leftCell+1, topCell+1, cellSize, _finalHeightMap);
 			}
 			else
 			{
 				// Point is over top triangle
-				v3 = GetPointCoords(leftCell, topCell, _terrInfo.GetCellSize(), _finalHeightMap);
+				v3 = GetPointCoords(leftCell, topCell, cellSize, _finalHeightMap);
 			}
 		}
 		else
 		{
 			// ODD IN OGRE
-			v1 = GetPointCoords(leftCell, topCell, _terrInfo.GetCellSize(), _finalHeightMap);
-			v2 = GetPointCoords(leftCell+1, topCell+1, _terrInfo.GetCellSize(), _finalHeightMap);
+			v1 = GetPointCoords(leftCell, topCell, cellSize, _finalHeightMap);
+			v2 = GetPointCoords(leftCell+1, topCell+1, cellSize, _finalHeightMap);
 
 			// Find triangle the point is over ( bot-left or top-right ) : dividing line have equation x-y=0
-			if( x - leftCell * _terrInfo.GetCellSize() + 
-				z - topCell * _terrInfo.GetCellSize() < 0.f)
+			if( x - leftCell * cellSize + 
+				z - topCell * cellSize < 0.f)
 			{
 				// Point is over bottom-left triangle
-				v3 = GetPointCoords(leftCell, topCell+1, _terrInfo.GetCellSize(), _finalHeightMap);
+				v3 = GetPointCoords(leftCell, topCell+1, cellSize, _finalHeightMap);
 			}
 			else
 			{
 				// Point is over top-right triangle
-				v3 = GetPointCoords(leftCell+1, topCell, _terrInfo.GetCellSize(), _finalHeightMap);
+				v3 = GetPointCoords(leftCell+1, topCell, cellSize, _finalHeightMap);
 			}
 		}
 
@@ -308,31 +308,31 @@ namespace FlagRTS
 		return h;
 	}
 
-	float TerrainGrid::GetTerrainVertexHeight(uint32 vx, uint32 vy)
+	float OgreTerrainGrid::GetTerrainVertexHeight(uint32 vx, uint32 vy)
 	{
 		return _finalHeightMap(vy, vx);
 	}
 
-	void TerrainGrid::ComputeHeightMap()
+	void OgreTerrainGrid::ComputeHeightMap()
 	{
 		new (&_finalHeightMap) Array2d<float>(
-			_terrInfo.GetTilesZ() * _terrInfo.GetTileCellSize()+1,
-			_terrInfo.GetTilesX() * _terrInfo.GetTileCellSize()+1);
+			_terrInfo.GetTilesZ() * _terrInfo.GetCellCountInTile()+1,
+			_terrInfo.GetTilesX() * _terrInfo.GetCellCountInTile()+1);
 
 		for(int tz = 0; tz < _terrInfo.GetTilesZ(); tz++)
 			for(int tx = 0; tx < _terrInfo.GetTilesX(); tx++)
 			{
 				Ogre::Terrain* terrain = GetTerrain(tx, tz);
 
-				for(uint32 vz = 0; vz < _terrInfo.GetTileCellSize(); ++vz)
+				for(uint32 vz = 0; vz < _terrInfo.GetCellCountInTile(); ++vz)
 				{
-					for(uint32 vx = 0; vx < _terrInfo.GetTileCellSize(); ++vx)
+					for(uint32 vx = 0; vx < _terrInfo.GetCellCountInTile(); ++vx)
 					{
 						// Terrain is in inverted z coord, so get size-z point
-						float h = terrain->getHeightAtPoint(vx,_terrInfo.GetTileCellSize()-vz);
+						float h = terrain->getHeightAtPoint(vx,_terrInfo.GetCellCountInTile()-vz);
 						_finalHeightMap.SetAt(
-							tz * _terrInfo.GetTileCellSize() + vz,
-							tx * _terrInfo.GetTileCellSize() + vx,
+							tz * _terrInfo.GetCellCountInTile() + vz,
+							tx * _terrInfo.GetCellCountInTile() + vx,
 							h);
 					}
 				}

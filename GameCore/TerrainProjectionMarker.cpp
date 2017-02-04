@@ -131,7 +131,7 @@ namespace FlagRTS
 
 		// All terrain materials used
 		Array<string> neededMaterials;
-		FindProjectedTerrainMaterials(neededMaterials);
+		//FindProjectedTerrainMaterials(neededMaterials);
 
 		if( neededMaterials.size() == 0)
 		{
@@ -208,56 +208,55 @@ namespace FlagRTS
 
 	void TerrainProjectionMarker::FindProjectedTerrainMaterials(Array<string>& matNames)
 	{
-		auto& pos = GetPositionAbsolute();
-		Vector3 orientedSize = Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_X) * GetOrientationAbsolute() * Vector3(_halfSize.x, 0.f, _halfSize.y);
+		//auto& pos = GetPositionAbsolute();
+		//Vector3 orientedSize = Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3::UNIT_X) * GetOrientationAbsolute() * Vector3(_halfSize.x, 0.f, _halfSize.y);
 
-		// Check which terrain cells are occupied by marker's corners 
-		// ( assume its smaller than terrain cell )
-		auto map = GameWorld::GlobalWorld->GetMap();
-		auto terrainGrid = GameWorld::GlobalWorld->GetMap()->GetTerrain()->GetTerrainGrid();
-		Ogre::Terrain* terrain;
-		uint32 xMin = (uint32)std::max(0.f, std::min(pos.x - orientedSize.x, pos.x + orientedSize.x));
-		uint32 xMax = (uint32)std::min(map->GetTerrainSize().x, std::max(pos.x - orientedSize.x, pos.x + orientedSize.x));
-		uint32 zMin = (uint32)std::max(0.f, std::max(pos.z - orientedSize.y, pos.z + orientedSize.y));
-		uint32 zMax = (uint32)std::min(map->GetTerrainSize().y, std::max(pos.z - orientedSize.z, pos.z + orientedSize.z));
+		//// Check which terrain cells are occupied by marker's corners 
+		//// ( assume its smaller than terrain cell )
+		//auto map = GameWorld::GlobalWorld->GetMap();
+		//auto terrainGrid = GameWorld::GlobalWorld->GetMap()->GetTerrain()->GetTerrainGrid();
+		//Ogre::Terrain* terrain;
+		//uint32 xMin = (uint32)std::max(0.f, std::min(pos.x - orientedSize.x, pos.x + orientedSize.x));
+		//uint32 xMax = (uint32)std::min(map->GetTerrainSize().x, std::max(pos.x - orientedSize.x, pos.x + orientedSize.x));
+		//uint32 zMin = (uint32)std::max(0.f, std::max(pos.z - orientedSize.y, pos.z + orientedSize.y));
+		//uint32 zMax = (uint32)std::min(map->GetTerrainSize().y, std::max(pos.z - orientedSize.z, pos.z + orientedSize.z));
 
-		// Check minimal corner terrain
-		terrain = terrainGrid->GetTerrainFromPosition(xMin, zMin);
-		if( _lastProjectedTerrains[0] != terrain )
-		{
-			// Terrain cell changed ( or its 1st call )
-			_lastProjectedTerrains[0] = terrain;
-			matNames.push_back(terrain->getMaterialName());
-		}
-		// Check maximal corner terrain
-		terrain = terrainGrid->GetTerrainFromPosition(xMax, zMax);
-		if( _lastProjectedTerrains[0] != terrain )
-		{
-			// Marker on multiple cells
-			if( _lastProjectedTerrains[3] != terrain )
-			{
-				_lastProjectedTerrains[3] = terrain;
-				matNames.push_back(terrain->getMaterialName());
-			}
-			terrain = terrainGrid->GetTerrainFromPosition(xMax, zMin);
-			if( _lastProjectedTerrains[1] != terrain )
-			{
-				_lastProjectedTerrains[1] = terrain;
-				matNames.push_back(terrain->getMaterialName());
-			}
-			terrain = terrainGrid->GetTerrainFromPosition(xMin, zMax);
-			if( _lastProjectedTerrains[2] != terrain )
-			{
-				_lastProjectedTerrains[2] = terrain;
-				matNames.push_back(terrain->getMaterialName());
-			}
-		}
-		else
-		{
-			// Max and min corner falls into same cell, so we'll have only one terrain
-			_lastProjectedTerrains[1] = terrain;
-			_lastProjectedTerrains[2] = terrain;
-			_lastProjectedTerrains[3] = terrain;
-		}
+		//// Check minimal corner terrain
+		//terrain = terrainGrid->GetTerrainFromPosition(xMin, zMin);
+		//if( _lastProjectedTerrains[0] != terrain )
+		//{
+		//	// Terrain cell changed ( or its 1st call )
+		//	_lastProjectedTerrains[0] = terrain;
+		//	matNames.push_back(terrain->getMaterialName());
+		//}
+		//// Check maximal corner terrain
+		//terrain = terrainGrid->GetTerrainFromPosition(xMax, zMax);
+		//if( _lastProjectedTerrains[0] != terrain )
+		//{
+		//	// Marker on multiple cells
+		//	if( _lastProjectedTerrains[3] != terrain )
+		//	{
+		//		_lastProjectedTerrains[3] = terrain;
+		//		matNames.push_back(terrain->getMaterialName());
+		//	}
+		//	terrain = terrainGrid->GetTerrainFromPosition(xMax, zMin);
+		//	if( _lastProjectedTerrains[1] != terrain )
+		//	{
+		//		_lastProjectedTerrains[1] = terrain;
+		//		matNames.push_back(terrain->getMaterialName());
+		//	}
+		//	terrain = terrainGrid->GetTerrainFromPosition(xMin, zMax);
+		//	if( _lastProjectedTerrains[2] != terrain )
+		//	{
+		//		_lastProjectedTerrains[2] = terrain;
+		//		matNames.push_back(terrain->getMaterialName());
+		//	}
+		//}
+		//else
+		//{
+		//	// Max and min corner falls into same cell, so we'll have only one terrain
+		//	_lastProjectedTerrains[1] = terrain;
+		//	_lastProjectedTerrains[2] = terrain;
+		//	_lastProjectedTerrains[3] = terrain;
 	}
 }

@@ -3,6 +3,7 @@
 #include "GenericManager.h"
 #include <map>
 #include "Thread.h"
+#include "StringUtils.h"
 
 namespace FlagRTS
 {
@@ -12,7 +13,7 @@ namespace FlagRTS
 	class ThreadManager : public GenericManager<ThreadManager>
 	{
 	private:
-		typedef std::map<string, Thread*, string_less> ThreadMap;
+		typedef std::map<string, Thread*, StringLess> ThreadMap;
 		ThreadMap _threads;
 
 	protected:

@@ -1,5 +1,4 @@
 #include "SceneMarkerDefinition.h"
-#include "AnimationDefinitionFactory.h"
 #include <Exception.h>
 #include "SceneObjectState.h"
 
@@ -80,7 +79,7 @@ namespace FlagRTS
 
 				try
 				{
-					anim = animFactory.CreateCast(animNode);
+					anim = static_cast<AnimationDefinition*>(animFactory.Create(animNode));
 				}
 				catch(std::exception& e)
 				{

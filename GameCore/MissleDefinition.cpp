@@ -1,7 +1,7 @@
 #include "MissleDefinition.h"
 #include "Missle.h"
 #include "GameWorld.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 #include "IEffect.h"
 #include "IMover.h"
 
@@ -43,25 +43,27 @@ namespace FlagRTS
 		{
 			string effectName = XmlUtility::XmlGetString(impactEffectNode, "effect");
 
-			auto getEffect = [this, effectName]() 
+			auto getEffect = [this, effectName](IObjectDefinitionManager* mgr) 
 			{
 				IEffect* effect = static_cast<IEffect*>(
-					GameWorld::GlobalWorld->GetGameObjectDefinition("Effect", effectName));
+					mgr->GetObjectDefinitionByName("Effect", effectName));
 				_onImpactEffect = effect;
 			};
-			MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-				xNew1(DelegateEventHandler<decltype(getEffect)>, getEffect);
+			typedef DelegateEventHandler<decltype(getEffect), IObjectDefinitionManager*> DefinitionsLoadedHandler;		
+			GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+				xNew1(DefinitionsLoadedHandler, getEffect);
 		}
 
 		XmlNode* moverNode = missleNode->first_node("Mover");
 		string moverName = XmlUtility::XmlGetString(moverNode, "definition");
-		auto getMover = [this, moverName]() 
+		auto getMover = [this, moverName](IObjectDefinitionManager* mgr) 
 		{
 			IMover* mover = static_cast<IMover*>(
-				GameWorld::GlobalWorld->GetGameObjectDefinition("Mover", moverName));
+				mgr->GetObjectDefinitionByName("Mover", moverName));
 			_mover = mover;
 		};
-		MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-			xNew1(DelegateEventHandler<decltype(getMover)>, getMover);
+		typedef DelegateEventHandler<decltype(getMover), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+		GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+			xNew1(DefinitionsLoadedHandler, getMover);
 	}
 }

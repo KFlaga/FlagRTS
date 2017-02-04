@@ -3,6 +3,7 @@
 #include "TypeDefs.h"
 #include "Array.h"
 #include "Iterators.h"
+#include "StringUtils.h"
 
 namespace FlagRTS
 {

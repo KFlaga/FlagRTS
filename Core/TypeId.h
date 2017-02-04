@@ -36,14 +36,14 @@ namespace FlagRTS
 		TypeId GetNextId(const std::type_info& typeInfo); // Ensures that multiple calls with same type returns same id
 	};
 
-	//// Returns TypeId of type in template parameter
+	/// Returns TypeId of type in template parameter
 	template<typename T>
 	TypeId GetTypeId() 
 	{
 		static TypeId id = TypeHelper::GlobalTypeHelper->GetNextId(typeid(T)); // id is computed only 1 time for type ( for each dll )
 		return id; 
 	}
-	//// Returns TypeId of object passed as parameter
+	/// Returns TypeId of object passed as parameter
 	template<typename T>
 	TypeId GetTypeId(const T&) 
 	{ 

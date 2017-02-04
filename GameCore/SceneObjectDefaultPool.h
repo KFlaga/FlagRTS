@@ -1,14 +1,13 @@
 #pragma once
 
-#include "IGameObjectPool.h"
+#include "GameObjectPool.h"
 #include "IObjectStateSupplier.h"
 #include <ArrayMap.h>
 
 namespace FlagRTS
 {
-
 	template<typename ObjType, typename DefType>
-	class SceneObjectDefaultPool : public IGameObjectPoolCast<ObjType, DefType>
+	class SceneObjectDefaultPool : public GameObjectPool<ObjType, DefType>
 	{
 	protected:
 		ArrayMaps<IObjectStateSupplier*>::KeyCCString _stateSuppliers;
@@ -17,7 +16,6 @@ namespace FlagRTS
 		SceneObjectDefaultPool() { }
 		virtual ~SceneObjectDefaultPool()
 		{
-			_objects.clear();
 			for(auto it = _stateSuppliers.begin(); it != _stateSuppliers.end(); ++it)
 			{
 				xDelete(it->Value);

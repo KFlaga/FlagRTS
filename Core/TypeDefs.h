@@ -26,6 +26,23 @@ namespace Ogre
 #define DllExclusive __declspec( dllimport )
 #endif
 
+#define DISALLOW_COPY(Type) \
+	private: \
+		Type(const Type&); \
+		Type& operator=(const Type&);
+
+#define DEFINE_SINGLETON_CLASS(Type) \
+	private: \
+		static Type* _instance; \
+		Type(); \
+		Type(const Type&); \
+		Type& operator=(const Type&); \
+	public: \
+		static void Initialize(); \
+		static void Release(); \
+		static Type* Instance() { return _instance; }
+
+
 namespace FlagRTS
 {
 	typedef unsigned __int64 uint64;
@@ -52,40 +69,6 @@ namespace FlagRTS
 	typedef Ogre::Angle Angle;
 	typedef Ogre::Matrix3 Matrix3;
 
-	typedef int KeyCode;
-	typedef int MouseButton;
-	namespace MouseButtons
-	{
-		enum MB : int
-		{
-			Left = 0,
-			Right = 1,
-			Middle = 2
-		};
-	}
-
-	typedef int ModifierCode;
-	namespace ModifierCodes
-	{
-		enum MC
-		{
-			Shift = 1 << 0,
-			Ctrl = 1 << 4,
-			Alt = 1 << 8
-		};
-	}
-
-	class InputState;
-
-
-	struct string_less
-	{	
-		bool operator()(const string& _Left, const string& _Right) const
-		{
-			return _Left.compare(_Right) < 0;
-		}
-	};
-
 	template< bool condition, typename type_true, typename type_false >
 	struct ConditinalType { };
 
@@ -99,28 +82,5 @@ namespace FlagRTS
 	struct ConditinalType<false, type_true, type_false>
 	{
 		typedef type_false type;
-	};
-
-	struct StringIsEqual
-	{
-		bool operator()(const string& str1, const string& str2)
-		{
-			return str1.compare(str2) == 0;
-		}
-
-		bool operator()(const char* str1, const string& str2)
-		{
-			return str2.compare(str1) == 0;
-		}
-
-		bool operator()(const string& str1, const char* str2)
-		{
-			return str1.compare(str2) == 0;
-		}
-
-		bool operator()(const char* str1, const char* str2)
-		{
-			return std::strcmp(str1, str2) == 0;
-		}
 	};
 }

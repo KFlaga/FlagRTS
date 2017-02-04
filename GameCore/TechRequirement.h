@@ -1,6 +1,6 @@
 #pragma once
 
-#include <IGameObject.h>
+#include "GameObjectFactory.h"
 #include "Technology.h"
 #include "ICondition.h"
 #include <Event.h>
@@ -13,20 +13,13 @@ namespace FlagRTS
 	// be set before checking requirement
 	class TechRequirement : public IGameObject
 	{
-	public:
-		enum RequirementType : size_t
-		{
-			PlayerTechs, // Requirement on player owned technology
-			CommandState, // Requirement on command/command owner state ( for commands )
-		};
-
 	protected:
 		static const uint8 _noPlayer = (uint8)-1;
 		const char* _name;
 		TechAvailability _stateOnTrue;
 		TechAvailability _stateOnFalse;
 		TechAvailability _currentState;
-		IParametrizedCondition<uint8>* _condition; // Condition depending on player
+		ICondition* _condition;
 		const char* _inavailableHint; // Short text shown to player if tech is inavailable becouse of this requirement
 									  // Probably not met requirements will be enlisted, so it should be something like:
 									  // - "Structure X constructed" or - "Technology Y researched"
@@ -36,27 +29,12 @@ namespace FlagRTS
 		uint8 _player;
 
 	public:
+		
+		TechRequirement(XmlNode* requirementNode);
 		// ICondition is owned by TechRequirement and deleted in destructor
-		TechRequirement(TechAvailability onTrue, TechAvailability onFalse, IParametrizedCondition<uint8>* condition) : 
-			_stateOnTrue(onTrue),
-			_stateOnFalse(onFalse),
-			_currentState(Unchecked),
-			_isMet(false),
-			_condition(condition),
-			_inavailableHint(0),
-			_name(0),
-			_player(_noPlayer)
-		{ 
-			// Handle Type is used to distinguish TechRequirement subtypes
-			SetHandleTypePart(PlayerTechs);
-		}
+		TechRequirement(TechAvailability onTrue, TechAvailability onFalse, ICondition* condition);
 
-		virtual ~TechRequirement()
-		{
-			xDeleteSafe(_condition);
-			sDeleteSafe(_inavailableHint);
-			sDeleteSafe(_name);
-		}
+		virtual ~TechRequirement();
 
 		const char* GetName() const { return _name; }
 		// Name is copied and deleted in destructor
@@ -75,36 +53,14 @@ namespace FlagRTS
 		bool IsRequirementMet() const { return _isMet; }
 
 		// Before checking requirement, player should be set
-		bool CheckRequirement()
-		{
-			_isMet = _condition->CheckCondition();
-			TechAvailability newState = _isMet == true ? _stateOnTrue : _stateOnFalse;
-			if( newState != _currentState )
-			{
-				_currentState = newState;
-				_onStateChanged.Fire(this);
-			}
-
-			return _isMet;
-		}
+		bool CheckRequirement();
 
 		// Do not fire event ( used when checking all reqs of single tech )
-		bool CheckRequirementQuiet()
-		{
-			_isMet = _condition->CheckCondition();
-			TechAvailability newState = _isMet == true ? _stateOnTrue : _stateOnFalse;
-			_currentState = newState;
-
-			return _isMet;
-		}
+		bool CheckRequirementQuiet();
 
 		// Sets player for this requirement - must be called before checking.
 		// In dervied classes it allows also for doing player specific preparations.
-		virtual void SetPlayer(uint8 player)
-		{
-			_player = player;
-			_condition->SetParameters(player);
-		}
+		virtual void SetPlayer(uint8 player);
 
 		uint8 GetPlayer() const { return _player; }
 
@@ -122,32 +78,17 @@ namespace FlagRTS
 
 		Event<TechRequirement*>& GetStateChangedEvent() { return _onStateChanged; }
 
-		virtual TechRequirement* GetCopy() 
-		{ 
-			return xNew3(TechRequirement, _stateOnTrue, _stateOnFalse, 
-				(IParametrizedCondition<uint8>*)_condition->GetCopy()); 
-		}
+		virtual TechRequirement* GetCopy();
+	};
+
+	class TechRequirementFactory : public SubClassXmlFactory
+	{
+	public:
+		TechRequirementFactory();
 	};
 
 	// Returns combined availability of Technology which have given set of Requirements
 	// Rules are simple : if any req causes it to be hidden, it is hidden, otherwise if
 	// and req causes to be inavailable it is inavailable, otherwise it is available
-	inline TechAvailability GetFinalAvailability(const Array<TechRequirement*>& reqs)
-	{
-		TechAvailability availability = TechAvailability::Available;
-		for(unsigned int req = 0; req < reqs.size(); ++req)
-		{
-			TechAvailability reqAv = reqs[req]->GetTargetAvailability();
-			if(reqAv == TechAvailability::Hidden)
-			{
-				availability = TechAvailability::Hidden;
-				break;
-			}
-			else if(reqAv == TechAvailability::Inavailable)
-			{
-				availability = TechAvailability::Inavailable;
-			}
-		}
-		return availability;
-	}
+	TechAvailability GetFinalAvailability(const Array<TechRequirement*>& reqs);
 }

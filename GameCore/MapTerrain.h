@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DataTypes.h"
-#include "TerrainGrid.h"
+#include "OgreTerrainGrid.h"
 #include <Xml.h>
 
 namespace Ogre
@@ -21,17 +21,15 @@ namespace FlagRTS
 	private:
 		TerrainInfo _terrainInfo;
 		Ogre::TerrainGlobalOptions* _tgOptions;
-		TerrainGrid* _terrains; // Each terrain in group is cell ( such a way becouse Ogre handle only square terrains )
+		OgreTerrainGrid* _terrains; // Each terrain in group is cell ( such a way becouse Ogre handle only square terrains )
 		Ogre::SceneManager* _ogreMgr;
 		Ogre::Light* _globalLight;
 		Vector2 _terrainBounds;
 
 	public:
 		MapTerrain(Ogre::SceneManager* ogreMgr, float cellSize, int tileCellSize);
-
 		~MapTerrain();
 
-		
 		// Only stores info and prepares terrain to be created ( to load reseources )
 		// Also reads and creates global light
 		void ReadTerrainInfo(XmlNode* mapNode);
@@ -58,7 +56,7 @@ namespace FlagRTS
 
 		TerrainInfo& GetTerrainInfo() { return _terrainInfo; }
 
-		TerrainGrid* GetTerrainGrid() const { return _terrains; }
+		OgreTerrainGrid* GetTerrainGrid() const { return _terrains; }
 
 		const Vector2& GetTerrainSize() const
 		{
@@ -69,8 +67,6 @@ namespace FlagRTS
 		const Array2d<float>& GetFinalHeightMap() const { return _terrains->GetFinalHeightMap(); }
 
 	protected:
-		// Parses info on terrain and fills _terrainInfo structure
-		void ParseTerrainInfo(XmlNode* terrainNode);
 		// Creates global light ( ambient + directional ) with values read from node
 		void CreateGlobalLight(XmlNode* lightNode);
 		// Sets terrain global settings and creates new TerrainGrid

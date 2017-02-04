@@ -57,6 +57,11 @@ namespace FlagRTS
 			return _loadedTextures[idx];
 		}
 
+		uint16 GetTextureSize(uint8 idx)
+		{
+			return _textureSizes[idx];
+		}
+
 		// Returns count of textures that are currently loaded
 		uint8 GetLoadedTexturesCount() const { return (uint8)_loadedTextures.size(); }
 

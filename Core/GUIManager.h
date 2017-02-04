@@ -4,6 +4,7 @@
 #include "GenericManager.h"
 #include <map>
 #include "GUI.h"
+#include "StringUtils.h"
 
 #include <MyGui\MyGUI.h>
 #include <MyGUI\MyGUI_OgrePlatform.h>
@@ -25,7 +26,7 @@ namespace FlagRTS
 		MyGUI::Gui* _mygui;
 		MyGUI::OgrePlatform* _ogre;
 
-		typedef std::map<std::string, RefPtr<GUI>, string_less> GuiMap;
+		typedef std::map<std::string, RefPtr<GUI>, StringLess> GuiMap;
 		GuiMap _guis;
 
 		RefPtr<GUI> _currentGui;

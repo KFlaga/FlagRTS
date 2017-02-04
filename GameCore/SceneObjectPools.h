@@ -15,11 +15,6 @@ namespace FlagRTS
 	public:
 		MapDecoratorPool();
 		~MapDecoratorPool();
-
-		IGameObject* FindByHandle(ObjectHandle handle)
-		{
-			return static_cast<IGameObject*>(FindByHandleCast(handle));
-		}
 		
 		MapDecorator* CreateCast(MapDecoratorDefinition* objDef, int owner);
 
@@ -31,11 +26,6 @@ namespace FlagRTS
 	public:
 		GameCameraPool();
 		~GameCameraPool();
-
-		IGameObject* FindByHandle(ObjectHandle handle)
-		{
-			return static_cast<IGameObject*>(FindByHandleCast(handle));
-		}
 
 		GameCamera* CreateCast(GameCameraDefinition* objDef, int owner);
 
@@ -51,11 +41,6 @@ namespace FlagRTS
 	public:
 		UnitPool();
 		~UnitPool();
-
-		IGameObject* FindByHandle(ObjectHandle handle)
-		{
-			return static_cast<IGameObject*>(FindByHandleCast(handle));
-		}
 
 		Unit* CreateCast(UnitDefinition* objDef, int owner);
 
@@ -98,11 +83,6 @@ namespace FlagRTS
 	public:
 		MisslePool();
 		~MisslePool();
-
-		IGameObject* FindByHandle(ObjectHandle handle)
-		{
-			return static_cast<IGameObject*>(FindByHandleCast(handle));
-		}
 		
 		Missle* CreateCast(MissleDefinition* objDef, int owner);
 

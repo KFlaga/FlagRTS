@@ -1,9 +1,7 @@
 #pragma once
 
-#include <IGameObject.h>
-#include <TypeId.h>
+#include "IGameObject.h"
 #include "DataTypes.h"
-#include <ObjectHandle.h>
 #include <Xml.h>
 
 namespace FlagRTS

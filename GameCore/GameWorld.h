@@ -7,20 +7,17 @@
 #include <ObjectHandle.h>
 #define NEUTRAL_PLAYERNUM 8
 
-namespace Ogre
-{
-	class SceneManager;
-	class RenderWindow;
-}
-
 namespace FlagRTS
 {
-	class MainGameObjectPool;
+	class IObjectDefinitionManager;
+	class IGameObjectPoolManager;
+	class IGameObjectPool;
+	class IGameObject;
+	class ObjectDefinition;
+
 	class Map;
 	class SceneObject;
 	class SceneObjectDefinition;
-	class ObjectDefinition;
-	class IGameObject;
 	class PathingSystem;
 	class UnitDefinition;
 	class Unit;
@@ -47,14 +44,20 @@ namespace FlagRTS
 	// they should take them from GameWorld::GlobalWorld
 	class GameWorld
 	{
+		DISALLOW_COPY(GameWorld);
+
 	public:
 		static GameWorld* GlobalWorld;
+
 		typedef Array<std::pair<std::pair<SpawnInfo*, int>, SceneObjectDefinition*>> SpawnList;
 
+	private: // System interfaces
+		IGameObjectPoolManager* _objectPoolManager; // Not owned by GameWorld
+		IGameObjectPool* _mainObjectPool; // Not owned by GameWorld
+		IObjectDefinitionManager* _objectDefinitionManager; // Not owned by GameWorld
+
 	private:
-		MainGameObjectPool* _objectPool; // Not owned by GameWorld
 		Ogre::SceneManager* _ogreSceneMgr;
-		Ogre::RenderWindow* _gameWindow;
 		InGameSettings* _gameSettings;
 		Map* _map; // Map created in and owned by GameWorld
 		GlobalStatisticsManager* _statsManager; // Not owned by GameWorld ( may be useful after game ends - i.e. score screen )
@@ -75,8 +78,9 @@ namespace FlagRTS
 
 	public:
 		GameWorld(Ogre::SceneManager* sceneMgr,
-			Ogre::RenderWindow* gamewindow,
-			MainGameObjectPool* objectPool,
+			IObjectDefinitionManager* objectDefinitionManager,
+			IGameObjectPoolManager* objectPoolManager,
+			IGameObjectPool* mainObjectPool,
 			GlobalStatisticsManager* statsManager
 			);
 		~GameWorld();
@@ -155,7 +159,10 @@ namespace FlagRTS
 		Resources* GetResources() const { return _resources; }
 		void SetNewResourcesData(Resources* resources);
 
-		MainGameObjectPool* GetObjectPool() const { return _objectPool; }
+	public: // System interfaces
+		IGameObjectPoolManager* GetGameObjectPoolManager() const { return _objectPoolManager; }
+		IGameObjectPool* GetGameObjectPool() const { return _mainObjectPool; }
+		IObjectDefinitionManager* GetObjectDefinitionManager() const { return _objectDefinitionManager; }
 
 		ConstructionManager* GetConstructionManager() const { return _constructionMgr; }
 
@@ -199,5 +206,23 @@ namespace FlagRTS
 
 		Event<const NoticeMessage&>& NoticeRequested() { return _noticeRequested; }
 		Event<const NoticeMessage&>& QuickNoticeRequested() { return _quickNoticeRequested; }
+	};
+
+	/// Provides global access to game system interfaces
+	/**
+		Static class that provides simple global access to important game world components' interfaces.
+		All interfaces are querried via global GameWorld ('GameWorld::GlobalWorld').
+	*/
+	class GameInterfaces
+	{
+		DISALLOW_COPY(GameInterfaces);
+		GameInterfaces();
+
+	public:
+		static GameWorld* GetGameWorld() { return GameWorld::GlobalWorld; }
+
+		static IGameObjectPoolManager* GetGameObjectPoolManager() { return GetGameWorld()->GetGameObjectPoolManager(); }
+		static IGameObjectPool* GetGameObjectPool() { return GetGameWorld()->GetGameObjectPool(); }
+		static IObjectDefinitionManager* GetObjectDefinitionManager() { return GetGameWorld()->GetObjectDefinitionManager(); }
 	};
 }

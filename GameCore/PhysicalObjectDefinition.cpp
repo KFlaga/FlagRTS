@@ -1,5 +1,4 @@
 #include "PhysicalObjectDefinition.h"
-#include "AnimationDefinitionFactory.h"
 #include "SelectionFlags.h"
 #include <PathFindingUniformGridObstacle.h>
 #include <OgreMeshManager.h>
@@ -9,7 +8,7 @@
 #include "CollisionGroup.h"
 #include "CollisionShapes.h"
 #include "GameWorld.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 
 namespace FlagRTS
 {
@@ -171,7 +170,7 @@ namespace FlagRTS
 
 				try
 				{
-					anim = animFactory.CreateCast(animNode);
+					anim = static_cast<AnimationDefinition*>(animFactory.Create(animNode));
 				}
 				catch(std::exception& e)
 				{
@@ -269,12 +268,13 @@ namespace FlagRTS
 			_portraitOrientation = XmlUtility::XmlGetQuaternion(orientNode);
 		}
 
-		auto getPortraitDefinition = [this, defName, defType]() 
+		auto getDefinition = [this, defName, defType](IObjectDefinitionManager* mgr) 
 		{
 			_portraitDef = static_cast<PhysicalObjectDefinition*>(
-				GameWorld::GlobalWorld->GetSceneObjectDefinition(defType, defName));
+				mgr->GetObjectDefinitionByName(defType, defName));
 		};
-		MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-			xNew1(DelegateEventHandler<decltype(getPortraitDefinition)>, getPortraitDefinition);
+		typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;		
+		GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+			xNew1(DefinitionsLoadedHandler, getDefinition);
 	}
 }

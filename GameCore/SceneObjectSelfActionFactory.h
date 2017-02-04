@@ -3,13 +3,14 @@
 #include "ISelfActionFactory.h"
 #include "SceneObjectSelfAction.h"
 #include <map>
+#include <StringUtils.h>
 
 namespace FlagRTS
 {
 	class SceneObjectSelfActionFactory : public ISelfActionFactory<XmlNode*, SceneObject*>
 	{
 	protected:
-		typedef std::map<string,  ISelfActionFactory<XmlNode*, SceneObject*>*, string_less> SubFactoryMap;
+		typedef std::map<string,  ISelfActionFactory<XmlNode*, SceneObject*>*, StringLess> SubFactoryMap;
 		SubFactoryMap _subFactories;
 
 	public:

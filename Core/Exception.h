@@ -1,6 +1,7 @@
 #pragma once
 
 #include <exception>
+#include <string>
 
 namespace FlagRTS
 {
@@ -15,9 +16,11 @@ namespace FlagRTS
 
 	public:
 		Exception(const char* reason, const char* file, int line, bool isFatal = false, bool autoLog = true) _NOEXCEPT;
-
+		Exception(const std::string& reason, const char* file, int line, bool isFatal = false, bool autoLog = true) _NOEXCEPT;
+	
 		void ShowMessageBox() const;
 		void AddLog() const _NOEXCEPT;
+
 	};
 
 #define CastFatalException(reason) throw( new Exception(reason, __FILE__, __LINE__, true) )

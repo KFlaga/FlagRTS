@@ -1,27 +1,29 @@
 #include "MainGameObjectPool.h"
+#include "GameObjectPool.h"
 #include "SceneObjectPools.h"
 #include "SceneMarkerPools.h"
-#include "FXObjectPools.h"
+#include "FXParticles.h"
+#include "FXSound.h"
 #include <Memory.h>
 #include <Exception.h>
 
 namespace FlagRTS
 {
-	MainGameObjectPool* MainGameObjectPool::GlobalPool = 0;
-
 	MainGameObjectPool::MainGameObjectPool()
 	{
-		_objPools.insert(GetTypeId<MapDecorator>() ,xNew0(MapDecoratorPool));
-		_objPools.insert(GetTypeId<GameCamera>() ,xNew0(GameCameraPool));
-		_objPools.insert(GetTypeId<Unit>() ,xNew0(UnitPool));
-		_objPools.insert(GetTypeId<Missle>() ,xNew0(MisslePool));
+		_objPools.insert(GetTypeId<MapDecorator>(), xNew0(MapDecoratorPool));
+		_objPools.insert(GetTypeId<GameCamera>(), xNew0(GameCameraPool));
+		_objPools.insert(GetTypeId<Unit>(), xNew0(UnitPool));
+		_objPools.insert(GetTypeId<Missle>(), xNew0(MisslePool));
 
-		_objPools.insert(GetTypeId<TerrainProjectionMarker>() ,xNew0(TerrainProjectionMarkerPool));
-		_objPools.insert(GetTypeId<ModelMarker>() ,xNew0(ModelMarkerPool));
-		_objPools.insert(GetTypeId<BillboardMarker>() ,xNew0(BillboardMarkerPool));
+		_objPools.insert(GetTypeId<TerrainProjectionMarker>(), xNew0(TerrainProjectionMarkerPool));
+		_objPools.insert(GetTypeId<ModelMarker>(), xNew0(ModelMarkerPool));
+		_objPools.insert(GetTypeId<BillboardMarker>(), xNew0(BillboardMarkerPool));
 
-		_objPools.insert(GetTypeId<FXParticles>() ,xNew0(FXParticlesPool));
-		_objPools.insert(GetTypeId<FXSound>() ,xNew0(FXSoundPool));
+		typedef GameObjectPool<FXParticles, FXParticlesDefinition> FXPartclesPool;
+		_objPools.insert(GetTypeId<FXParticles>(), xNew0(FXPartclesPool));
+		typedef GameObjectPool<FXSound, FXSoundDefinition> FXSoundPool;
+		_objPools.insert(GetTypeId<FXSound>(), xNew0(FXSoundPool));
 	}
 
 	MainGameObjectPool::~MainGameObjectPool()
@@ -67,17 +69,26 @@ namespace FlagRTS
 
 	IGameObject* MainGameObjectPool::Create(ObjectDefinition* objDef, int owner)
 	{
-		return _objPools.find(objDef->GetFinalType())->Value->Create(objDef, owner);
+		return GetObjectPool(objDef->GetFinalType())->Create(objDef, owner);
 	}
 
 	void MainGameObjectPool::Destroy(IGameObject* object)
 	{
-		_objPools.find(object->GetFinalType())->Value->Destroy(object);
+		GetObjectPool(object->GetFinalType())->Destroy(object);
 	}
 
-	IGameObject* MainGameObjectPool::FindByHandle(ObjectHandle handle)
+	IGameObject* MainGameObjectPool::FindByHandle(TypeId objectType, ObjectHandle handle)
 	{
-		IGameObject* object = reinterpret_cast<IGameObject*>(handle.Object);
-		return FindByHandle(object->GetFinalType(), handle);
+		return GetObjectPool(objectType)->FindByHandle(objectType, handle);
+	}
+
+	IGameObjectPool* MainGameObjectPool::GetObjectPool(TypeId ofType)
+	{
+		return _objPools.find(ofType)->Value;
+	}
+
+	IGameObject* MainGameObjectPool::GetLastCreatedObject(TypeId ofType)
+	{
+		return GetObjectPool(ofType)->GetLastCreatedObject();
 	}
 }

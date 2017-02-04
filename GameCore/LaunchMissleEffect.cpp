@@ -3,7 +3,7 @@
 #include "Unit.h"
 #include "GameWorld.h"
 #include "Map.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 
 namespace FlagRTS
 {
@@ -60,14 +60,15 @@ namespace FlagRTS
 			_applyTargetOffset = true;
 		}
 
-		auto getMissleDefinition = [this, missleDefName]() 
+		auto getDefinition = [this, missleDefName](IObjectDefinitionManager* mgr) 
 		{
 			MissleDefinition* missleDef = static_cast<MissleDefinition*>(
-				GameWorld::GlobalWorld->GetSceneObjectDefinition("Missle", missleDefName));
+				mgr->GetObjectDefinitionByName("Missle", missleDefName));
 			_missleStorage.SetMissleDefinition(missleDef);
 		};
-		MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-			xNew1(DelegateEventHandler<decltype(getMissleDefinition)>,getMissleDefinition);
+		typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;		
+		GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+			xNew1(DefinitionsLoadedHandler, getDefinition);
 	}
 
 	LaunchMissleEffect::~LaunchMissleEffect()
@@ -108,7 +109,7 @@ namespace FlagRTS
 			spawnPos = casterUnit->GetPositionAbsolute() + spawnOrientation*_spawnOffset;
 		else
 			spawnPos = casterUnit->GetPositionAbsolute();
-		
+
 		GameWorld::GlobalWorld->GetMap()->GetRootNode()->addChild( newMissle->GetSceneNode() );
 		newMissle->SetPosition(spawnPos);
 		newMissle->SetOrientation(spawnOrientation);
@@ -154,14 +155,15 @@ namespace FlagRTS
 			string effectName = XmlUtility::XmlGetString(effectNode, "name");
 			++effCount;
 
-			auto getEffect = [this, effectName]() 
+			auto getEffect = [this, effectName](IObjectDefinitionManager* mgr) 
 			{
 				ILaunchMissleEffect* effect = static_cast<ILaunchMissleEffect*>(
-					GameWorld::GlobalWorld->GetGameObjectDefinition("Effect", effectName));
+					mgr->GetObjectDefinitionByName("Effect", effectName));
 				AddEffect(effect);
 			};
-			MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-				xNew1(DelegateEventHandler<decltype(getEffect)>, getEffect);
+			typedef DelegateEventHandler<decltype(getEffect), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+			GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+				xNew1(DefinitionsLoadedHandler, getEffect);
 
 			effectNode = effectNode->next_sibling();
 		}

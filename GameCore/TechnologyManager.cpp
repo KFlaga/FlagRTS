@@ -1,7 +1,6 @@
 
 #include "TechnologyManager.h"
 #include "Faction.h"
-#include "TechRequirementFactory.h"
 
 namespace FlagRTS
 {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ObjectDefinition.h"
+#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -25,5 +26,11 @@ namespace FlagRTS
 		virtual ~IMover() { }
 		// Moves object and returns distance traveled in this frame
 		virtual float Move(SceneObject* object, float moveTime, float frameTime) = 0;
+	};
+
+	class MoverFactory : public SubClassXmlFactory
+	{
+	public:
+		MoverFactory();
 	};
 }

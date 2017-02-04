@@ -1,7 +1,7 @@
 #include "SpawnObjectEffect.h"
 #include "SceneObject.h"
 #include "GameWorld.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 
 namespace FlagRTS
 {
@@ -28,13 +28,14 @@ namespace FlagRTS
 		string defName = XmlUtility::XmlGetString(objectNode, "definition");
 		string typeName = XmlUtility::XmlGetString(objectNode, "type");
 
-		auto getObjectDefinition = [this, defName, typeName]() 
+		auto getDefinition = [this, defName, typeName](IObjectDefinitionManager* mgr) 
 		{
 			_objectDef = static_cast<SceneObjectDefinition*>(
-				GameWorld::GlobalWorld->GetSceneObjectDefinition(typeName, defName));
+				mgr->GetObjectDefinitionByName(typeName, defName));
 		};
-		MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-			xNew1(DelegateEventHandler<decltype(getObjectDefinition)>,getObjectDefinition);
+		typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+		GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+			xNew1(DefinitionsLoadedHandler, getDefinition);
 
 	}
 
@@ -47,7 +48,7 @@ namespace FlagRTS
 		SceneObject* object = GameWorld::GlobalWorld->
 			CreateSceneObject(_objectDef, 
 			_setCastersOwner ? static_cast<SceneObject*>(caster)->GetOwner() : 
-				NEUTRAL_PLAYERNUM);
+			NEUTRAL_PLAYERNUM);
 
 		if(_attachToCaster && caster != 0)
 		{
@@ -103,7 +104,7 @@ namespace FlagRTS
 		default:
 			break;
 		}
-		
+
 		spawnOrient = spawnOrient * _orientationOffset;
 		spawnPosition += spawnOrient * _positionOffset;
 

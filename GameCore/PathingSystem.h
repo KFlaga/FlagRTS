@@ -34,7 +34,7 @@ namespace FlagRTS
 	class Dbvh;
 	class PathUnit;
 	struct IBoxPathingQuery;
-	class MapTerrain;
+	class TerrainBase;
 
 	class PathingSystem
 	{
@@ -61,13 +61,13 @@ namespace FlagRTS
 		PathingSystem(Ogre::SceneManager* ogreMgr,
 			const int cellCountX, 
 			const int cellCountY,
-			const Vector2& cellSize);
+			const float cellSize);
 		~PathingSystem();
 
 		// Creates obstacles on map, based on terrain height differences 
 		// and rules read from PathingConfig.
 		// Must be called after terrains are loaded
-		void CreateSlopeObstacles(MapTerrain* terrain);
+		void CreateSlopeObstacles(TerrainBase* terrain);
 
 		void Update(float ms);
 
@@ -124,7 +124,7 @@ namespace FlagRTS
 
 	private:
 		void CreatePathingMap(XmlNode* rootNode, 
-			int x, int y, const Vector2& cellSize);
+			int x, int y, float cellSize);
 		void InitGlobalPathFinder(XmlNode* rootNode);
 		void InitLocalPathFinder(XmlNode* rootNode);
 		void ProcessFinishedPathRequests();

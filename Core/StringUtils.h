@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TypeDefs.h"
+#include <string>
 #include "Memory.h"
 
 namespace FlagRTS
@@ -30,4 +30,35 @@ namespace FlagRTS
 		emptyCharPtr[len] = '\0';
 		return emptyCharPtr;
 	}
+
+	struct StringLess
+	{	
+		bool operator()(const string& _Left, const string& _Right) const
+		{
+			return _Left.compare(_Right) < 0;
+		}
+	};
+
+	struct StringIsEqual
+	{
+		bool operator()(const string& str1, const string& str2)
+		{
+			return str1.compare(str2) == 0;
+		}
+
+		bool operator()(const char* str1, const string& str2)
+		{
+			return str2.compare(str1) == 0;
+		}
+
+		bool operator()(const string& str1, const char* str2)
+		{
+			return str1.compare(str2) == 0;
+		}
+
+		bool operator()(const char* str1, const char* str2)
+		{
+			return std::strcmp(str1, str2) == 0;
+		}
+	};
 }

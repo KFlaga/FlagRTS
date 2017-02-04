@@ -4,7 +4,7 @@
 #include "UnitCommandSet.h"
 #include "SelectionFlags.h"
 #include "UnitClass.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 #include "GameWorld.h"
 #include <SystemSettings.h>
 #include "CommandButton.h"
@@ -110,15 +110,14 @@ namespace FlagRTS
 
 			// Becouse in this point they might be not loaded yet, 
 			// postpone it until all defs are loaded
-			auto addWeaponDef = [this, weaponName, isActive]() 
+			auto getDefinition = [this, weaponName, isActive](IObjectDefinitionManager* mgr) 
 			{
-				_weapons.push_back(std::make_pair(
-					MainGameObjectPool::GlobalPool->GetObjectDefinitionByNameCast
-					<WeaponDefinition>(weaponName, "Weapon"), isActive));
+				_weapons.push_back(std::make_pair(static_cast<WeaponDefinition*>(
+					mgr->GetObjectDefinitionByName(weaponName, "Weapon")), isActive));
 			};
-
-			MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-				xNew1(DelegateEventHandler<decltype(addWeaponDef)>, addWeaponDef);
+			typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+			GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+				xNew1(DefinitionsLoadedHandler, getDefinition);
 
 			weaponNode = weaponNode->next_sibling();
 		}
@@ -150,11 +149,10 @@ namespace FlagRTS
 				// Lambda funtion for creating button -> button needs definition which can
 				// be not loaded at this point ( as CommandSet is created in UnitDefinition ),
 				// so we'll create it later, when all Definitions are loaded
-				auto createButton = [this, key, buttonName, hotkey, posx, posy, customCommand]() 
+				auto createButton = [this, key, buttonName, hotkey, posx, posy, customCommand](IObjectDefinitionManager* mgr) 
 				{
-					CommandButton* button = xNew1(CommandButton, 
-						MainGameObjectPool::GlobalPool->GetObjectDefinitionByNameCast
-						<CommandButtonDefinition>(buttonName, "CommandButton"));
+					CommandButton* button = xNew1(CommandButton, static_cast<CommandButtonDefinition*>(
+						mgr->GetObjectDefinitionByName(buttonName, "CommandButton")));
 					button->SetHotkey(hotkey);
 					button->SetPosX(posx);
 					button->SetPosY(posy);
@@ -163,8 +161,9 @@ namespace FlagRTS
 					else
 						_customCommands.push_back(std::make_pair(customCommand, button));
 				};
-				MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-					xNew1(DelegateEventHandler<decltype(createButton)>,createButton);
+				typedef DelegateEventHandler<decltype(createButton), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+				GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+					xNew1(DefinitionsLoadedHandler, createButton);
 
 				commandNode = commandNode->next_sibling();
 		}
@@ -250,13 +249,14 @@ namespace FlagRTS
 		_selectionMarkerSize = XmlUtility::XmlGetXYZ(selectionNode->first_node("Size"));
 		_selectionMarkerOffset = XmlUtility::XmlGetXYZ(selectionNode->first_node("Position"));
 
-		auto getMarkerDef = [this, markerName, markerType]() 
+		auto getDefinition = [this, markerName, markerType](IObjectDefinitionManager* mgr) 
 		{
-			_selectionMarkerDef = static_cast<SceneMarkerDefinition*>(GameWorld::GlobalWorld->
-				GetSceneObjectDefinition(markerType, markerName));
+			_selectionMarkerDef = static_cast<SceneMarkerDefinition*>(
+				mgr->GetObjectDefinitionByName(markerType, markerName));
 		};
-		MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-			xNew1(DelegateEventHandler<decltype(getMarkerDef)>,getMarkerDef);
+		typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+		GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+			xNew1(DefinitionsLoadedHandler, getDefinition);
 	}
 
 	void UnitDefinition::ParseMoveStrategy(XmlNode* moveNode)
@@ -272,12 +272,13 @@ namespace FlagRTS
 			moveStrategyName = XmlUtility::XmlGetString(moveNode, "name");
 		}
 
-		auto getMoveStrategy = [this, moveStrategyName]() 
+		auto getDefinition = [this, moveStrategyName](IObjectDefinitionManager* mgr) 
 		{
-			_defaultMoveStrategy = static_cast<IMoveStrategy*>(GameWorld::GlobalWorld->
-				GetGameObjectDefinition("MoveStrategy", moveStrategyName));
+			_defaultMoveStrategy = static_cast<IMoveStrategy*>(
+				mgr->GetObjectDefinitionByName("MoveStrategy", moveStrategyName));
 		};
-		MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-			xNew1(DelegateEventHandler<decltype(getMoveStrategy)>,getMoveStrategy);
+		typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+		GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+			xNew1(DefinitionsLoadedHandler, getDefinition);
 	}
 }

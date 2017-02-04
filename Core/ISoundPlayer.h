@@ -1,7 +1,6 @@
 #pragma once
 
 #include "TypeDefs.h"
-#include "IGameObject.h"
 #include "Array.h"
 
 namespace FlagRTS
@@ -22,7 +21,7 @@ namespace FlagRTS
 		// All SoundPlayers uses the same additional gain, that is GameVolume from AudioSettings
 		// which is set when requesting SoundSource -> all SoundPlayer users should
 		// multiply gain with one set, not set a new one
-		class ISoundPlayer : public IGameObject
+		class ISoundPlayer
 		{
 		protected:
 			Array<SoundSource*> _allSources;

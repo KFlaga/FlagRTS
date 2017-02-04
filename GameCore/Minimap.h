@@ -22,7 +22,7 @@ namespace FlagRTS
 	class GameCamera;
 	class BillboardMarker;
 	class MiniMapDbvh;
-	class MapTerrain;
+	class TerrainBase;
 	
 	namespace MinimapFlags
 	{

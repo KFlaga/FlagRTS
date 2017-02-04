@@ -1,6 +1,6 @@
 #include "BaseEffects.h"
 #include "GameWorld.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 
 namespace FlagRTS
 {
@@ -19,14 +19,15 @@ namespace FlagRTS
 		{
 			string effectName = XmlUtility::XmlGetString(effectNode, "name");
 
-			auto getEffect = [this, effectName]() 
+			auto getDefinition = [this, effectName](IObjectDefinitionManager* objDefMgr) 
 			{
 				IEffect* effect = static_cast<IEffect*>(
-					GameWorld::GlobalWorld->GetGameObjectDefinition("Effect", effectName));
+					objDefMgr->GetObjectDefinitionByName("Effect", effectName));
 				_effects.push_back(effect);
 			};
-			MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-				xNew1(DelegateEventHandler<decltype(getEffect)>, getEffect);
+			typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+			GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+				xNew1(DefinitionsLoadedHandler, getDefinition);
 
 			effectNode = effectNode->next_sibling();
 		}

@@ -1,16 +1,5 @@
 #pragma once
 
-#define SINGLETON_CLASS(Type) \
-	private: \
-		static Type* _instance; \
-		Type(); \
-		Type(const Type&); \
-		Type& operator=(const Type&); \
-	public: \
-		static void Initialize(); \
-		static void Release(); \
-		static Type* Instance() { return _instance; }
-
 namespace FlagRTS
 {
 	// Base class for all manager classes ( singleton with Initialize / Release )

@@ -6,6 +6,29 @@
 
 namespace FlagRTS
 {
+	typedef int KeyCode;
+	typedef int MouseButton;
+	namespace MouseButtons
+	{
+		enum MB : int
+		{
+			Left = 0,
+			Right = 1,
+			Middle = 2
+		};
+	}
+
+	typedef int ModifierCode;
+	namespace ModifierCodes
+	{
+		enum MC
+		{
+			Shift = 1 << 0,
+			Ctrl = 1 << 4,
+			Alt = 1 << 8
+		};
+	}
+
 	namespace InputStates
 	{
 		enum IS : int8

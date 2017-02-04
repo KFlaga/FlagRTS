@@ -1,10 +1,10 @@
 #pragma once
 
 #include "ObjectDefinition.h"
-#include <Xml.h>
 #include <Event.h>
 #include "SceneObjectProperties.h"
 #include <Array.h>
+#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -102,5 +102,11 @@ namespace FlagRTS
 		void ParseSOClasses(XmlNode* classesNode);
 		void ParseSOChildObjects(XmlNode* childrenNode);
 		void ParseMinimap(XmlNode* minimapNode);
+	};
+
+	class SceneObjectDefinitionFactory : public SubClassXmlFactory
+	{
+	public:
+		SceneObjectDefinitionFactory();
 	};
 }

@@ -1,4 +1,4 @@
-#include "InputState.h"
+#include "Input.h"
 #include "SystemSettings.h"
 #include "InputSettings.h"
 #include <OISKeyboard.h>

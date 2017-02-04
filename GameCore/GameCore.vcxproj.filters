@@ -145,6 +145,15 @@
     <Filter Include="Source Files\Effects">
       <UniqueIdentifier>{591981f4-9d13-479f-9685-f2b2e12f6f6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Terrain">
+      <UniqueIdentifier>{da2f375d-0a6b-4e0d-ad39-ebd352284cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ObjectData">
+      <UniqueIdentifier>{245844dc-71b3-4915-9dfc-d52699ede198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SystemInterfaces">
+      <UniqueIdentifier>{98ff7f74-72ef-4717-93bb-097ff58e6cc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataTypes.h">
@@ -156,16 +165,10 @@
     <ClInclude Include="SceneObject.h">
       <Filter>Header Files\SceneObjects</Filter>
     </ClInclude>
-    <ClInclude Include="SceneObjectDefinitionFactory.h">
-      <Filter>Header Files\SceneObjects</Filter>
-    </ClInclude>
     <ClInclude Include="SceneObjectDefinition.h">
       <Filter>Header Files\SceneObjects</Filter>
     </ClInclude>
     <ClInclude Include="PhysicalObjectDefinition.h">
-      <Filter>Header Files\SceneObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicalObjectDefinitionFactory.h">
       <Filter>Header Files\SceneObjects</Filter>
     </ClInclude>
     <ClInclude Include="ObjectDefinition.h">
@@ -222,16 +225,10 @@
     <ClInclude Include="AnimationDefinition.h">
       <Filter>Header Files\Animations</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationDefinitionFactory.h">
-      <Filter>Header Files\Animations</Filter>
-    </ClInclude>
     <ClInclude Include="SkeletalAnimation.h">
       <Filter>Header Files\Animations</Filter>
     </ClInclude>
     <ClInclude Include="SkeletalAnimationDefinition.h">
-      <Filter>Header Files\Animations</Filter>
-    </ClInclude>
-    <ClInclude Include="SkeletalAnimationDefinitionFactory.h">
       <Filter>Header Files\Animations</Filter>
     </ClInclude>
     <ClInclude Include="IAction.h">
@@ -282,12 +279,6 @@
     <ClInclude Include="Map.h">
       <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="MapTerrain.h">
-      <Filter>Header Files\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainGrid.h">
-      <Filter>Header Files\Map</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainInfo.h">
       <Filter>Header Files\Map</Filter>
     </ClInclude>
@@ -295,12 +286,6 @@
       <Filter>Header Files\Map</Filter>
     </ClInclude>
     <ClInclude Include="SpawnInfoFactory.h">
-      <Filter>Header Files\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="ITerrainLoader.h">
-      <Filter>Header Files\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="ArtefixMapTerrainLoader.h">
       <Filter>Header Files\Map</Filter>
     </ClInclude>
     <ClInclude Include="UnitRetrievers.h">
@@ -330,9 +315,6 @@
     <ClInclude Include="UnitClass.h">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
-    <ClInclude Include="IGameObjectPool.h">
-      <Filter>Header Files\ObjectPools</Filter>
-    </ClInclude>
     <ClInclude Include="MainGameObjectPool.h">
       <Filter>Header Files\ObjectPools</Filter>
     </ClInclude>
@@ -352,9 +334,6 @@
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="CommandButtonDefinition.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandButtonDefinitionFactory.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="DefaultCommands.h">
@@ -379,9 +358,6 @@
       <Filter>Header Files\Animations</Filter>
     </ClInclude>
     <ClInclude Include="TransformAnimationDefinition.h">
-      <Filter>Header Files\Animations</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformAnimationDefinitionFactory.h">
       <Filter>Header Files\Animations</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
@@ -441,9 +417,6 @@
     <ClInclude Include="EmptyAnimation.h">
       <Filter>Header Files\Animations</Filter>
     </ClInclude>
-    <ClInclude Include="EmptyAnimationDefinitionFactory.h">
-      <Filter>Header Files\Animations</Filter>
-    </ClInclude>
     <ClInclude Include="EmptyAnimationDefinition.h">
       <Filter>Header Files\Animations</Filter>
     </ClInclude>
@@ -474,9 +447,6 @@
     <ClInclude Include="TrainingQueue.h">
       <Filter>Header Files\Building</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectDefinitionsCreator.h">
-      <Filter>Header Files\ObjectPools</Filter>
-    </ClInclude>
     <ClInclude Include="FXObject.h">
       <Filter>Header Files\FXObjects</Filter>
     </ClInclude>
@@ -487,9 +457,6 @@
       <Filter>Header Files\FXObjects</Filter>
     </ClInclude>
     <ClInclude Include="FXSoundDefinition.h">
-      <Filter>Header Files\FXObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="FXObjectDefinitionFactory.h">
       <Filter>Header Files\FXObjects</Filter>
     </ClInclude>
     <ClInclude Include="FXParticles.h">
@@ -516,13 +483,7 @@
     <ClInclude Include="PlayerStatsManager.h">
       <Filter>Header Files\PlayerInfo</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultTechReqs.h">
-      <Filter>Header Files\Technology</Filter>
-    </ClInclude>
     <ClInclude Include="CommandRequirement.h">
-      <Filter>Header Files\Technology</Filter>
-    </ClInclude>
-    <ClInclude Include="TechRequirementFactory.h">
       <Filter>Header Files\Technology</Filter>
     </ClInclude>
     <ClInclude Include="Faction.h">
@@ -672,13 +633,7 @@
     <ClInclude Include="SpawnObjectEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="MoverFactory.h">
-      <Filter>Header Files\Mover</Filter>
-    </ClInclude>
     <ClInclude Include="Movers.h">
-      <Filter>Header Files\Mover</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveStrategyFactory.h">
       <Filter>Header Files\Mover</Filter>
     </ClInclude>
     <ClInclude Include="BaseEffects.h">
@@ -694,9 +649,6 @@
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
     <ClInclude Include="InflictDamagaEffect.h">
-      <Filter>Header Files\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="EffectFactory.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
     <ClInclude Include="FXObjectPools.h">
@@ -774,6 +726,48 @@
     <ClInclude Include="GeneralEventPool.h">
       <Filter>Header Files\ECA</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainBase.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="OgreTerrain.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="OgreTerrainGrid.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="OgreTerrainLoader.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="ETMTerrain.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerUnitKindRequirement.h">
+      <Filter>Header Files\Technology</Filter>
+    </ClInclude>
+    <ClInclude Include="IObjectDefinitionManager.h">
+      <Filter>Header Files\SystemInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectDefinitionsManager.h">
+      <Filter>Header Files\ObjectPools</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameObjectPool.h">
+      <Filter>Header Files\SystemInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectDataHolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameObjectPoolManager.h">
+      <Filter>Header Files\SystemInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectPool.h">
+      <Filter>Header Files\ObjectPools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneObject.cpp">
@@ -834,9 +828,6 @@
       <Filter>Source Files\Animations</Filter>
     </ClCompile>
     <ClCompile Include="SkeletalAnimationDefintion.cpp">
-      <Filter>Source Files\Animations</Filter>
-    </ClCompile>
-    <ClCompile Include="SkeletalAnimationDefinitonFactory.cpp">
       <Filter>Source Files\Animations</Filter>
     </ClCompile>
     <ClCompile Include="SkeletalAnimation.cpp">
@@ -923,19 +914,10 @@
     <ClCompile Include="TransformAnimationDefinition.cpp">
       <Filter>Source Files\Animations</Filter>
     </ClCompile>
-    <ClCompile Include="TransformAnimationDefinitionFactory.cpp">
-      <Filter>Source Files\Animations</Filter>
-    </ClCompile>
     <ClCompile Include="TransformAnimation.cpp">
       <Filter>Source Files\Animations</Filter>
     </ClCompile>
-    <ClCompile Include="ArtefixMapTerrainLoader.cpp">
-      <Filter>Source Files\Map</Filter>
-    </ClCompile>
     <ClCompile Include="Map.cpp">
-      <Filter>Source Files\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="MapTerrain.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
     <ClCompile Include="TerrainGrid.cpp">
@@ -962,9 +944,6 @@
     <ClCompile Include="SceneObjectPools.cpp">
       <Filter>Source Files\ObjectPools</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectDefinitionsCreator.cpp">
-      <Filter>Source Files\ObjectPools</Filter>
-    </ClCompile>
     <ClCompile Include="Tileset.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
@@ -976,9 +955,6 @@
     </ClCompile>
     <ClCompile Include="ObjectDefinition.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EmptyAnimationDefinitionFactory.cpp">
-      <Filter>Source Files\Animations</Filter>
     </ClCompile>
     <ClCompile Include="EmptyAnimationDefiniton.cpp">
       <Filter>Source Files\Animations</Filter>
@@ -1032,12 +1008,6 @@
       <Filter>Source Files\Players</Filter>
     </ClCompile>
     <ClCompile Include="Technology.cpp">
-      <Filter>Source Files\Technology</Filter>
-    </ClCompile>
-    <ClCompile Include="TechRequirementFactory.cpp">
-      <Filter>Source Files\Technology</Filter>
-    </ClCompile>
-    <ClCompile Include="DefaultTechReqs.cpp">
       <Filter>Source Files\Technology</Filter>
     </ClCompile>
     <ClCompile Include="Faction.cpp">
@@ -1210,6 +1180,36 @@
     </ClCompile>
     <ClCompile Include="GeneralEventPool.cpp">
       <Filter>Source Files\ECA</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainInfo.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="OgreTerrainLoader.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="OgreTerrain.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="ETMTerrain.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TechRequirementFactory.cpp">
+      <Filter>Source Files\Technology</Filter>
+    </ClCompile>
+    <ClCompile Include="TechRequirement.cpp">
+      <Filter>Source Files\Technology</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerUnitKindRequirement.cpp">
+      <Filter>Source Files\Technology</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectDefinitionsManager.cpp">
+      <Filter>Source Files\ObjectPools</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectDataHolder.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

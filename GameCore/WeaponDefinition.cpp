@@ -4,7 +4,7 @@
 #include <LocalizationManager.h>
 #include "UnitClass.h"
 #include "GameWorld.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 #include "LaunchMissleEffect.h"
 
 namespace FlagRTS
@@ -42,14 +42,15 @@ namespace FlagRTS
 		{
 			string effectName = XmlUtility::XmlGetString(attackEffectNode, "effect");
 
-			auto getEffect = [this, effectName]() 
+			auto getEffect = [this, effectName](IObjectDefinitionManager* mgr) 
 			{
 				IEffect* effect = static_cast<IEffect*>(
-					GameWorld::GlobalWorld->GetGameObjectDefinition("Effect", effectName));
+					mgr->GetObjectDefinitionByName("Effect", effectName));
 				_onAttackEffect = effect;
 			};
-			MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-				xNew1(DelegateEventHandler<decltype(getEffect)>, getEffect);
+			typedef DelegateEventHandler<decltype(getEffect), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+			GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+				xNew1(DefinitionsLoadedHandler, getEffect);
 		}
 
 		if( _type == WeaponTypes::Missle )
@@ -59,14 +60,15 @@ namespace FlagRTS
 			{
 				string effectName = XmlUtility::XmlGetString(missleEffectNode, "effect");
 
-				auto getEffect = [this, effectName]() 
+				auto getEffect = [this, effectName](IObjectDefinitionManager* mgr) 
 				{
 					ILaunchMissleEffect* effect = static_cast<ILaunchMissleEffect*>(
-						GameWorld::GlobalWorld->GetGameObjectDefinition("Effect", effectName));
+						mgr->GetObjectDefinitionByName("Effect", effectName));
 					_missleEffect = effect;
 				};
-				MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-					xNew1(DelegateEventHandler<decltype(getEffect)>, getEffect);
+				typedef DelegateEventHandler<decltype(getEffect), IObjectDefinitionManager*> DefinitionsLoadedHandler2;		
+				GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+					xNew1(DefinitionsLoadedHandler2, getEffect);
 			}
 		}
 	}

@@ -244,14 +244,14 @@ namespace FlagRTS
 				if(soundNode == spackNode->last_node("Sound", 5))
 					lastSoundParsed = true;
 
-				Sound* sound = _soundFactory->CreateCast(soundNode);
+				Sound* sound = _soundFactory->Create(soundNode);
 				if(sound != 0)
 				{
 					// add directory to sound file path
 					sound->SetFile( packDir + sound->GetFile());
 
 					soundPack->insert(sound->GetName().c_str(), sound);
-					ISoundPlayer* player = _playerFactory->CreateCast(soundNode);
+					ISoundPlayer* player = _playerFactory->Create(soundNode);
 					if(player != 0)
 					{
 						player->SetSound(sound);

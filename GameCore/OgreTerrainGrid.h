@@ -11,7 +11,7 @@ namespace FlagRTS
 	// doesn't work properly
 	// More specialzed than TerrainGroup, so not all properties need to
 	// be set manualy
-	class TerrainGrid
+	class OgreTerrainGrid
 	{
 	private:
 		Ogre::SceneManager* _ogreMgr;
@@ -29,8 +29,8 @@ namespace FlagRTS
 		Vector3 _origin;
 
 	public:
-		TerrainGrid(Ogre::SceneManager*);
-		~TerrainGrid();
+		OgreTerrainGrid(Ogre::SceneManager*);
+		~OgreTerrainGrid();
 
 		uint32 GetVectorPos(uint32 x, uint32 z) const 
 		{ 
@@ -42,15 +42,15 @@ namespace FlagRTS
 		void SetOriginAtTopLeft() 
 		{ 
 			SetTerrainsCenter(Vector3(
-			(float)_terrInfo.GetTilesX()*_terrInfo.GetTileWorldSize()*0.5f, 0,
-			(float)_terrInfo.GetTilesZ()*_terrInfo.GetTileWorldSize()*0.5f));
+			(float)_terrInfo.GetTilesX()*_terrInfo.GetWorldSizeOfTile()*0.5f, 0,
+			(float)_terrInfo.GetTilesZ()*_terrInfo.GetWorldSizeOfTile()*0.5f));
 		}
 
 		void SetTerrainsCenter(const Vector3& center) 
 		{ 
 			_center = center; 
-			_origin = Vector3(_center.x - _terrInfo.GetTilesX()*_terrInfo.GetTileWorldSize()*0.5f, 0,
-				_center.z - _terrInfo.GetTilesZ()*_terrInfo.GetTileWorldSize()*0.5f);
+			_origin = Vector3(_center.x - _terrInfo.GetTilesX()*_terrInfo.GetWorldSizeOfTile()*0.5f, 0,
+				_center.z - _terrInfo.GetTilesZ()*_terrInfo.GetWorldSizeOfTile()*0.5f);
 		}
 		const Vector3& GetTerrainsCenter() const { return _center; }
 
@@ -67,8 +67,8 @@ namespace FlagRTS
 
 		Ogre::Terrain* GetTerrainFromPosition(float x, float z)
 		{
-			return GetTerrain((uint32)(x/_terrInfo.GetTileWorldSize()), 
-				(uint32)(z/_terrInfo.GetTileWorldSize()));
+			return GetTerrain((uint32)(x/_terrInfo.GetWorldSizeOfTile()), 
+				(uint32)(z/_terrInfo.GetWorldSizeOfTile()));
 		}
 
 		void PrepareTerrains();

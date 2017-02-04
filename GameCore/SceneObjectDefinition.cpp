@@ -6,7 +6,7 @@
 #include "IKindSpecificDataSupplier.h"
 #include <StringUtils.h>
 #include "GameWorld.h"
-#include "MainGameObjectPool.h"
+#include "IObjectDefinitionManager.h"
 #include "Minimap.h"
 #include <OgreMaterialManager.h>
 
@@ -118,14 +118,15 @@ namespace FlagRTS
 			Quaternion rot = XmlUtility::XmlGetQuaternion(objectNode->first_node("Orientation"));
 			++children;
 
-			auto getEffect = [this, defName, defType, pos, rot]() 
+			auto getDefinition = [this, defName, defType, pos, rot](IObjectDefinitionManager* mgr) 
 			{
 				SceneObjectDefinition* soDef = static_cast<SceneObjectDefinition*>(
-					GameWorld::GlobalWorld->GetSceneObjectDefinition(defType, defName));
+					mgr->GetObjectDefinitionByName(defType, defName));
 				_childObjects.push_back(std::make_pair(soDef, std::make_pair(pos, rot)));
 			};
-			MainGameObjectPool::GlobalPool->OnAllDefinitionsLoaded() +=
-				xNew1(DelegateEventHandler<decltype(getEffect)>, getEffect);
+			typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;
+			GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
+				xNew1(DefinitionsLoadedHandler, getDefinition);
 
 			objectNode = objectNode->next_sibling();
 		}

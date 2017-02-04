@@ -16,7 +16,7 @@ namespace FlagRTS
 		_matName(matName),
 		_sceneNode(0)
 	{
-		_cellSize = GameWorld::GlobalWorld->GetMap()->GetCellSize();
+		_cellSize = GameWorld::GlobalWorld->GetMap()->GetWorldSizeOfCell();
 		_renderCells = _ogreMgr->createManualObject();
 		_renderCells->setCastShadows(false);
 		_renderCells->setDynamic(true);

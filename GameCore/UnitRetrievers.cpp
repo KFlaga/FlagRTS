@@ -1,6 +1,7 @@
 #include "UnitRetrievers.h"
+#include <Exception.h>
 
-#include "MainGameObjectPool.h"
+#include "IGameObjectPoolManager.h"
 #include "MainEventPool.h"
 #include "SceneObjectPools.h"
 #include "GameWorld.h"
@@ -48,13 +49,13 @@ namespace FlagRTS
 	UnitByHandleRetriever::operator Unit*() const
 	{
 		return reinterpret_cast<Unit*>(
-			MainGameObjectPool::GlobalPool->FindByHandle(_handle));
+			GameInterfaces::GetGameObjectPool()->FindByHandle(GetTypeId<Unit>(), _handle));
 	}
 
 	UnitLastCreatedRetriever::operator Unit*() const
 	{
 		return reinterpret_cast<Unit*>(
-			MainGameObjectPool::GlobalPool->GetObjectPool(GetTypeId<Unit>())->
+			GameInterfaces::GetGameObjectPoolManager()->GetObjectPool(GetTypeId<Unit>())->
 			GetLastCreatedObject());
 	}
 
