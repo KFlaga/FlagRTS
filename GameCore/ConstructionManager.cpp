@@ -3,6 +3,8 @@
 #include "ConstructionSiteFactory.h"
 #include "Unit.h"
 #include "GameWorld.h"
+#include "ISceneObjectSpawner.h"
+#include "IGameObjectPool.h"
 
 namespace FlagRTS
 {
@@ -68,8 +70,8 @@ namespace FlagRTS
 	void ConstructionManager::BeginConstruction(UnitDefinition* plannedBuildingDef, 
 		const Vector3& terrainPosition, int owner)
 	{
-		Unit* building = static_cast<Unit*>(GameWorld::GlobalWorld->
-			CreateSceneObject(plannedBuildingDef, owner));
+		Unit* building = static_cast<Unit*>(GameInterfaces::GetGameObjectPool()->
+			Create(plannedBuildingDef, owner));
 
 		// Set new commands to building -> that is only AbortBuildingConstructionCommand
 		// Rest will be enabled after construction is finished
@@ -77,7 +79,7 @@ namespace FlagRTS
 		Unit* csite = _siteFactory->CreateSite(building, owner);
 		building->ConstructionFinished() += &_onConstructionFinished;
 
-		GameWorld::GlobalWorld->SpawnSceneObject(csite, 
+		GameInterfaces::GetSceneObjectSpawner()->SpawnSceneObject(csite, 
 			SpawnInfo(Quaternion::IDENTITY, terrainPosition, false));
 		// Building should be spawned from within ConstructionSite
 	}
@@ -92,8 +94,7 @@ namespace FlagRTS
 		// For now assume it was stopped
 		// Things like resource return should be done from within ConstructionSite state
 		// If it was aborted, just despawn and destroy both things
-		GameWorld::GlobalWorld->DespawnSceneObject(building);
-		GameWorld::GlobalWorld->DestroySceneObject(building);
+		GameInterfaces::GetSceneObjectSpawner()->DestroySceneObject(building);
 
 		_pendingSiteDeletes.push_back(site);
 	}
@@ -106,7 +107,7 @@ namespace FlagRTS
 			return;
 		}
 
-		GameWorld::GlobalWorld->DespawnSceneObject(site);
+		GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(site);
 
 		// If construction was finished, destory site
 		_pendingSiteDeletes.push_back(site);

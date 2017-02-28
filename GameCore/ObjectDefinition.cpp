@@ -1,51 +1,44 @@
 #include "ObjectDefinition.h"
-#include "IKindSpecificDataSupplier.h"
-#include "IObjectSpecificDataSupplier.h"
+#include "GameWorld.h"
+#include "IObjectDefinitionManager.h"
+#include "ObjectDefinitionFactory.h"
 
 namespace FlagRTS
 {
-	ObjectDefinition::ObjectDefinition() :
-		_objectDataName(""),
-		_objectDataHandleSupplier(0),
-		_kindDataHandleSupplier(0),
-		_kindSpecificDataHandle(0)
+	ObjectDefinition::ObjectDefinition()
 	{
 
 	}
 
-	ObjectDefinition::ObjectDefinition(XmlNode* defNode) :
-		_objectDataName(""),
-		_objectDataHandleSupplier(0),
-		_kindDataHandleSupplier(0),
-		_kindSpecificDataHandle(0)
+	ObjectDefinition::ObjectDefinition(XmlNode* defNode)
 	{
 		// Name of definition
-		XmlAttribute* nameAtt = defNode->first_attribute("name",4,false);
-		if(nameAtt != 0)
-			SetName(nameAtt->value());
-		// Object data if available
-		XmlAttribute* dataAtt = defNode->first_attribute("data",4,false);
-		if(dataAtt != 0)
-			_objectDataName = dataAtt->value();
+		SetName(XmlUtility::XmlGetStringIfExists(defNode, "name"));
+
+		// Find all component nodes
+		std::vector<XmlNode*> componentNodes = XmlUtility::XmlFindAllNodesWithName(
+			defNode, "Component");
+		// For each node : find its type, then factory then create it
+		for(int i = 0; i < componentNodes.size(); ++i)
+		{
+			XmlNode* compNode = componentNodes[i];
+			const char* typeName = XmlUtility::XmlGetString(compNode, "type");
+			IObjectDefinitionFactory* compFactory = GameInterfaces::GetObjectDefinitionManager()->GetFactoryOfType(typeName);
+
+			_ASSERT(compFactory != 0);
+			if(compFactory != 0)
+			{
+				ObjectDefinition* compDef = compFactory->Create(compNode);
+				_componentDefinitions.push_back(compDef);
+			}
+		}
 	}
 
 	ObjectDefinition::~ObjectDefinition()
 	{
-		if(_kindSpecificDataHandle != 0)
-			_kindDataHandleSupplier->DeleteHandle(_kindSpecificDataHandle);
-	}
-
-	size_t ObjectDefinition::RequestObjectDataHandle() const 
-	{ 
-		if(_objectDataHandleSupplier != 0)
-			return _objectDataHandleSupplier->GetObjectSpecificDataHandle();
-		else
-			return 0;
-	}
-
-	void ObjectDefinition::DeleteObjectDataHandle(size_t handle) const
-	{
-		if(handle != 0)
-			_objectDataHandleSupplier->DeleteHandle(handle);
+		for(int i = 0; i < _componentDefinitions.size(); ++i)
+		{
+			xDelete(_componentDefinitions[i]);
+		}
 	}
 }

@@ -15,9 +15,6 @@ namespace FlagRTS
 	public:
 		MissleIdleState(Missle* owner);
 		void Update(float ms);
-
-		const char* GetName();
-		size_t GetType();
 	};
 
 	// Missle idle state :
@@ -35,9 +32,9 @@ namespace FlagRTS
 
 		void Begin();
 		void End();
+		void Interrupt();
+		void Resume();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
 	};
 
 	// Missle dying state -> changed to on impact
@@ -54,8 +51,8 @@ namespace FlagRTS
 
 		void Begin();
 		void End();
-		void Update(float ms);		
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
+		void Update(float ms);
 	};
 }

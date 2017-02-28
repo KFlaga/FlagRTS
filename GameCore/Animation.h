@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AnimationDefinition.h"
+#include "IGameObject.h"
 
 namespace FlagRTS
 {

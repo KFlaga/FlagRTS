@@ -1,9 +1,10 @@
 #include "SceneObject.h"
 #include <Exception.h>
 #include "GameWorld.h"
+#include "IGameObjectPool.h"
+#include "ISceneObjectSpawner.h"
 #include "Player.h"
 #include <OgreSceneManager.h>
-#include "Minimap.h"
 
 namespace FlagRTS
 {
@@ -14,11 +15,7 @@ namespace FlagRTS
 		_definition(0),
 		_stateMachine(),
 		_loaded(false),
-		_spawned(false),
-		_selectionFlags(0),
-		_owner(NEUTRAL_PLAYERNUM),
-		_minimapHandle(0),
-		_minimapFlags(MinimapFlags::NeverVisible)
+		_spawned(false)
 	{ }
 
 	void SceneObject::SetSceneObjectDefinition(SceneObjectDefinition* soDef)
@@ -26,10 +23,6 @@ namespace FlagRTS
 		_definition = soDef;
 		_onSpawn = soDef->GetOnSpawnEvent();
 		_onDespawn = soDef->GetOnDespawnEvent();
-		_onHoverBegin = soDef->GetOnHoverBeginEvent();
-		_onHoverEnd = soDef->GetOnHoverEndEvent();
-		_objectSpecificDataHandle = soDef->RequestObjectDataHandle();
-		_minimapFlags = soDef->GetMinimapFlags();
 	}
 
 	SceneObject::SceneObject(SceneObjectDefinition* soDef) :
@@ -39,20 +32,12 @@ namespace FlagRTS
 		_definition(soDef),
 		_stateMachine(),
 		_loaded(false),
-		_spawned(false),
-		_selectionFlags(soDef->GetSelectionFlags()),
-		_minimapHandle(0),
-		_minimapFlags(soDef->GetMinimapFlags()),
-		_owner(NEUTRAL_PLAYERNUM)
+		_spawned(false)
 	{
 		SetFinalType( soDef->GetFinalType() );
 
 		_onSpawn = soDef->GetOnSpawnEvent();
 		_onDespawn = soDef->GetOnDespawnEvent();
-		_onHoverBegin = soDef->GetOnHoverBeginEvent();
-		_onHoverEnd = soDef->GetOnHoverEndEvent();
-
-		_objectSpecificDataHandle = soDef->RequestObjectDataHandle();
 	}
 
 	SceneObject::~SceneObject()
@@ -61,18 +46,14 @@ namespace FlagRTS
 			GetParent()->DetachChild(this, false, false);
 		for(unsigned int i = 0; i < _childObjects.size(); ++i)
 		{
-			GameWorld::GlobalWorld->QueueDestroySceneObject(_childObjects[i]);
+			GameInterfaces::GetSceneObjectSpawner()->DestroySceneObject(_childObjects[i], true);
 		}
 		DetachAllChildren(false, false);
-
-		if(_objectSpecificDataHandle != 0)
-		{
-			_definition->DeleteObjectDataHandle(_objectSpecificDataHandle);
-		}
 	}
 
 	void SceneObject::Update(float ms) 
 	{ 
+		IGameObject::Update(ms);
 		_stateMachine.Update(ms);
 	}
 
@@ -195,7 +176,7 @@ namespace FlagRTS
 		// Dont spawn other objects ( actually there shouldnt be any )
 		for(unsigned int i = 0; i < _spawnObjects.size(); ++i)
 		{
-			GameWorld::GlobalWorld->SpawnSceneObject(_spawnObjects[i].first, 
+			GameInterfaces::GetSceneObjectSpawner()->SpawnSceneObject(_spawnObjects[i].first, 
 				SpawnInfo(_spawnObjects[i].second.second, _spawnObjects[i].second.first, false));
 			AttachChild(_spawnObjects[i].first, true);
 		}
@@ -208,19 +189,21 @@ namespace FlagRTS
 		for(unsigned int i = 0; i < _spawnObjects.size(); ++i)
 		{
 			if(_spawnObjects[i].first->IsSpawned())
-				GameWorld::GlobalWorld->DespawnSceneObject(_spawnObjects[i].first);
+				GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(_spawnObjects[i].first);
 		}
 		DetachAllChildren(false, false);
 	}
 
 	void SceneObject::LoadResources(Ogre::SceneManager* ogreMgr)
 	{
+		IGameObject::LoadResources(ogreMgr);
+
 		_spawnObjects.reserve(_definition->GetChildObjects().size());
 		_childObjects.reserve(_definition->GetChildObjects().size());
 		for(unsigned int i = 0; i < _definition->GetChildObjects().size(); ++i)
 		{
-			auto object = GameWorld::GlobalWorld->CreateSceneObject(
-				_definition->GetChildObjects()[i].first, _owner);
+			SceneObject* object = static_cast<SceneObject*>(GameInterfaces::GetGameObjectPool()->Create(
+				_definition->GetChildObjects()[i].first, _owner));
 			_spawnObjects.push_back(std::make_pair(object, _definition->GetChildObjects()[i].second));
 		}
 	}
@@ -233,10 +216,12 @@ namespace FlagRTS
 			{
 				// this means that object was attached after Despawn, which should not happen
 				_ASSERT(false); 
-				GameWorld::GlobalWorld->DespawnSceneObject(_childObjects[i]);
+				GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(_childObjects[i]);
 			}
-			GameWorld::GlobalWorld->DestroySceneObject(_childObjects[i]);
+			GameInterfaces::GetSceneObjectSpawner()->DestroySceneObject(_childObjects[i]);
 		}
 		_childObjects.clear();
+		
+		IGameObject::UnloadResources(ogreMgr);
 	}
 }

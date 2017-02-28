@@ -5,7 +5,6 @@
 #include <Exception.h>
 #include "SceneObjectState.h"
 #include "PathingSystem.h"
-#include "CollisionGroup.h"
 #include "CollisionShapes.h"
 #include "GameWorld.h"
 #include "IObjectDefinitionManager.h"
@@ -15,8 +14,6 @@ namespace FlagRTS
 	PhysicalObjectDefinition::PhysicalObjectDefinition() :
 		SceneObjectDefinition(),
 		_animations(0),
-		_footprint(0),
-		_havePhysics(false),
 		_portraitDef(0),
 		_useDefaultPortraitPosition(true),
 		_portraitPosition(Vector3::ZERO),
@@ -31,8 +28,6 @@ namespace FlagRTS
 		_meshScale(0.f,0.f,0.f),
 		_ingameSize(0.f,0.f,0.f),
 		_animations(xNew0(AnimationDefinitionMap)),
-		_footprint(0),
-		_havePhysics(false),
 		_portraitDef(0),
 		_useDefaultPortraitPosition(true),
 		_portraitPosition(Vector3::ZERO),
@@ -90,13 +85,6 @@ namespace FlagRTS
 			if(flagsNode != 0)
 				ParsePOFlags(flagsNode);
 
-			XmlNode* pathingNode = poNode->first_node("Pathing");
-			if(pathingNode != 0)
-			{
-				_havePhysics = true;
-				ParsePathing(pathingNode);
-			}
-
 			XmlNode* portaitNode = poNode->first_node("PortraitObject");
 			if(portaitNode != 0)
 			{
@@ -110,8 +98,6 @@ namespace FlagRTS
 
 	PhysicalObjectDefinition::~PhysicalObjectDefinition()
 	{
-		xDeleteSafe(_footprint);
-		//	xDeleteSafe(_physicsDefinition);
 		if(_animations != 0)
 		{
 			for(auto asetIt = _animations->begin(), end = _animations->end();
@@ -130,12 +116,7 @@ namespace FlagRTS
 
 	void PhysicalObjectDefinition::ParsePOFlags(XmlNode* flagsNode)
 	{
-		_isSelectable = XmlUtility::XmlGetFlag(flagsNode, "IsSelectable");
-		if(_isSelectable)
-			_selectionFlags |= SelectionFlags::Selectable;
-		_isHoverable = XmlUtility::XmlGetFlag(flagsNode, "IsHoverable");
-		if(_isHoverable)
-			_selectionFlags |= SelectionFlags::Hoverable;
+
 	}
 
 	void PhysicalObjectDefinition::ParsePOProperties(XmlNode* propsNode)
@@ -187,66 +168,6 @@ namespace FlagRTS
 				stateNum, animsForState));
 
 			stateNode = stateNode->next_sibling("State",5);
-		}
-	}
-
-	void PhysicalObjectDefinition::ParsePathing(XmlNode* pathingNode)
-	{
-		_addToPathingGraph = XmlUtility::XmlGetBoolIfExists(pathingNode->first_node("AddToGraph"), "value", true);
-
-		_pathingGroup = 0;
-		XmlNode* pathingGroupsNode = pathingNode->first_node("PathingGroups",13);
-		if(pathingGroupsNode != 0)
-		{
-			XmlNode* groupNode =  pathingGroupsNode->first_node("Group",5);
-			while(groupNode != 0)
-			{
-				_pathingGroup |= CollisionGroups::ParseCollisionGroupType(
-					XmlUtility::XmlGetString(groupNode, "name", 4));
-				groupNode = groupNode->next_sibling();
-			}
-		}
-
-		_pathingBlocked = 0;
-		pathingGroupsNode = pathingNode->first_node("BlockedGroups",13);
-		if(pathingGroupsNode != 0)
-		{
-			XmlNode* groupNode =  pathingGroupsNode->first_node("Group",5);
-			while(groupNode != 0)
-			{
-				_pathingBlocked |= CollisionGroups::ParseCollisionGroupType(
-					XmlUtility::XmlGetString(groupNode, "name", 4));
-				groupNode = groupNode->next_sibling();
-			}
-		}
-
-		_pathingShape = CollisionShapes::ParseCollisionShapeType(XmlUtility::XmlGetStringIfExists(
-			pathingNode->first_node("Shape",5), "value", "Box"));
-
-		bool useFootprint = XmlUtility::XmlGetFlag(
-			pathingNode, "UseFootprint");
-		if(useFootprint)
-		{
-			XmlNode* footprintNode = pathingNode->first_node("Footprint", 9);
-			int sizeX = XmlUtility::XmlGetInt(footprintNode, "x", 1);
-			int sizeY = XmlUtility::XmlGetInt(footprintNode, "y", 1);
-			_footprint = xNew2(PathFinding::UniformGridObstacle, sizeX, sizeY);
-
-			XmlNode* rowNode = footprintNode->first_node("Row",3); 
-			for(int row = 0; row < sizeY; ++row)
-			{
-				const char* filledCells = XmlUtility::XmlGetString(
-					rowNode, "filled", 6);
-				for(int col = 0; col < sizeX; ++col)
-				{
-					filledCells[col] == 'x' ?
-						_footprint->SetAt(row, col, 
-						PathFinding::CollisionFilter(_pathingGroup, _pathingBlocked)) :
-						_footprint->SetAt(row, col, 
-						PathFinding::CollisionFilter(0));
-				}
-				rowNode = rowNode->next_sibling();
-			}
 		}
 	}
 

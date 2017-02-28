@@ -2,6 +2,8 @@
 #include "Unit.h"
 #include "ConstructionSiteData.h"
 #include "GameWorld.h"
+#include "IGameObjectPool.h"
+#include "ISceneObjectSpawner.h"
 #include "Map.h"
 #include <PathFindingUniformGridPathingMap.h>
 #include <StringUtils.h>
@@ -39,27 +41,26 @@ namespace FlagRTS
 
 		csiteDef->SetModelName(name);
 		csiteDef->SetInheritsScale(false);
-		csiteDef->SetIsHoverable(false);
 		csiteDef->SetIsIndependent(true);
-		csiteDef->SetIsSelectable(false);
 		csiteDef->SetCountsAsPlayerUnit(false);
-		csiteDef->SetSelectionFlags(0);
 		csiteDef->SetScale(Vector3(1.f,1.f,1.f));
+		/*
 		auto khsupp = xNew0(ConstructionSiteTypeDataSupplier);
 		csiteDef->SetKindDataHandleSupplier(khsupp);
 		csiteDef->SetKindSpecificDataHandle(khsupp->GetKindSpecificDataHandle());
 		csiteDef->SetObjectDataHandleSupplier(
 			xNew0(ConstructionSiteObjectDataSupplier));
+			*/
 		csiteDef->SetAnimations(
 			xNew0(AnimationDefinitionMap));
 		csiteDef->SetPathingBlockedGroups(building->GetPathingBlockedGroups());
 		csiteDef->SetPathingGroup(building->GetPathingGroup());
 		csiteDef->GetObjectClasses().push_back(CopyChar("ConstructionSite"));
 
-		Unit* csite = static_cast<Unit*>(GameWorld::GlobalWorld->
-			CreateSceneObject(csiteDef, owner));
+		Unit* csite = static_cast<Unit*>(GameInterfaces::GetGameObjectPool()->
+			Create(csiteDef, owner));
 
-		csite->GetObjectSpecificData<ConstructionSiteObjectData>()->Building = building;
+		// csite->GetObjectSpecificData<ConstructionSiteObjectData>()->Building = building;
 
 		return csite;
 	}
@@ -67,7 +68,7 @@ namespace FlagRTS
 	void ConstructionSiteFactory::DestroySite(Unit* site)
 	{
 		auto def = site->GetUnitDefinition();
-		GameWorld::GlobalWorld->DestroySceneObject(site);
+		GameInterfaces::GetSceneObjectSpawner()->DestroySceneObject(site);
 		xDelete(def);
 	}
 

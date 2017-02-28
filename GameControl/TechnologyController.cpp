@@ -4,7 +4,6 @@
 #include <MainGameObjectPool.h>
 #include <ConstructionManager.h>
 #include <TechRequirement.h>
-#include <TechRequirementFactory.h>
 #include <TechnologyManager.h>
 
 //#include <Thread.h>
@@ -85,7 +84,7 @@ namespace FlagRTS
 
 	//void TechnologyController::BeginRequirementTracking()
 	//{
-	//	_reqsTracker = xNew1(RequirementsTracker, this);
+	//	_reqsTracker = New<RequirementsTracker>( this);
 
 	//	Thread* trackerThread = ThreadManager::Instance()->CreateThread("RequirementTrackerThread");
 	//	if(!Thread::IsMainThread())

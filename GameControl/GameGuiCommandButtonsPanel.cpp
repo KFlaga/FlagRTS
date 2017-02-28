@@ -2,7 +2,7 @@
 #include <CommandButton.h>
 #include <MyGUI\MyGUI.h>
 #include <ConfigurationManager.h>
-
+#include <Input.h>
 
 namespace FlagRTS
 {

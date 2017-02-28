@@ -7,16 +7,18 @@
 #include <Profiler.h>
 
 #include "GameWorld.h"
+#include "ISceneObjectSpawner.h"
 #include "PathingSystem.h"
 #include "Map.h"
 
 #include "ConstructionSiteData.h"
 #include "Resources.h"
-#include "TrainingQueue.h"
+#include "TrainingComponent.h"
 
 namespace FlagRTS
 {
-	UnitState::UnitState(Unit* owner) :
+	UnitState::UnitState(Unit* owner, size_t type, const char* name) :
+		SceneObjectState(type, name),
 		_owner(owner)
 	{
 
@@ -29,7 +31,7 @@ namespace FlagRTS
 	}
 
 	UnitIdleState::UnitIdleState(Unit* owner) :
-		UnitState(owner),
+		UnitState(owner, SceneObjectStates::Idle, "Idle"),
 		_defaultActionLength(1e6f),
 		_boredActionLength(1e7f),
 		_boredTimer(0.f)
@@ -38,6 +40,8 @@ namespace FlagRTS
 
 	void UnitIdleState::Begin()
 	{
+		_status = StateStatus::RunningNoncritical;
+
 		_defaultActionLength = _owner->GetAnimController().
 			FindAnimation(SceneObjectStates::Idle, "Default")->GetLength() * 3.f;
 
@@ -61,6 +65,18 @@ namespace FlagRTS
 	void UnitIdleState::End()
 	{
 		_owner->GetAnimController().EndAllAnimations();
+		_status = StateStatus::Ready;
+	}
+
+	void UnitIdleState::Interrupt()
+	{
+		_owner->GetAnimController().EndAllAnimations();
+		_status = StateStatus::Ready;
+	}
+
+	void UnitIdleState::Resume()
+	{
+		Begin();
 	}
 
 	void UnitIdleState::Update(float ms)
@@ -93,24 +109,16 @@ namespace FlagRTS
 		UnitState::Update(ms);
 	}
 
-	const char* UnitIdleState::GetName()
-	{
-		return "Idle";
-	}
-
-	size_t UnitIdleState::GetType()
-	{
-		return SceneObjectStates::Idle;
-	}
-
 	UnitMoveState::UnitMoveState(Unit* owner) :
-		UnitState(owner)
+		UnitState(owner, SceneObjectStates::Move, "Move")
 	{
 
 	}
 
 	void UnitMoveState::Begin()
 	{
+		_status = StateStatus::RunningNoncritical;
+
 		_owner->GetAnimController().ChangeAnimation(
 			SceneObjectStates::Move, "Default");
 		// Allow unit movement
@@ -119,7 +127,19 @@ namespace FlagRTS
 
 	void UnitMoveState::End()
 	{
+		_status = StateStatus::Ready;
 		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitMoveState::Resume()
+	{
+		Begin();
 	}
 
 	void UnitMoveState::Update(float ms)
@@ -136,30 +156,21 @@ namespace FlagRTS
 		// else if() -> if not reach goal but cannot move, after few secs abort move
 		else
 		{
-			_owner->ChangeState(SceneObjectStates::Idle);
-			_owner->Update(ms);
+			_status = StateStatus::Finished;
 		}
 		UnitState::Update(ms);
 	}
 
-	const char* UnitMoveState::GetName()
-	{
-		return "Moving";
-	}
-
-	size_t UnitMoveState::GetType()
-	{
-		return SceneObjectStates::Move;
-	}
-
 	UnitForceMoveState::UnitForceMoveState(Unit* owner) :
-		UnitState(owner)
+		UnitState(owner, SceneObjectStates::ForceMove, "ForceMove")
 	{
 
 	}
 
 	void UnitForceMoveState::Begin()
 	{
+		_status = StateStatus::RunningCritical;
+
 		_owner->GetAnimController().ChangeAnimation(
 			SceneObjectStates::Move, "Default");
 		// Disallow unit movement
@@ -169,6 +180,18 @@ namespace FlagRTS
 	void UnitForceMoveState::End()
 	{
 		_owner->GetAnimController().EndAllAnimations();
+		_status = StateStatus::Ready;
+	}
+
+	void UnitForceMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitForceMoveState::Resume()
+	{
+		Begin();
 	}
 
 	void UnitForceMoveState::Update(float ms)
@@ -178,29 +201,21 @@ namespace FlagRTS
 		if(_owner->GetMoveStrategy()->GetRemainingSquaredDistance() <= 1e-3f)
 		{
 			// Unit moved to destination, so change state back
-			_owner->ChangeState(SceneObjectStates::Idle);
+			_status = StateStatus::Finished;
 		}
 		UnitState::Update(ms);
 	}
 
-	const char* UnitForceMoveState::GetName()
-	{
-		return "Moving";
-	}
-
-	size_t UnitForceMoveState::GetType()
-	{
-		return SceneObjectStates::ForceMove;
-	}
-
 	UnitAttackState::UnitAttackState(Unit* owner) :
-		UnitState(owner)
+		UnitState(owner, SceneObjectStates::Attack, "Attack")
 	{
 
 	}
 
 	void UnitAttackState::Begin()
 	{
+		_status = StateStatus::RunningNoncritical;
+
 		// Check current weapon != 0. It should be set by command/AI state
 		Weapon* weapon = _owner->GetWeapons()->GetCurrentWeapon();
 		_ASSERT(weapon != 0);
@@ -228,7 +243,19 @@ namespace FlagRTS
 
 	void UnitAttackState::End()
 	{
+		_status = StateStatus::Ready;
 		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitForceMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitForceMoveState::Resume()
+	{
+		Begin();
 	}
 
 	void UnitAttackState::Update(float ms)
@@ -237,7 +264,8 @@ namespace FlagRTS
 		_ASSERT(weapon != 0);
 		if(weapon == 0)
 		{
-			_owner->ChangeState(SceneObjectStates::Idle);
+			_status = StateStatus::Finished;
+			return;
 		}
 
 		if( _playingAnim )
@@ -295,24 +323,16 @@ namespace FlagRTS
 		UnitState::Update(ms);
 	}
 
-	const char* UnitAttackState::GetName()
-	{
-		return "Attacking";
-	}
-
-	size_t UnitAttackState::GetType()
-	{
-		return SceneObjectStates::Attack;
-	}
-
 	UnitDyingState::UnitDyingState(Unit* owner) :
-		UnitState(owner),
+		UnitState(owner, SceneObjectStates::Dying, "Dying"),
 		_finished(false)
 	{
 	}
 
 	void UnitDyingState::Begin()
 	{
+		_status = StateStatus::RunningCritical;
+
 		_owner->GetAnimController().ChangeAnimation(
 			SceneObjectStates::Dying, "Default", false);
 
@@ -321,7 +341,19 @@ namespace FlagRTS
 
 	void UnitDyingState::End()
 	{
+		_status = StateStatus::Ready;
 		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitForceMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitForceMoveState::Resume()
+	{
+		Begin();
 	}
 
 	void UnitDyingState::Update(float ms)
@@ -330,36 +362,40 @@ namespace FlagRTS
 
 		if( _owner->GetAnimController().GetCurrentAnimations()[0]->CheckIsFinished() && _finished == false )
 		{
+			_status = StateStatus::Finished;
 			_finished = true;
-			GameWorld::GlobalWorld->QueueDespawnSceneObject(_owner);
-			GameWorld::GlobalWorld->QueueDestroySceneObject(_owner);
+			//GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(_owner, true);
+			GameInterfaces::GetSceneObjectSpawner()->DestroySceneObject(_owner, true);
 		}
 	}
 
-	const char* UnitDyingState::GetName()
-	{
-		return "Dying";
-	}
-
-	size_t UnitDyingState::GetType()
-	{
-		return SceneObjectStates::Dying;
-	}
-
 	BuildingUnderConstructionState::BuildingUnderConstructionState(Unit* owner) :
-		UnitState(owner)
+		UnitState(owner, SceneObjectStates::UnderConstruction, "UnderConstruction")
 	{
 
 	}
 
 	void BuildingUnderConstructionState::Begin()
 	{
+		_status = StateStatus::RunningNoncritical;
 		_owner->SetIsUnderConstruction(true);
 	}
 
 	void BuildingUnderConstructionState::End()
 	{
+		_status = StateStatus::Ready;
 		_owner->SetIsUnderConstruction(false);
+	}
+
+	void UnitForceMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitForceMoveState::Resume()
+	{
+		Begin();
 	}
 
 	void BuildingUnderConstructionState::Update(float ms)
@@ -367,18 +403,8 @@ namespace FlagRTS
 		// Currently do nothing
 	}
 
-	const char* BuildingUnderConstructionState::GetName()
-	{
-		return "Under construction";
-	}
-
-	size_t BuildingUnderConstructionState::GetType()
-	{
-		return SceneObjectStates::UnderConstruction;
-	}
-
 	ConstructionSiteBuildingState::ConstructionSiteBuildingState(Unit* owner) :
-		UnitState(owner),
+		UnitState(owner, GetTypeId<ConstructionSiteBuildingState>(), "Constructing"),
 		_onBuildingDestroyed(this)
 	{
 
@@ -386,6 +412,8 @@ namespace FlagRTS
 
 	void ConstructionSiteBuildingState::Begin()
 	{
+		_status = StateStatus::RunningNoncritical;
+
 		// Site just spawned, now we should spawn the building
 		ConstructionSiteObjectData* siteData = _owner->GetObjectSpecificData<ConstructionSiteObjectData>();
 		ConstructionSiteTypeData* siteTypeData = _owner->GetKindSpecificData<ConstructionSiteTypeData>();
@@ -395,7 +423,7 @@ namespace FlagRTS
 
 		_buildingHeight = siteData->Building->GetEntity()->getBoundingBox().getSize().y;
 		// Spawn it fully under ground, it will emerge over time
-		GameWorld::GlobalWorld->SpawnSceneObject(siteData->Building,
+		GameInterfaces::GetSceneObjectSpawner()->SpawnSceneObject(siteData->Building,
 			SpawnInfo(_owner->GetOrientationAbsolute(), 
 			_owner->GetPositionAbsolute() - Vector3(0.f, _buildingHeight-1.f, 0.f),  false));
 		siteData->Building->ChangeState(SceneObjectStates::UnderConstruction);
@@ -418,9 +446,20 @@ namespace FlagRTS
 
 	void ConstructionSiteBuildingState::End()
 	{
+		_status = StateStatus::Ready;
 		// End animation ??
 		ConstructionSiteObjectData* siteData = _owner->GetObjectSpecificData<ConstructionSiteObjectData>();
 		siteData->Building->UnitDied() -= &_onBuildingDestroyed;
+	}
+
+	void UnitForceMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+	}
+
+	void UnitForceMoveState::Resume()
+	{
+		_status = StateStatus::RunningNoncritical;
 	}
 
 	void ConstructionSiteBuildingState::Update(float ms)
@@ -441,6 +480,7 @@ namespace FlagRTS
 			// Check if construction is finished
 			if(siteData->Building->GetConstructionProgress() >= 1.f)
 			{
+				_status = StateStatus::Finished;
 				// Building finished : fire event
 				siteData->Building->SetConstructionProgress(1.f);
 				siteData->Building->SetHitPoints(std::min(
@@ -456,16 +496,6 @@ namespace FlagRTS
 		UnitState::Update(ms);
 	}
 
-	const char* ConstructionSiteBuildingState::GetName()
-	{
-		return "Constructing";
-	}
-
-	size_t ConstructionSiteBuildingState::GetType()
-	{
-		return SceneObjectStates::Internal;
-	}
-
 	void ConstructionSiteBuildingState::OnBuildingDestroyed(Unit* building)
 	{
 		ConstructionSiteObjectData* siteData = 
@@ -475,26 +505,38 @@ namespace FlagRTS
 	}
 
 	UnitTrainingState::UnitTrainingState(Unit* owner) :
-		UnitState(owner)
+		UnitState(owner, SceneObjectStates::Train, "Train")
 	{
 
 	}
 
 	void UnitTrainingState::Begin()
 	{
+		_status = StateStatus::RunningNoncritical;
 		_owner->GetAnimController().ChangeAnimation(
 			SceneObjectStates::Train, "Default");
 	}
 
 	void UnitTrainingState::End()
 	{
+		_status = StateStatus::Ready;
 		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitForceMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+		_owner->GetAnimController().EndAllAnimations();
+	}
+
+	void UnitForceMoveState::Resume()
+	{
+		Begin();
 	}
 
 	void UnitTrainingState::Update(float ms)
 	{
 		UnitState::Update(ms);
-		_owner->GetTrainingQueue()->Update(ms);
 	}
 
 	bool UnitTrainingState::TryFinishTrain(Unit* trainedUnit)
@@ -503,19 +545,29 @@ namespace FlagRTS
 	}
 
 	UnitOpeningState::UnitOpeningState(Unit* owner) :
-		UnitState(owner)
+		UnitState(owner, SceneObjectStates::Open, "Open")
 	{
 
 	}
 
 	void UnitOpeningState::Begin()
 	{
-
+		_status = StateStatus::RunningNoncritical;
 	}
 
 	void UnitOpeningState::End()
 	{
+		_status = StateStatus::Ready;
+	}
 
+	void UnitForceMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+	}
+
+	void UnitForceMoveState::Resume()
+	{
+		Begin();
 	}
 
 	void UnitOpeningState::Update(float ms)
@@ -523,44 +575,34 @@ namespace FlagRTS
 
 	}
 
-	const char* UnitOpeningState::GetName()
-	{
-		return "Opening";
-	}
-
-	size_t UnitOpeningState::GetType()
-	{
-		return SceneObjectStates::Open;
-	}
-
 	UnitClosingState::UnitClosingState(Unit* owner) :
-		UnitState(owner)
+		UnitState(owner, SceneObjectStates::Close, "Close")
 	{
 
 	}
 
 	void UnitClosingState::Begin()
 	{
-
+		_status = StateStatus::RunningNoncritical;
 	}
 
 	void UnitClosingState::End()
 	{
+		_status = StateStatus::Ready;
+	}
 
+	void UnitForceMoveState::Interrupt()
+	{
+		_status = StateStatus::Paused;
+	}
+
+	void UnitForceMoveState::Resume()
+	{
+		Begin();
 	}
 
 	void UnitClosingState::Update(float ms)
 	{
 
-	}
-
-	const char* UnitClosingState::GetName()
-	{
-		return "Closing";
-	}
-
-	size_t UnitClosingState::GetType()
-	{
-		return SceneObjectStates::Close;
 	}
 }

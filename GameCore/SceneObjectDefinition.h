@@ -4,7 +4,6 @@
 #include <Event.h>
 #include "SceneObjectProperties.h"
 #include <Array.h>
-#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -41,15 +40,6 @@ namespace FlagRTS
 		//
 		Event<SceneObject*> _onSpawn; 
 		Event<SceneObject*> _onDespawn;
-		Event<SceneObject*> _onHoverBegin;
-		Event<SceneObject*> _onHoverEnd;
-
-		uint32 _selectionFlags;
-
-		int _minimapFlags;
-		string _minimapIconMaterialName;
-		size_t _minimapIconHandle; // Pointer to ogre material for icon
-		Vector2 _minimapSize; // Size of minimap icon
 
 	public:
 		// Sets default values
@@ -65,13 +55,8 @@ namespace FlagRTS
 		bool InheritsScale() const { return _inhertisScale; }
 		void SetInheritsScale(bool value) { _inhertisScale = value; }
 
-		virtual bool HavePhysics() const { return false; }
-		virtual bool HaveFootprint() const { return false; }
-
 		Event<SceneObject*>& GetOnSpawnEvent() { return _onSpawn; }
 		Event<SceneObject*>& GetOnDespawnEvent() { return _onDespawn; }
-		Event<SceneObject*>& GetOnHoverBeginEvent() { return _onHoverBegin; }
-		Event<SceneObject*>& GetOnHoverEndEvent() { return _onHoverEnd; }
 
 		Array<char*>& GetObjectClasses() { return _objectClasses; }
 		const Array<char*>& GetObjectClasses() const { return _objectClasses; }
@@ -79,34 +64,10 @@ namespace FlagRTS
 		ChildObjectDefsArray& GetChildObjects() { return _childObjects; }
 		const ChildObjectDefsArray& GetChildObjects() const { return _childObjects; }
 
-		uint32 GetSelectionFlags() const { return _selectionFlags; }
-		void SetSelectionFlags(uint32 flags) { _selectionFlags = flags; }
-		void AddSelectionFlags(uint32 flags) { _selectionFlags |= flags; }
-		void RemoveSelectionFlags(uint32 flags) { _selectionFlags &= ~flags; }
-		
-		int GetMinimapFlags() const { return _minimapFlags; }
-		void SetMinimapFlags(int value) { _minimapFlags = value; }
-		
-		size_t GetMinimapIconHandle() const { return _minimapIconHandle; }
-		void SetMinimapIconHandle(size_t value) { _minimapIconHandle = value; }
-		
-		const string& GetMinimapIconMaterialName() const { return _minimapIconMaterialName; }
-		void SetMinimapIconMaterialName(const string& value) { _minimapIconMaterialName = value; }
-		
-		const Vector2& GetMinimapSize() const { return _minimapSize; }
-		void SetMinimapSize(const Vector2& value) { _minimapSize = value; }
-
 	protected:
 		void ParseSOFlags(XmlNode* flagsNode);
 		void ParseSOProperties(XmlNode* propsNode);
 		void ParseSOClasses(XmlNode* classesNode);
 		void ParseSOChildObjects(XmlNode* childrenNode);
-		void ParseMinimap(XmlNode* minimapNode);
-	};
-
-	class SceneObjectDefinitionFactory : public SubClassXmlFactory
-	{
-	public:
-		SceneObjectDefinitionFactory();
 	};
 }

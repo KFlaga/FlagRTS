@@ -6,10 +6,12 @@
 #include <PathFindingUtils.h>
 #include "Unit.h"
 #include "CollisionArea.h"
+#include "CollisionComponent.h"
 
 namespace FlagRTS
 {
 	MissleIdleState::MissleIdleState(Missle* owner) :
+		SceneObjectState(SceneObjectStates::Idle, "Idle"),
 		_owner(owner)
 	{
 
@@ -20,17 +22,8 @@ namespace FlagRTS
 
 	}
 
-	const char* MissleIdleState::GetName()
-	{
-		return "Idle";
-	}
-
-	size_t MissleIdleState::GetType()
-	{
-		return SceneObjectStates::Idle;
-	}
-
 	MissleMoveState::MissleMoveState(Missle* owner) :
+		SceneObjectState(SceneObjectStates::Move, "Move"),
 		_owner(owner)
 	{
 
@@ -45,11 +38,23 @@ namespace FlagRTS
 		}
 		_moveTime = 0.f;
 		_totalDistance = 0.f;
+		_status = StateStatus::RunningCritical;
 	}
 
 	void MissleMoveState::End()
 	{
 		_owner->GetAnimController().EndAllAnimations();
+		_status = StateStatus::Ready;
+	}
+	
+	void MissleMoveState::Interrupt()
+	{
+		_ASSERT(false); // Cannot be interrupted
+	}
+	
+	void MissleMoveState::Resume()
+	{
+		_ASSERT(false); // Cannot be interrupted
 	}
 
 	void MissleMoveState::Update(float ms)
@@ -59,11 +64,15 @@ namespace FlagRTS
 		_totalDistance += _owner->GetMover()->Move(_owner, _moveTime, ms);
 		_moveTime += ms;
 
+		_ASSERT(_owner->FindComponent<CollisionComponent>() != 0);
+		CollisionComponent* collision = _owner->FindComponent<CollisionComponent>();
+
 		CollisionArea missleCollision(
-			PathFinding::CollisionFilter(_owner->GetPathingGroup(), _owner->GetPathingBlockedGroups()).Value,
+			collision->GetCollisionFilter().Value,
 			CollisionShapes::Box,
-			_owner->GetPositionAbsolute(),
-			_owner->GetHalfSize());
+			collision->GetCollisionShape().GetCenter(),
+			collision->GetCollisionShape().GetHalfExtends());
+
 		missleCollision.SetOwner(_owner->GetCaster());
 		missleCollision.FindCollisions();
 		auto collsions = missleCollision.GetUnitsHit();
@@ -75,6 +84,7 @@ namespace FlagRTS
 			// - 2 objects are toching themsleves and missle went just between them
 			if( collsions[i]->IsAlive() ) // Ignore dead units
 			{
+				_status = StateStatus::Finished;
 				_owner->HitObject(collsions[i], _owner->GetPositionAbsolute());
 				return;
 			}
@@ -82,21 +92,13 @@ namespace FlagRTS
 
 		if( _totalDistance >= _owner->GetMaxRange() )
 		{
+			_status = StateStatus::Finished;
 			_owner->Detonate(_owner->GetPositionAbsolute());
 		}
 	}
 
-	const char* MissleMoveState::GetName()
-	{
-		return "Move";
-	}
-
-	size_t MissleMoveState::GetType()
-	{
-		return SceneObjectStates::Move;
-	}
-
 	MissleDyingState::MissleDyingState(Missle* owner) :
+		SceneObjectState(SceneObjectStates::Dying, "Dying"),
 		_owner(owner)
 	{
 
@@ -114,11 +116,24 @@ namespace FlagRTS
 			// No animation -> release missle
 			_owner->GetSourceMissleHolder()->ReleaseMissle(_owner);
 		}
+
+		_status = StateStatus::RunningCritical;
 	}
 
 	void MissleDyingState::End()
 	{
 		_owner->GetAnimController().EndAllAnimations();
+		_status = StateStatus::Ready;
+	}
+	
+	void MissleDyingState::Interrupt()
+	{
+		_ASSERT(false); // Cannot be interrupted
+	}
+	
+	void MissleDyingState::Resume()
+	{
+		_ASSERT(false); // Cannot be interrupted
 	}
 
 	void MissleDyingState::Update(float ms)
@@ -126,18 +141,9 @@ namespace FlagRTS
 		_owner->GetAnimController().Update(ms);
 		if( _owner->GetAnimController().GetCurrentAnimations()[0]->CheckIsFinished() )
 		{
+			_status = StateStatus::Finished;
 			// Animation ended -> release missle
 			_owner->GetSourceMissleHolder()->ReleaseMissle(_owner);
 		}
-	}
-
-	const char* MissleDyingState::GetName()
-	{
-		return "Dying";
-	}
-
-	size_t MissleDyingState::GetType()
-	{
-		return SceneObjectStates::Dying;
 	}
 }

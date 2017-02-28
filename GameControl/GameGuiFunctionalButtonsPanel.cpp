@@ -4,6 +4,7 @@
 #include "GameGuiIFunctionalPanel.h"
 #include <GuiElement.h>
 #include <AudioManager.h>
+#include <Input.h>
 
 
 namespace FlagRTS

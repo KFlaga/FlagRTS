@@ -1,6 +1,8 @@
 #include "MissleHolder.h"
 #include "Missle.h"
 #include "GameWorld.h"
+#include "ISceneObjectSpawner.h"
+#include "IGameObjectPool.h"
 
 namespace FlagRTS
 {
@@ -150,8 +152,8 @@ namespace FlagRTS
 			for(int i = 0; i < toCreate; ++i)
 			{
 				Missle* missle = static_cast<Missle*>(
-					GameWorld::GlobalWorld->CreateSceneObject(_missleDef, NEUTRAL_PLAYERNUM));
-				GameWorld::GlobalWorld->SpawnSceneObject(missle, 
+					GameInterfaces::GetGameObjectPool()->Create(_missleDef, NEUTRAL_PLAYERNUM));
+				GameInterfaces::GetSceneObjectSpawner()->SpawnSceneObject(missle, 
 					SpawnInfo(Quaternion::IDENTITY, Vector3::ZERO, false));
 				// Have missle spawned - detach it for now
 				missle->Despawn();
@@ -169,8 +171,8 @@ namespace FlagRTS
 			for(int i = 1; i <= toRemove; ++i)
 			{
 				Missle* missle = _freeMissles[freeSize - i];
-				GameWorld::GlobalWorld->QueueDespawnSceneObject(missle);
-				GameWorld::GlobalWorld->QueueDestroySceneObject(missle);
+				GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(missle, true);
+				GameInterfaces::GetSceneObjectSpawner()->DestroySceneObject(missle, true);
 			}
 
 			_freeMissles.resize(freeSize - toRemove);

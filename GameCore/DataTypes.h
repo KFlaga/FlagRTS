@@ -7,6 +7,10 @@
 #include <Ogre\OgreVector4.h>
 #include <Ogre\OgreQuaternion.h>
 #include <IntVector2.h>
+#include <ObjectHandle.h>
+#include <TypeId.h>
+
+#define NEUTRAL_PLAYERNUM 8
 
 // Commonly used containers
 //#include <list>

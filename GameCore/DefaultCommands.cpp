@@ -2,6 +2,7 @@
 #include "Unit.h"
 #include "AnimationController.h"
 #include "GameWorld.h"
+#include "IObjectDefinitionManager.h"
 #include "Map.h"
 #include "Weapon.h"
 #include "HoverTargetTypes.h"
@@ -486,8 +487,8 @@ namespace FlagRTS
 		_trainedUnit(0)
 	{
 		_appliance = CommandApplianceTypes::ToSingle;
-		_trainedUnit = static_cast<UnitDefinition*>(GameWorld::GlobalWorld->
-			GetSceneObjectDefinition("Unit", trainedUnitName));
+		_trainedUnit = static_cast<UnitDefinition*>(GameInterfaces::GetObjectDefinitionManager()->
+			GetObjectDefinitionByName("Unit", trainedUnitName));
 
 		_requirements.push_back( xNew3(ExecutorIsConstructedRequirement,
 			TechAvailability::Available, TechAvailability::Hidden, this));

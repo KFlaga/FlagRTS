@@ -7,7 +7,7 @@ namespace FlagRTS
 {
 	typedef boost::any Any; // Alias for boost any for consistent naming
 
-	template<typename T>
+	/*template<typename T>
 	struct ensure_refrence
 	{
 		typedef boost::mpl::if_<
@@ -15,7 +15,7 @@ namespace FlagRTS
             T,
             boost::add_reference<T>::type
         >::type RefernceType;
-	};
+	};*/
 
 	/// Obtains data from 'Any'
 	/**

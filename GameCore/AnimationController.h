@@ -42,7 +42,11 @@ namespace FlagRTS
 		void EndAllAnimations();
 
 		// Ends all animations and starsts new one (foced)
+		// TODO: add does nothing if animation not found + assert for it
 		void ChangeAnimation(int state, const string& action, bool looped = true);
+		
+		// Ends all animations and starsts new one (foced)
+		void ChangeAnimation(Animation* anim, bool looped = true);
 		
 		Animation* FindAnimation(int state, const string& action);
 

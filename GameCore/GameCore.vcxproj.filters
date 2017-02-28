@@ -22,9 +22,6 @@
     <Filter Include="Source Files\ECA">
       <UniqueIdentifier>{9b6fd24d-025b-49c3-b20a-e3c7fd4f3297}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Utility">
-      <UniqueIdentifier>{7f9d6941-1398-414a-9e30-e0b24171ce9a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\SceneObjectsECA">
       <UniqueIdentifier>{5c3f62d8-e8e2-4069-9b0f-cd2c3e31b617}</UniqueIdentifier>
     </Filter>
@@ -52,9 +49,6 @@
     <Filter Include="Source Files\Units">
       <UniqueIdentifier>{bd60db37-c384-469d-9a08-7ee986e40bc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utility">
-      <UniqueIdentifier>{c0330595-4058-430f-aded-57bdfc22d295}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Weapon">
       <UniqueIdentifier>{df6fae9b-977b-46e0-90bf-377f4d3f9d73}</UniqueIdentifier>
     </Filter>
@@ -73,17 +67,8 @@
     <Filter Include="Header Files\ObjectPools">
       <UniqueIdentifier>{7a7b0453-e814-441b-b3b4-de7abf02b6cb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\NonsceneObjects">
-      <UniqueIdentifier>{b4b819c8-21eb-4218-8028-6e665a646e96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Commands">
       <UniqueIdentifier>{9f325bd8-b951-47a1-bcf9-4278bd329cff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Retrievers">
-      <UniqueIdentifier>{0e9394dd-a9e4-490e-af13-6cdf72890ed9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Physics">
-      <UniqueIdentifier>{73439278-73c1-4076-8375-c0263e4d3355}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Map">
       <UniqueIdentifier>{c338b500-31f5-483c-875b-147068a2ef3c}</UniqueIdentifier>
@@ -102,9 +87,6 @@
     </Filter>
     <Filter Include="Source Files\ObjectPools">
       <UniqueIdentifier>{8564eaf5-14b9-44e6-b982-8a4ae34bd3e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PlayerInfo">
-      <UniqueIdentifier>{de77b972-5e3e-43b6-bb3d-a286fbe8ac14}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Building">
       <UniqueIdentifier>{0ab42890-1585-41e0-8d8d-b8d234833912}</UniqueIdentifier>
@@ -148,11 +130,23 @@
     <Filter Include="Source Files\Terrain">
       <UniqueIdentifier>{da2f375d-0a6b-4e0d-ad39-ebd352284cce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ObjectData">
-      <UniqueIdentifier>{245844dc-71b3-4915-9dfc-d52699ede198}</UniqueIdentifier>
+    <Filter Include="Header Files\Misc">
+      <UniqueIdentifier>{7f9d6941-1398-414a-9e30-e0b24171ce9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\SystemInterfaces">
+    <Filter Include="Header Files\Misc\Retrievers">
+      <UniqueIdentifier>{0e9394dd-a9e4-490e-af13-6cdf72890ed9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{b164ddbe-f5f0-4b53-a63b-fa8085a251bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Interfaces">
       <UniqueIdentifier>{98ff7f74-72ef-4717-93bb-097ff58e6cc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{dba53e32-6cac-4b29-9db3-4dc63619fb87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Misc">
+      <UniqueIdentifier>{c0330595-4058-430f-aded-57bdfc22d295}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -199,7 +193,7 @@
       <Filter>Header Files\SceneObjectsECA</Filter>
     </ClInclude>
     <ClInclude Include="ObjectTypeHelper.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="SceneObjectStateMachine.h">
       <Filter>Header Files\SceneObjectsStates</Filter>
@@ -250,10 +244,10 @@
       <Filter>Header Files\ECA</Filter>
     </ClInclude>
     <ClInclude Include="IRegion.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="RegionFactory.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="ICondition.h">
       <Filter>Header Files\ECA</Filter>
@@ -262,16 +256,13 @@
       <Filter>Header Files\ECA</Filter>
     </ClInclude>
     <ClInclude Include="EventArgsRetriever.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="SceneObjectActionFamilyFactory.h">
       <Filter>Header Files\SceneObjectsECA</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MoverRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="SceneObjectProperties.h">
       <Filter>Header Files\SceneObjects</Filter>
@@ -289,16 +280,10 @@
       <Filter>Header Files\Map</Filter>
     </ClInclude>
     <ClInclude Include="UnitRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="UnitStates.h">
       <Filter>Header Files\SceneObjectsStates</Filter>
-    </ClInclude>
-    <ClInclude Include="HoverContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HoverTargetTypes.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UnitProperties.h">
       <Filter>Header Files\Units</Filter>
@@ -348,9 +333,6 @@
     <ClInclude Include="MissleDefinition.h">
       <Filter>Header Files\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="UnitWeaponSet.h">
-      <Filter>Header Files\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="CommandTarget.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
@@ -361,10 +343,10 @@
       <Filter>Header Files\Animations</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="GameWorld.h">
       <Filter>Header Files</Filter>
@@ -405,12 +387,6 @@
     <ClInclude Include="DllGameMod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\PlayerInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="Resources.h">
-      <Filter>Header Files\PlayerInfo</Filter>
-    </ClInclude>
     <ClInclude Include="UnitClassSupplier.h">
       <Filter>Header Files\ObjectPools</Filter>
     </ClInclude>
@@ -444,9 +420,6 @@
     <ClInclude Include="ConstructionSiteData.h">
       <Filter>Header Files\Building</Filter>
     </ClInclude>
-    <ClInclude Include="TrainingQueue.h">
-      <Filter>Header Files\Building</Filter>
-    </ClInclude>
     <ClInclude Include="FXObject.h">
       <Filter>Header Files\FXObjects</Filter>
     </ClInclude>
@@ -468,9 +441,6 @@
     <ClInclude Include="FXEmitterDefinition.h">
       <Filter>Header Files\FXObjects</Filter>
     </ClInclude>
-    <ClInclude Include="FXEmitterDefinitionFactory.h">
-      <Filter>Header Files\FXObjects</Filter>
-    </ClInclude>
     <ClInclude Include="UnitSoundSet.h">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
@@ -479,9 +449,6 @@
     </ClInclude>
     <ClInclude Include="TechRequirement.h">
       <Filter>Header Files\Technology</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerStatsManager.h">
-      <Filter>Header Files\PlayerInfo</Filter>
     </ClInclude>
     <ClInclude Include="CommandRequirement.h">
       <Filter>Header Files\Technology</Filter>
@@ -499,7 +466,7 @@
       <Filter>Header Files\Technology</Filter>
     </ClInclude>
     <ClInclude Include="NoticeMessages.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="SceneMarker.h">
       <Filter>Header Files\SceneMarkers</Filter>
@@ -535,13 +502,13 @@
       <Filter>Header Files\SceneMarkers</Filter>
     </ClInclude>
     <ClInclude Include="SelectionFlags.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="SelectionBox.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="GameTimer.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="PathingQuery.h">
       <Filter>Header Files\Pathing</Filter>
@@ -553,9 +520,6 @@
       <Filter>Header Files\Pathing</Filter>
     </ClInclude>
     <ClInclude Include="PathRequestHandler.h">
-      <Filter>Header Files\Pathing</Filter>
-    </ClInclude>
-    <ClInclude Include="PathingPathUnit.h">
       <Filter>Header Files\Pathing</Filter>
     </ClInclude>
     <ClInclude Include="UnitAIState.h">
@@ -574,52 +538,52 @@
       <Filter>Header Files\SceneObjectsECA</Filter>
     </ClInclude>
     <ClInclude Include="BoolRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="FloatRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="IntRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="QuaternionRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="Vector2Retrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="Vector3Retrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="OwnerRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="ISceneObjectRetriever.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="SceneObjectStateRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="StringRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="CommandTargetRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="KillReasonRetriever.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="KillReason.h">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
     <ClInclude Include="WeaponRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="DamageRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="IObjectRetriever.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="DefaultMoveStrategies.h">
       <Filter>Header Files\Mover</Filter>
@@ -651,35 +615,20 @@
     <ClInclude Include="InflictDamagaEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="FXObjectPools.h">
-      <Filter>Header Files\ObjectPools</Filter>
-    </ClInclude>
     <ClInclude Include="MissleHolder.h">
       <Filter>Header Files\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionArea.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionGroup.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionShapes.h">
-      <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="FXParticlesDefinition.h">
       <Filter>Header Files\FXObjects</Filter>
     </ClInclude>
     <ClInclude Include="CommandTypeRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="Minimap.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="MinimapUnit.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="ModelTexture.h">
-      <Filter>Header Files\Utility</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
     <ClInclude Include="PathingFormation.h">
       <Filter>Header Files\Pathing</Filter>
@@ -700,7 +649,7 @@
       <Filter>Header Files\ECA</Filter>
     </ClInclude>
     <ClInclude Include="VariableRetrievers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="UnitActions.h">
       <Filter>Header Files\SceneObjectsECA</Filter>
@@ -709,7 +658,7 @@
       <Filter>Header Files\SceneObjectsECA</Filter>
     </ClInclude>
     <ClInclude Include="FactionRetreivers.h">
-      <Filter>Header Files\Retrievers</Filter>
+      <Filter>Header Files\Misc\Retrievers</Filter>
     </ClInclude>
     <ClInclude Include="IEvent.h">
       <Filter>Header Files\ECA</Filter>
@@ -741,32 +690,176 @@
     <ClInclude Include="ETMTerrain.h">
       <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IGameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerUnitKindRequirement.h">
       <Filter>Header Files\Technology</Filter>
     </ClInclude>
     <ClInclude Include="IObjectDefinitionManager.h">
-      <Filter>Header Files\SystemInterfaces</Filter>
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="ObjectDefinitionsManager.h">
       <Filter>Header Files\ObjectPools</Filter>
     </ClInclude>
     <ClInclude Include="IGameObjectPool.h">
-      <Filter>Header Files\SystemInterfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectDataHolder.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="IGameObjectPoolManager.h">
-      <Filter>Header Files\SystemInterfaces</Filter>
+      <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectPool.h">
       <Filter>Header Files\ObjectPools</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectDataStorage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ISceneObjectSpawner.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObjectSpawner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IPathingSystem.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="NamedPropertiesMap.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTypes.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="HoverTargetTypes.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="HoverContext.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatsManager.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="IDataStorage.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameObject.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectDefinitionFactory.h">
+      <Filter>Header Files\ObjectPools</Filter>
+    </ClInclude>
+    <ClInclude Include="IObjectComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MoverComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponsComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MinimapComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentPool.h">
+      <Filter>Header Files\ObjectPools</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceProducerComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstructorComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TrainingComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionFilter.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionShapes.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionArea.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TrainingStates.h">
+      <Filter>Header Files\SceneObjectsStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingShapes.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingDefs.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingShapes3d.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingUtils.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingUniformGridObstacle.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingUniformGridMap.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="SlopeObstacles.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingIUnitUnitPairer.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingBruteUUPairer.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingDbvhUUPairer.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingForcesLocalPathFinder.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingIPathFinder.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingBvhNode.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingDbvh.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingAStarNode.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingJumpNode.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingAStarNodeQueue.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingIgnoreUnitsLocalPathFinder.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingJumpGlobalPathFinder.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingAStarGlobalPathFinder.h">
+      <Filter>Header Files\Pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="PathingVariedSizeJumpGlobalPathFinder.h">
+      <Filter>Header Files\Pathing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -777,9 +870,6 @@
       <Filter>Source Files\SceneObjectsSrc</Filter>
     </ClCompile>
     <ClCompile Include="PhysicalObjectDefinition.cpp">
-      <Filter>Source Files\SceneObjectsSrc</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicalObjectDefinitionFactory.cpp">
       <Filter>Source Files\SceneObjectsSrc</Filter>
     </ClCompile>
     <ClCompile Include="SceneObjectDefinition.cpp">
@@ -804,7 +894,7 @@
       <Filter>Source Files\SceneObjectsECA</Filter>
     </ClCompile>
     <ClCompile Include="ObjectTypeHelper.cpp">
-      <Filter>Source Files\Utility</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="MapDecorator.cpp">
       <Filter>Source Files\SceneObjectsSrc</Filter>
@@ -840,10 +930,7 @@
       <Filter>Source Files\ECA</Filter>
     </ClCompile>
     <ClCompile Include="RegionFactory.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneObjectDefinitionFactory.cpp">
-      <Filter>Source Files\SceneObjectsSrc</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="SceneObjectFamilyActionFactory.cpp">
       <Filter>Source Files\SceneObjectsECA</Filter>
@@ -858,7 +945,7 @@
       <Filter>Source Files\Retrievers</Filter>
     </ClCompile>
     <ClCompile Include="SelectionBox.cpp">
-      <Filter>Source Files\Utility</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="SceneObjectProperties.cpp">
       <Filter>Source Files\SceneObjectsSrc</Filter>
@@ -905,9 +992,6 @@
     <ClCompile Include="WeaponDefinition.cpp">
       <Filter>Source Files\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="UnitWeaponSet.cpp">
-      <Filter>Source Files\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Source Files\NonsceneObjects</Filter>
     </ClCompile>
@@ -924,10 +1008,10 @@
       <Filter>Source Files\Map</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Source Files\Utility</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Source Files\Utility</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="GameWorld.cpp">
       <Filter>Source Files</Filter>
@@ -983,9 +1067,6 @@
     <ClCompile Include="FXObjectDefinition.cpp">
       <Filter>Source Files\FXObject</Filter>
     </ClCompile>
-    <ClCompile Include="FXObjectDefinitionFactory.cpp">
-      <Filter>Source Files\FXObject</Filter>
-    </ClCompile>
     <ClCompile Include="FXSoundDefinition.cpp">
       <Filter>Source Files\FXObject</Filter>
     </ClCompile>
@@ -1022,16 +1103,10 @@
     <ClCompile Include="DefaultCommandReqs.cpp">
       <Filter>Source Files\Technology</Filter>
     </ClCompile>
-    <ClCompile Include="TrainingQueue.cpp">
-      <Filter>Source Files\Building</Filter>
-    </ClCompile>
     <ClCompile Include="TerrainProjectionMarker.cpp">
       <Filter>Source Files\SceneMarkers</Filter>
     </ClCompile>
     <ClCompile Include="TerrainProjectionMarkerDefinition.cpp">
-      <Filter>Source Files\SceneMarkers</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneMarkerDefinitionFactory.cpp">
       <Filter>Source Files\SceneMarkers</Filter>
     </ClCompile>
     <ClCompile Include="SceneMarkerDefinition.cpp">
@@ -1079,9 +1154,6 @@
     <ClCompile Include="MissleStates.cpp">
       <Filter>Source Files\SceneObjectsStates</Filter>
     </ClCompile>
-    <ClCompile Include="FXObjectPools.cpp">
-      <Filter>Source Files\ObjectPools</Filter>
-    </ClCompile>
     <ClCompile Include="BoolRetrievers.cpp">
       <Filter>Source Files\Retrievers</Filter>
     </ClCompile>
@@ -1092,13 +1164,10 @@
       <Filter>Source Files\Retrievers</Filter>
     </ClCompile>
     <ClCompile Include="CollisionArea.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionGroup.cpp">
-      <Filter>Source Files\Utility</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="CollsionShapes.cpp">
-      <Filter>Source Files\Utility</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="FXparticles.cpp">
       <Filter>Source Files\FXObject</Filter>
@@ -1116,18 +1185,12 @@
       <Filter>Source Files\Retrievers</Filter>
     </ClCompile>
     <ClCompile Include="ModelTexture.cpp">
-      <Filter>Source Files\Utility</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="Minimap.cpp">
-      <Filter>Source Files\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="MoverFactory.cpp">
-      <Filter>Source Files\Mover</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="Movers.cpp">
-      <Filter>Source Files\Mover</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveStrategyFactory.cpp">
       <Filter>Source Files\Mover</Filter>
     </ClCompile>
     <ClCompile Include="DefaultMoveStrategies.cpp">
@@ -1137,9 +1200,6 @@
       <Filter>Source Files\Effects</Filter>
     </ClCompile>
     <ClCompile Include="SpawnObjectEffect.cpp">
-      <Filter>Source Files\Effects</Filter>
-    </ClCompile>
-    <ClCompile Include="EffectFactory.cpp">
       <Filter>Source Files\Effects</Filter>
     </ClCompile>
     <ClCompile Include="LaunchMissleEffect.cpp">
@@ -1190,12 +1250,6 @@
     <ClCompile Include="OgreTerrain.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="ETMTerrain.cpp">
-      <Filter>Source Files\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TechRequirementFactory.cpp">
       <Filter>Source Files\Technology</Filter>
     </ClCompile>
@@ -1208,8 +1262,44 @@
     <ClCompile Include="ObjectDefinitionsManager.cpp">
       <Filter>Source Files\ObjectPools</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectDataHolder.cpp">
+    <ClCompile Include="IGameObject.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneObjectSpawner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MinimapComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectionComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainingComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="PathingUniformGridMap.cpp">
+      <Filter>Source Files\Pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="SlopeObstacles.cpp">
+      <Filter>Source Files\Pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="PathingAStarGlobalPathFinder.cpp">
+      <Filter>Source Files\Pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="PathingJumpGlobalPathFinder.cpp">
+      <Filter>Source Files\Pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="PathingVariedSizeJumpGlobalPathFinder.cpp">
+      <Filter>Source Files\Pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="PathingComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,6 +5,8 @@
 #include "MainEventPool.h"
 #include "SceneObjectPools.h"
 #include "GameWorld.h"
+#include "IObjectDefinitionManager.h"
+#include "ISceneObjectSpawner.h"
 #include "OwnerRetrievers.h"
 
 namespace FlagRTS
@@ -62,7 +64,7 @@ namespace FlagRTS
 	UnitNewFromDefinitionRetriever::operator Unit*() const
 	{
 		return reinterpret_cast<Unit*>(
-			GameWorld::GlobalWorld->CreateSceneObject(
-			GameWorld::GlobalWorld->GetSceneObjectDefinition("Unit", _defName), *_owner));
+			GameInterfaces::GetGameObjectPool()->Create(
+			GameInterfaces::GetObjectDefinitionManager()->GetObjectDefinitionByName("Unit", _defName), *_owner));
 	}
 }

@@ -2,7 +2,6 @@
 
 #include "SceneObjectDefinition.h"
 #include "AnimationDefinition.h"
-#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -39,11 +38,5 @@ namespace FlagRTS
 
 	protected:
 		void ParseAnimations(XmlNode* animNode);
-	};
-
-	class SceneMarkerDefinitionFactory : public SubClassXmlFactory
-	{
-	public:
-		SceneMarkerDefinitionFactory();
 	};
 }

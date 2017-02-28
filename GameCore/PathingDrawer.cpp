@@ -55,15 +55,21 @@ namespace FlagRTS
 	}
 
 
-	void PathingDrawer::DrawLine(const PFVector2& startPoint, const PFVector2& endPoint)
+	void PathingDrawer::DrawLine(const Vector2& startPoint, const Vector2& endPoint)
 	{
 		float startY = GameWorld::GlobalWorld->GetMap()->GetTerrainHeight(startPoint.x, startPoint.y);
 		float endY = GameWorld::GlobalWorld->GetMap()->GetTerrainHeight(endPoint.x, endPoint.y);
 		_pointList.push_back(Vector3(startPoint.x, startY+4.0f, startPoint.y));
 		_pointList.push_back(Vector3(endPoint.x, endY+4.0f, endPoint.y));
 	}
+	
+	void PathingDrawer::DrawLine(const Vector3& startPoint, const Vector3& endPoint)
+	{
+		_pointList.push_back(startPoint);
+		_pointList.push_back(endPoint);
+	}
 
-	void PathingDrawer::DrawMessage(const PFVector2& position, const PFVector2& size, const char* text)
+	void PathingDrawer::DrawMessage(const Vector2& position, const Vector2& size, const char* text)
 	{
 
 	}

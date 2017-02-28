@@ -4,11 +4,11 @@
 #include <Xml.h>
 #include <Event.h>
 #include <ObjectHandle.h>
-#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
 	class ObjectDefinition;
+	class IObjectDefinitionFactory;
 
 	/// Interface for ObjectDefinition loader / holder
 	class IObjectDefinitionManager
@@ -94,12 +94,31 @@ namespace FlagRTS
 
 		/// Returns ObjectDefinition factory with given type name
 		/**
-			Returns GameObjectFactory which creates ObjectDefinition of given type.
-			Type is in form 'base_type.derived_type' (i.e. SceneObject.PhysicalObject.Unit).
+			Returns IObjectDefinitionFactory which creates ObjectDefinition of given final-type.
 
 			\param typeName name of object type
 			\returns factory of given type or 0 if factory not found
 		*/
-		virtual IGameObjectFactory<XmlNode*>* GetFactoryOfType(const string& typeName) = 0;
+		virtual IObjectDefinitionFactory* GetFactoryOfType(const string& typeName) = 0;
+		
+		/// Registers ObjectDefinition factory with given type name
+		/**
+			Registers IObjectDefinitionFactory which creates ObjectDefinition of given final-type.
+			Manager acquires ownership of factory.
+			If factory for given type is already specified, overrides it and xDeletes old one.
+
+			\param typeName name of object type
+			\param factory of given type
+		*/
+		virtual void RegisterFactory(const string& typeName, IObjectDefinitionFactory* factory) = 0;
+		
+		/// Unregisters ObjectDefinition factory with given type name
+		/**
+			Unregisters IObjectDefinitionFactory which creates ObjectDefinition of given final-type.
+			If there's no factory for given type does nothing.
+
+			\param typeName name of object type
+		*/
+		virtual void UnregisterFactory(const string& typeName) = 0;
 	};
 }

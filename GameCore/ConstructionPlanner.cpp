@@ -3,6 +3,8 @@
 #include "UnitDefinition.h"
 #include <PathFindingUniformGridPathingMap.h>
 #include "GameWorld.h"
+#include "ISceneObjectSpawner.h"
+#include "IGameObjectPool.h"
 #include "Map.h"
 #include "PathingSystem.h"
 
@@ -41,7 +43,7 @@ namespace FlagRTS
 	{
 		if(_currentOutline != 0)
 		{
-			GameWorld::GlobalWorld->DespawnSceneObject(_currentOutline);
+			GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(_currentOutline);
 			_currentOutline->UnloadResources(_ogreMgr);
 			xDelete(_currentOutline);
 		}
@@ -123,7 +125,7 @@ namespace FlagRTS
 				auto query = GameWorld::GlobalWorld->GetPathingSystem()->CreateBoxPathingQuery();
 				auto& pos = _currentOutline->GetPositionAbsolute();
 				auto& hsize = _currentOutline->GetHalfSize();
-				query->SetTestShape( PathFinding::Box(PFVector2(pos.x - hsize.x, pos.z - hsize.z), 
+				query->SetTestShape( BoundingBox(PFVector2(pos.x - hsize.x, pos.z - hsize.z), 
 					PFVector2(pos.x + hsize.x, pos.z + hsize.z)));
 				HitNotObstacles dysc;
 				query->Execute(dysc);
@@ -176,7 +178,7 @@ namespace FlagRTS
 		_invalidColorer->ClearCells();
 		_invalidColorer->ClearRender();
 
-		GameWorld::GlobalWorld->DespawnSceneObject(_currentOutline);
+		GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(_currentOutline);
 		_currentOutline->UnloadResources(_ogreMgr);
 		xDelete(_currentOutline);
 		_currentOutline = 0;
@@ -189,7 +191,7 @@ namespace FlagRTS
 		if( _currentOutline != 0)
 		{
 			// Should not hit here ( old plan was not abadonded )
-			GameWorld::GlobalWorld->DespawnSceneObject(_currentOutline);
+			GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(_currentOutline);
 			_currentOutline->UnloadResources(_ogreMgr);
 			xDelete(_currentOutline);
 			_currentOutline = 0;
@@ -197,7 +199,7 @@ namespace FlagRTS
 
 		_currentOutline = xNew1(ObjectOutline, plannedBuildingDef);
 		_currentOutline->LoadResources(_ogreMgr);
-		GameWorld::GlobalWorld->SpawnSceneObject(_currentOutline,
+		GameInterfaces::GetSceneObjectSpawner()->SpawnSceneObject(_currentOutline,
 			SpawnInfo( Quaternion::IDENTITY, startPosition, false));
 
 		_topLeftCell = IntVector2(-1,-1);

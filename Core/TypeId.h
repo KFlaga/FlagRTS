@@ -50,8 +50,6 @@ namespace FlagRTS
 		return GetTypeId<T>();
 	}
 
-
-
 	// TypeId of this struct is considered invalid
 	struct bad_type { };
 #define GetInvalidType() GetTypeId<bad_type>()

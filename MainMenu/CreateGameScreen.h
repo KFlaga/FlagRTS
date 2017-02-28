@@ -10,6 +10,7 @@ namespace FlagRTS
 	class MapPreview;
 	class PlayerPanel;
 	class PlayersSettings;
+	class MapBaseInfo;
 
 	struct Mode
 	{
@@ -111,9 +112,9 @@ namespace FlagRTS
 		void VisibilityModeSelected(MyGUI::ComboBox* sender, size_t index);
 		void StartLocModeSelected(MyGUI::ComboBox* sender, size_t index);
 
-		void MapSelected(RefPtr<XmlDocument>& mapDoc);
+		void MapSelected(MapBaseInfo& mapDoc);
 		DEFINE_DELEGATE1(MapSelectedDelegate, CreateGameScreen,
-			MapSelected, RefPtr<XmlDocument>&);
+			MapSelected, MapBaseInfo&);
 		MapSelectedDelegate _onMapSelected;
 		
 		void StartPosLeftClicked(int num);

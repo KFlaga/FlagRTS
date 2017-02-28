@@ -6,81 +6,35 @@
 #include "GameWorld.h"
 #include "Player.h"
 
-
-#define INVALID_RESOURCE (uint8)-1
-
 namespace FlagRTS
 {
-	struct ResourceInfo
+	Resources::Resources(int resourcesCount, int playerCount) 
 	{
-		string Name;
-		int AbsoluteMaxAmount;
-		bool IsInverted;
-		uint8 Number;
-	};
+		_definitions.resize(resourcesCount);
 
-	struct PlayerResources
-	{
-		int Amount;
-		int MaxAmount;
-	};
-
-	struct ResourcesInternal
-	{
-	public:
-		Array<ResourceInfo> Resources;
-		Array<PlayerResources> Players;
-
-		ResourcesInternal(uint8 resourcesCount, uint8 playerCount)
+		for(int i = 0; i < resourcesCount; ++i)
 		{
-			Resources.resize(resourcesCount);
-			for(unsigned int i = 0; i < Resources.size(); ++i)
-			{
-				Resources[i].Number = i;
-				Resources[i].Name = "";
-				Resources[i].IsInverted = false;
-			}
-
-			Players.resize(playerCount*resourcesCount);
+			_definitions[i].Index = i;
+			_definitions[i].Name = "";
+			_definitions[i].IsSupply = false;
 		}
 
-		~ResourcesInternal()
+		_playerResources.resize(playerCount);
+		for(int i = 0; i < playerCount; ++i)
 		{
-
+			_playerResources.resize(resourcesCount);
 		}
-
-		PlayerResources& GetPlayerResource(const uint8 playerNum, const uint8 resNum)
-		{
-			return Players[playerNum * Resources.size() + resNum];
-		}
-	};
-
-	Resources::Resources(uint8 resourcesCount, uint8 playerCount) 
-	{
-		_internal = xNew2(ResourcesInternal, resourcesCount, playerCount);
-	}
-
-	Resources::Resources() 
-	{
-		_internal = xNew2(ResourcesInternal, 3, 9);
-		SetDefaultValues();
-	}
-
-	Resources::~Resources()
-	{
-		xDeleteSafe(_internal);
 	}
 
 	void Resources::SetResourcesSettings(InGameSettings* settings)
 	{
-		int playerCount = _internal->Players.size() / _internal->Resources.size();
-		for(unsigned int i = 0; i < settings->ResourceSettings.size(); ++i)
+		for(int i = 0; i < settings->ResourceSettings.size(); ++i)
 		{
-			uint8 num = GetResourceNumber(settings->ResourceSettings[i].ResourceName);
+			int num = GetResourceNumber(settings->ResourceSettings[i].ResourceName);
 			if(num != INVALID_RESOURCE)
 			{
 				SetMaxAmount(num, settings->ResourceSettings[i].AbsoluteMaxAmount);
-				for(unsigned int pl = 0; pl < playerCount; ++pl)
+				for(int pl = 0; pl < _playerResources.size(); ++pl)
 				{
 					SetMaxAmountForPlayer(pl, num, settings->ResourceSettings[i].StartMaxAmount);
 					SetPlayerResourceAmount(pl, num, settings->ResourceSettings[i].StartAmount);
@@ -89,137 +43,112 @@ namespace FlagRTS
 		}
 	}
 
-	const string& Resources::GetResourceName(const uint8 resource)
+	const string& Resources::GetResourceName(const int resource)
 	{
-		return _internal->Resources[resource].Name;
+		return _definitions[resource].Name;
 	}
 
-	void Resources::SetResourceName(const uint8 resource, const char* name)
+	void Resources::SetResourceName(const int resource, const char* name)
 	{
-		_internal->Resources[resource].Name = name;
+		_definitions[resource].Name = name;
 	}
 
-	void Resources::SetResourceName(const uint8 resource, const string& name)
+	void Resources::SetResourceName(const int resource, const string& name)
 	{
-		_internal->Resources[resource].Name = name;
+		_definitions[resource].Name = name;
 	}
 
-	uint8 Resources::GetResourceNumber(const string& resource)
+	int Resources::GetResourceNumber(const string& resource)
 	{
-		for(auto res = _internal->Resources.begin(), end =  _internal->Resources.end(); 
-			res != end; ++res)
+		for(int i = 0; i < _definitions.size(); ++i)
 		{
-			if(resource.compare(res->Name) == 0)
+			if(resource.compare(_definitions[i].Name) == 0)
 			{
-				return res->Number;
+				return _definitions[i].Index;
 			}
 		}
 		return INVALID_RESOURCE;
 	}
 
-	uint8 Resources::GetResourceNumber(const char* resource)
+	int Resources::GetResourceNumber(const char* resource)
 	{
-		for(auto res = _internal->Resources.begin(), end =  _internal->Resources.end(); 
-			res != end; ++res)
+		for(int i = 0; i < _definitions.size(); ++i)
 		{
-			if(strcmp(resource,res->Name.c_str()) == 0)
+			if(strcmp(resource, _definitions[i].Name.c_str()) == 0)
 			{
-				return res->Number;
+				return _definitions[i].Index;
 			}
 		}
 		return INVALID_RESOURCE;
 	}
 
-	uint8 Resources::GetResourcesCount()
+	int Resources::GetResourcesCount()
 	{
-		return _internal->Resources.size();
+		return _definitions.size();
 	}
 
-	bool Resources::IsInvertedResource(const uint8 resource)
+	bool Resources::IsSupplyResource(const int resource)
 	{
-		return _internal->Resources[resource].IsInverted;
+		return _definitions[resource].IsSupply;
 	}
 
-	void Resources::SetIsInvertedResource(const uint8 resource, bool isInv)
+	void Resources::SetIsSupplyResource(const int resource, bool isSupply)
 	{
-		_internal->Resources[resource].IsInverted = isInv;
+		_definitions[resource].IsSupply = isSupply;
 	}
 
-	void Resources::SetMaxAmount(const uint8 resource, const int maxAmount)
+	void Resources::SetMaxAmount(const int resource, const float maxAmount)
 	{
-		_internal->Resources[resource].AbsoluteMaxAmount = maxAmount;
+		_definitions[resource].AbsoluteMaxAmount = maxAmount;
 	}
 
-	int Resources::GetMaxAmount(const uint8 resource)
+	float Resources::GetMaxAmount(const int resource)
 	{
-		return _internal->Resources[resource].AbsoluteMaxAmount;
+		return _definitions[resource].AbsoluteMaxAmount;
 	}
 
-	int Resources::GetPlayerResourceAmount(const uint8 playerNum, const uint8 resNum)
+	float Resources::GetPlayerResourceAmount(const int playerNum, const int resNum)
 	{
-		return _internal->GetPlayerResource(playerNum, resNum).Amount;
+		return GetPlayerResource(playerNum, resNum).Amount;
 	}
 
-	void Resources::SetPlayerResourceAmount(const uint8 playerNum, const uint8 resNum, const int amount)
+	void Resources::SetPlayerResourceAmount(const int playerNum, const int resNum, const float amount)
 	{
-		_internal->GetPlayerResource(playerNum, resNum).Amount = amount;
+		GetPlayerResource(playerNum, resNum).Amount = amount;
 	}
 
-	void Resources::AddResourceToPlayer(const uint8 playerNum, const uint8 resNum, const int amount)
+	void Resources::AddResourceToPlayer(const int playerNum, const int resNum, const float amount)
 	{
-		auto& res = _internal->GetPlayerResource(playerNum, resNum);
-		if( IsInvertedResource(resNum ) )
-		{
-			res.Amount = std::max(res.Amount - amount, 0);
-		}
-		else
-		{
-			res.Amount = std::min(res.Amount + amount, res.MaxAmount);
-		}
+		auto& res = GetPlayerResource(playerNum, resNum);
+		res.Amount = std::min(res.Amount + amount, res.MaxAmount);
 	}
 
-	void Resources::TakeResourceFromPlayer(const uint8 playerNum, const uint8 resNum, const int amount)
+	void Resources::TakeResourceFromPlayer(const int playerNum, const int resNum, const float amount)
 	{
-		auto& res = _internal->GetPlayerResource(playerNum, resNum);
-		if( IsInvertedResource(resNum ) )
-		{
-			res.Amount = std::min(res.Amount + amount, res.MaxAmount);
-		}
-		else
-		{
-			res.Amount = std::max(res.Amount - amount, 0);
-		}
+		auto& res = GetPlayerResource(playerNum, resNum);
+		res.Amount = std::max(res.Amount - amount, 0.f);
 	}
 
-	void Resources::SetMaxAmountForPlayer(const uint8 playerNum, 
-		const uint8 resNum, 
-		const int maxAmount)
+	void Resources::SetMaxAmountForPlayer(const int playerNum, 
+		const int resNum, 
+		const float maxAmount)
 	{
-		_internal->GetPlayerResource(playerNum, resNum).MaxAmount = maxAmount;
+		GetPlayerResource(playerNum, resNum).MaxAmount = maxAmount;
 	}
 
-	int Resources::GetMaxAmountForPlayer(const uint8 playerNum, 
-		const uint8 resNum)
+	float Resources::GetMaxAmountForPlayer(const int playerNum, 
+		const int resNum)
 	{
-		return _internal->GetPlayerResource(playerNum, resNum).MaxAmount;
+		return GetPlayerResource(playerNum, resNum).MaxAmount;
 	}
 
-	bool Resources::CheckPlayerHaveSufficientResources(const uint8 playerNum, 
-		const UnitCost& unitCost, uint8* insufficientResourceNum)
+	bool Resources::CheckPlayerHaveSufficientResources(const int playerNum, 
+		const UnitCost& unitCost, int* insufficientResourceNum)
 	{
 		for(unsigned int i = 0; i < unitCost.size(); ++i)
 		{
 			auto resNum = GetResourceNumber(unitCost[i].ResName);
-			if( IsInvertedResource(resNum) )
-			{
-				if( GetPlayerResourceAmount(playerNum, resNum) + unitCost[i].ResAmount >
-					GetMaxAmountForPlayer(playerNum, resNum) )
-				{
-					*insufficientResourceNum = resNum;
-					return false;
-				}
-			}
-			else if( GetPlayerResourceAmount(playerNum, resNum) < unitCost[i].ResAmount )
+			if( GetPlayerResourceAmount(playerNum, resNum) < unitCost[i].ResAmount )
 			{
 				*insufficientResourceNum = resNum;
 				return false;
@@ -228,7 +157,7 @@ namespace FlagRTS
 		return true;
 	}
 
-	void Resources::TakeResourcesFromPlayer(const uint8 playerNum, const UnitCost& unitCost)
+	void Resources::TakeResourcesFromPlayer(const int playerNum, const UnitCost& unitCost)
 	{
 		for(unsigned int i = 0; i < unitCost.size(); ++i)
 		{
@@ -237,11 +166,11 @@ namespace FlagRTS
 		}
 	}
 
-	void Resources::ReturnResourcesOnDeathToPlayer(const uint8 playerNum, const UnitCost& unitCost)
+	void Resources::ReturnResourcesOnDeathToPlayer(const int playerNum, const UnitCost& unitCost)
 	{
 		for(unsigned int i = 0; i < unitCost.size(); ++i)
 		{
-			if( unitCost[i].ReturnOnDeath )
+			if( _definitions[i].IsSupply )
 			{
 				auto resNum = GetResourceNumber(unitCost[i].ResName);
 				AddResourceToPlayer(playerNum, resNum, unitCost[i].ResAmount); 
@@ -249,23 +178,12 @@ namespace FlagRTS
 		}
 	}
 
-	void Resources::ReturnAllResourcesToPlayer(const uint8 playerNum, const UnitCost& unitCost)
+	void Resources::ReturnAllResourcesToPlayer(const int playerNum, const UnitCost& unitCost)
 	{
 		for(unsigned int i = 0; i < unitCost.size(); ++i)
 		{
 			auto resNum = GetResourceNumber(unitCost[i].ResName);
 			AddResourceToPlayer(playerNum, resNum, unitCost[i].ResAmount);
 		}
-	}
-
-	void Resources::SetDefaultValues()
-	{
-		auto& resources = _internal->Resources;
-
-		resources[0].Number = 0;
-		resources[0].AbsoluteMaxAmount = 200;
-		resources[0].IsInverted = false;
-		resources[0].Name = "Funds";
-
 	}
 }

@@ -4,36 +4,28 @@
 #include "PhysicalObject.h"
 #include "UnitStats.h"
 #include "CommandQueue.h"
-#include "UnitWeaponSet.h"
 #include "IMoveStrategy.h"
 
 namespace FlagRTS
 {
-	class Weapon;
 	class IMoveStrategy;
-	class TrainingQueue;
 	class Command;
 	class SceneMarker;
+	class Weapon;
 
 	class Unit : public PhysicalObject
 	{
 	protected:
 		UnitDefinition* _unitDef;
 		CommandQueue _commands;
-		UnitWeaponSet _weapons;
 		UnitStats _currentStats;
 		IMoveStrategy* _moveStrategy; // Strategy used to move this unit
 		UnitClass _finalUnitClass; // Final unit class defines : unit movement type (ground/air/building etc) 
 							 // and intended use (aggresive/worker/factory etc) combined in binary flags set
 
-		TrainingQueue* _trainQueue; // If unit can train units its != 0 and used for training
 		Vector3 _rallyPoint; // If unit can train it contains rally point for newly trained units
 
 		Event<Unit*> _onDied; // Event called when unit dies
-
-		Event<Unit*, bool> _onIsSelectedChanged;
-		SceneMarker* _selectionMarker; // Marker to show when unit is selected
-		bool _isSelected;
 
 		bool _isInteractable; // Enable/Disable user commands
 
@@ -66,8 +58,6 @@ namespace FlagRTS
 
 		void Update(float ms);
 
-		void SetOwner(unsigned int owner);
-
 		UnitClass GetUnitClass() const { return _finalUnitClass; }
 		void SetUnitClass(UnitClass uclass);
 		void AddSubClassToUnit(UnitClass subclass) { SetUnitClass(_finalUnitClass | subclass); }
@@ -88,8 +78,6 @@ namespace FlagRTS
 
 		void SetAIEnabled(bool value);
 		bool GetAIEnabled() const { return _aiEnabled; }
-	
-		UnitWeaponSet* GetWeapons() { return &_weapons; }
 
 		IMoveStrategy* GetMoveStrategy() const { return _moveStrategy; }
 		// Sets new move strategy for unit
@@ -152,14 +140,6 @@ namespace FlagRTS
 		float GetConstructionProgress() const { return _constructionProgress; }
 		void SetConstructionProgress(float value) { _constructionProgress = value; }
 
-		bool CanTrainUnits() const { return GetUnitDefinition()->CanTrainUnits(); }
-		// Called from TrainingQueue when unit is finished -> spawns unit and retrns true
-		// unless unit couldn't be spawned - in which case it returns false
-		bool TryFinishTrain(Unit* trainedUnit); 
-
-		TrainingQueue* GetTrainingQueue() { return _trainQueue; }
-		bool IsTrainingUnit() const;
-
 		const Vector3& GetRallyPoint() const { return _rallyPoint; }
 		void SetRallyPoint(const Vector3& point) { _rallyPoint = point; }
 		
@@ -171,17 +151,6 @@ namespace FlagRTS
 		
 		bool IsSilienced() const { return _isSilienced; }
 		void SetIsSilienced(bool value) { _isSilienced = value; }
-		
-		Event<Unit*, bool>& IsSelectedChanged() { return _onIsSelectedChanged; }
-		bool IsSelected() { return _isSelected; }
-		void SetIsSelected(bool value);
-
-		SceneMarker* GetSelectionMarker() const { _selectionMarker; }
-		void SetSelectionMarker(SceneMarker* marker) { _selectionMarker = marker; }
-
-		const Vector3& GetSelectionMarkerSize() const { return GetUnitDefinition()->GetSelectionMarkerSize(); }
-		const Vector3& GetSelectionMarkerOffset() const { return GetUnitDefinition()->GetSelectionMarkerOffset(); }
-
 
 #pragma endregion
 

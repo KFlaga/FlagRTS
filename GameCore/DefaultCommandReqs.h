@@ -1,5 +1,4 @@
 #include "CommandRequirement.h"
-#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -25,10 +24,10 @@ namespace FlagRTS
 		~ReqClassName() { } \
 		void SetPlayer(uint8 player) { } \
 		TechRequirement* GetCopy() { return xNew2(ReqClassName, _stateOnTrue, _stateOnFalse); } \
-		class Factory : public IGameObjectFactory<XmlNode*> \
+		class Factory : public TechRequirementFactory \
 		{ \
 		public: \
-			IGameObject* Create(XmlNode* node)  \
+			TechRequirement* Create(XmlNode* node)  \
 			{ \
 				TechAvailability onTrue = ParseTechAvailability(XmlUtility::XmlGetString(node, "on_true")); \
 				TechAvailability onFalse = ParseTechAvailability(XmlUtility::XmlGetString(node, "on_false")); \

@@ -2,6 +2,8 @@
 #include "SceneObject.h"
 #include "GameWorld.h"
 #include "IObjectDefinitionManager.h"
+#include "IGameObjectPool.h"
+#include "ISceneObjectSpawner.h"
 
 namespace FlagRTS
 {
@@ -45,15 +47,14 @@ namespace FlagRTS
 		const Vector3& targetPoint)
 	{
 		// Create object
-		SceneObject* object = GameWorld::GlobalWorld->
-			CreateSceneObject(_objectDef, 
-			_setCastersOwner ? static_cast<SceneObject*>(caster)->GetOwner() : 
-			NEUTRAL_PLAYERNUM);
+		SceneObject* object = static_cast<SceneObject*>(GameInterfaces::GetGameObjectPool()->
+			Create(_objectDef, 
+			_setCastersOwner ? caster->GetOwner() : NEUTRAL_PLAYERNUM));
 
 		if(_attachToCaster && caster != 0)
 		{
 			// Assume _spawnPositionType = Caster
-			GameWorld::GlobalWorld->SpawnSceneObject(object, 
+			GameInterfaces::GetSceneObjectSpawner()->SpawnSceneObject(object, 
 				SpawnInfo(_orientationOffset, _positionOffset, false));
 
 			if(object->GetSceneNode()->getParent() != 0)
@@ -109,7 +110,7 @@ namespace FlagRTS
 		spawnPosition += spawnOrient * _positionOffset;
 
 		// Spawn object
-		GameWorld::GlobalWorld->SpawnSceneObject(object, 
+		GameInterfaces::GetSceneObjectSpawner()->SpawnSceneObject(object, 
 			SpawnInfo(spawnOrient, spawnPosition, false));
 	}
 }

@@ -1,6 +1,7 @@
 #include "WeaponRetrievers.h"
 #include <Exception.h>
 #include "GameWorld.h"
+#include "IObjectDefinitionManager.h"
 #include "Weapon.h"
 #include "Unit.h"
 #include "UnitRetrievers.h"
@@ -35,7 +36,7 @@ namespace FlagRTS
 	WeaponNewFromDefinitionRetriever::operator Weapon*() const
 	{
 		WeaponDefinition* def = static_cast<WeaponDefinition*>(
-			GameWorld::GlobalWorld->GetGameObjectDefinition("Weapon", _defName));
+			GameInterfaces::GetObjectDefinitionManager()->GetObjectDefinitionByName("Weapon", _defName));
 
 		return xNew1(Weapon, def);
 	}

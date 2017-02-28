@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SceneObjectDefinition.h"
-#include "GameObjectFactory.h"
 
 namespace FlagRTS
 {
@@ -39,11 +38,5 @@ namespace FlagRTS
 		
 		void SetDestroyOnEnd(const bool value) { _destroyOnEnd = value; }
 		bool GetDestroyOnEnd() const { return _destroyOnEnd; }
-	};
-
-	class FXObjectDefinitionFactory : public SubClassXmlFactory
-	{
-	public:
-		FXObjectDefinitionFactory();
 	};
 }

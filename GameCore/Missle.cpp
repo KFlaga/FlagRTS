@@ -27,7 +27,7 @@ namespace FlagRTS
 		if(!_spawned)
 		{
 			PhysicalObject::Spawn();
-			_stateMachine.ChangeState(SceneObjectStates::Idle);
+			_stateMachine.ResetStack();
 			_spawned = true;
 			_onSpawn(this);
 		}
@@ -37,7 +37,7 @@ namespace FlagRTS
 	{
 		if(_spawned)
 		{
-			_stateMachine.ChangeState(SceneObjectStates::Idle);
+			_stateMachine.ResetStack();
 			PhysicalObject::Despawn();
 			_spawned = false;
 			_onDespawn(this);
@@ -72,7 +72,8 @@ namespace FlagRTS
 			_target->GetPositionAbsolute() - GetPositionAbsolute());
 		Rotate(rotationToTarget, Ogre::Node::TS_WORLD);
 		
-		_stateMachine.ChangeState(SceneObjectStates::Move);
+		_stateMachine.PushState(SceneObjectStates::Move);
+		_stateMachine.PushState(SceneObjectStates::Dying);
 	}
 
 	void Missle::Launch(PhysicalObject* target, const Vector3& offset)
@@ -85,7 +86,8 @@ namespace FlagRTS
 			_target->GetPositionAbsolute() - GetPositionAbsolute() + _targetPosition);
 		Rotate(rotationToTarget, Ogre::Node::TS_WORLD);
 
-		_stateMachine.ChangeState(SceneObjectStates::Move);
+		_stateMachine.PushState(SceneObjectStates::Move);
+		_stateMachine.PushState(SceneObjectStates::Dying);
 	}
 
 	void Missle::Launch(const Vector3& target)
@@ -95,14 +97,13 @@ namespace FlagRTS
 		Quaternion rotationToTarget = GetDirectionAbsolute().getRotationTo(
 			_targetPosition - GetPositionAbsolute());
 		Rotate(rotationToTarget, Ogre::Node::TS_WORLD);
-
-		_stateMachine.ChangeState(SceneObjectStates::Move);
+		
+		_stateMachine.PushState(SceneObjectStates::Move);
+		_stateMachine.PushState(SceneObjectStates::Dying);
 	}
 
 	void Missle::HitObject(PhysicalObject* object, const Vector3& pos)
 	{
-		_stateMachine.ChangeState(SceneObjectStates::Dying);
-		
 		if( GetMissleDefinition()->GetOnImpactEffect() != 0 )
 		{
 			GetMissleDefinition()->GetOnImpactEffect()->ApplyEffect(
@@ -114,8 +115,6 @@ namespace FlagRTS
 
 	void Missle::HitGround(const Vector3& pos)
 	{
-		_stateMachine.ChangeState(SceneObjectStates::Dying);
-		
 		if( GetMissleDefinition()->GetOnImpactEffect() != 0 )
 		{
 			GetMissleDefinition()->GetOnImpactEffect()->ApplyEffect(
@@ -127,8 +126,6 @@ namespace FlagRTS
 
 	void Missle::Detonate(const Vector3& pos)
 	{
-		_stateMachine.ChangeState(SceneObjectStates::Dying);
-
 		if( GetMissleDefinition()->GetOnImpactEffect() != 0 )
 		{
 			GetMissleDefinition()->GetOnImpactEffect()->ApplyEffect(

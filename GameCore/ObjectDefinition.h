@@ -1,28 +1,20 @@
 #pragma once
 
-#include "IGameObject.h"
 #include "DataTypes.h"
 #include <Xml.h>
+#include <TypeId.h>
+#include <ObjectHandle.h>
 
 namespace FlagRTS
 {
-	class IKindSpecificDataSupplier;
-	class IObjectSpecificDataSupplier;
 	// Base class for all object defnitions
-	// Contains only name of defined object and TypeId of
-	// child class next in hierarchy
-	// Inherits IGameObject, as itshould be created by factories
-	class ObjectDefinition : public IGameObject
+	class ObjectDefinition
 	{
 	protected:
+		Array<ObjectDefinition*> _componentDefinitions;
+		ObjectHandle _handle;
 		string _name;
 		string _finalTypeName;
-		// Object data name defines which Kind/Object specific data should be used
-		string _objectDataName;
-
-		size_t _kindSpecificDataHandle;
-		IObjectSpecificDataSupplier* _objectDataHandleSupplier;
-		IKindSpecificDataSupplier* _kindDataHandleSupplier;
 
 	public:
 		ObjectDefinition();
@@ -34,29 +26,13 @@ namespace FlagRTS
 		
 		void SetFinalTypeName(const string& type) { _finalTypeName = type; }
 		const string& GetFinalTypeName() const { return _finalTypeName; }
+		
+		ObjectHandle GetHandle() const { return _handle; }
 
-		const string& GetObjectDataName() const { return _objectDataName; }
+		void SetFinalType(TypeId type) { _handle.Type; }
+		TypeId GetFinalType() const { return _handle.Type; }
 
-		void SetKindDataHandleSupplier(IKindSpecificDataSupplier* supplier)
-		{
-			_kindDataHandleSupplier = supplier;
-		}
-
-		size_t GetKindSpecificDataHandle() const { return _kindSpecificDataHandle; }
-		void SetKindSpecificDataHandle(size_t handle) { _kindSpecificDataHandle = handle; }
-
-		template<typename DataType>
-		DataType* GetKindSpecificData() const 
-		{ 
-			return reinterpret_cast<DataType*>(_kindSpecificDataHandle); 
-		}
-
-		void SetObjectDataHandleSupplier(IObjectSpecificDataSupplier* supplier)
-		{
-			_objectDataHandleSupplier = supplier;
-		}
-
-		size_t RequestObjectDataHandle() const;
-		void DeleteObjectDataHandle(size_t handle) const;
+		Array<ObjectDefinition*>& GetComponentDefinitions() { return _componentDefinitions; }
+		const Array<ObjectDefinition*>& GetComponentDefinitions() const { return _componentDefinitions; }
 	};
 }

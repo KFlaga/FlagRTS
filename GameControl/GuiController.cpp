@@ -18,6 +18,7 @@
 #include <KeyBindings.h>
 #include <CursorManager.h>
 #include <GameWorld.h>
+#include <NoticeMessage.h>
 
 #include <UnitGroup.h>
 #include <Unit.h>
@@ -91,8 +92,9 @@ namespace FlagRTS
 
 		RenderSystemManager::Instance()->WindowResized() += &_resizeGui;
 
-		GameWorld::GlobalWorld->NoticeRequested() += &_showNotice;
-		GameWorld::GlobalWorld->QuickNoticeRequested() += &_showQuickNotice;
+		// TODO change Notice: pass NoticeMessageSender that handles this
+		GameInterfaces::GetNoticeMessageSender()->NoticeRequested() += &_showNotice;
+		GameInterfaces::GetNoticeMessageSender()->QuickNoticeRequested() += &_showQuickNotice;
 	}
 
 	void GuiController::Update(float ms)

@@ -134,6 +134,15 @@ namespace FlagRTS
 
 	}
 
+	void AnimationControler::ChangeAnimation(Animation* anim, bool looped)
+	{
+		_ASSERT(anim != 0);
+		EndAllAnimations();
+		anim->SetLoop(looped);
+		anim->Start();
+		_currentAnimations.push_back(anim);
+	}
+
 	Animation* AnimationControler::FindAnimation(int state, const string& action)
 	{
 		auto animSetIt = _animations.find(state);

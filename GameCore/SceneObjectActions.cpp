@@ -8,6 +8,7 @@
 #include "SceneObject.h"
 
 #include "GameWorld.h"
+#include "ISceneObjectSpawner.h"
 
 namespace FlagRTS
 {
@@ -100,7 +101,7 @@ namespace FlagRTS
 
 	void SpawnAction::Execute()
 	{
-		GameWorld::GlobalWorld->SpawnSceneObject(
+		GameInterfaces::GetSceneObjectSpawner()->SpawnSceneObject(
 			*_object, 
 			SpawnInfo(*_rotation , *_position, *_spawnOnTerrain));
 	}
@@ -147,7 +148,7 @@ namespace FlagRTS
 
 	void DespawnAction::Execute()
 	{
-		GameWorld::GlobalWorld->DespawnSceneObject(*_object);
+		GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(*_object);
 	}
 
 	void DespawnAction::SetParameters(

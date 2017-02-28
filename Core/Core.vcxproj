@@ -437,7 +437,6 @@
     <ClInclude Include="AudioPreReqs.h" />
     <ClInclude Include="CameraSettings.h" />
     <ClInclude Include="DllPlugin.h" />
-    <ClInclude Include="Enum.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="FileBrowser.h" />
@@ -458,6 +457,7 @@
     <ClInclude Include="MemoryNode.h" />
     <ClInclude Include="MemoryPool.h" />
     <ClInclude Include="MemoryPoolAllocator.h" />
+    <ClInclude Include="Meta.h" />
     <ClInclude Include="ObjectHandle.h" />
     <ClInclude Include="ObjectNode.h" />
     <ClInclude Include="ObjectPool.h" />

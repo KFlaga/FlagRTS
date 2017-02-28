@@ -1,24 +1,27 @@
 #pragma once
 
 #include "DataTypes.h"
-#include "SpawnInfo.h"
 #include <Event.h>
 #include <Array.h>
 #include <ObjectHandle.h>
-#define NEUTRAL_PLAYERNUM 8
 
 namespace FlagRTS
 {
+	//template<typename T>
+	//class IDataStorage;
+
 	class IObjectDefinitionManager;
 	class IGameObjectPoolManager;
 	class IGameObjectPool;
-	class IGameObject;
 	class ObjectDefinition;
-
+	class ISceneObjectSpawner;
+	class IPathingSystem;
 	class Map;
+
+	class IGameObject;
+	class SpawnInfo;
 	class SceneObject;
 	class SceneObjectDefinition;
-	class PathingSystem;
 	class UnitDefinition;
 	class Unit;
 	class IKindSpecificDataSupplier;
@@ -33,10 +36,11 @@ namespace FlagRTS
 	class GlobalStatisticsManager;
 	class GlobalTechnologyManager;
 	class FactionsManager;
-	struct NoticeMessage;
 	class Minimap;
 	struct InGameSettings;
 
+	struct NoticeMessage;
+	class INoticeMessageSender;
 
 	// Class that loads, creates and stores actual map with terrain/objects etc
 	// It also delegates spawn/despawn/load/unload of game object
@@ -49,21 +53,24 @@ namespace FlagRTS
 	public:
 		static GameWorld* GlobalWorld;
 
-		typedef Array<std::pair<std::pair<SpawnInfo*, int>, SceneObjectDefinition*>> SpawnList;
+		typedef Array<std::pair<SpawnInfo*, SceneObjectDefinition*>> SpawnList;
 
-	private: // System interfaces
-		IGameObjectPoolManager* _objectPoolManager; // Not owned by GameWorld
-		IGameObjectPool* _mainObjectPool; // Not owned by GameWorld
-		IObjectDefinitionManager* _objectDefinitionManager; // Not owned by GameWorld
+	protected: // System interfaces 
+		IGameObjectPoolManager* _objectPoolManager; // NOT owned by GameWorld
+		IGameObjectPool* _mainObjectPool; // NOT owned by GameWorld
+		IObjectDefinitionManager* _objectDefinitionManager; // NOT owned by GameWorld
+		ISceneObjectSpawner* _sceneObjectSpawner; // NOT owned by GameWorld
+		INoticeMessageSender* _noticeSender; // NOT owned by GameWorld
 
-	private:
+		// IDataStorage<size_t>* _objectDataStorage; // owned by GameWorld
+	protected:
 		Ogre::SceneManager* _ogreSceneMgr;
 		InGameSettings* _gameSettings;
 		Map* _map; // Map created in and owned by GameWorld
 		GlobalStatisticsManager* _statsManager; // Not owned by GameWorld ( may be useful after game ends - i.e. score screen )
 		FactionsManager* _factionsManager;  // Factions created and owned by GameWorld
 		GlobalTechnologyManager* _techsManager; // Created and owned by GameWorld
-		PathingSystem* _pathing; // Created and owned by GameWorld
+		IPathingSystem* _pathing; // Created and owned by GameWorld
 		ConstructionManager* _constructionMgr; // Created and owned by GameWorld
 		// List of objects to be spawned on map inital state 
 		SpawnList _mapInitObjects;
@@ -73,18 +80,29 @@ namespace FlagRTS
 		PlayersInfo* _players; // 
 		Resources* _resources;
 
-		Array<SceneObject*> _despawnPending;
-		Array<SceneObject*> _destroyPending;
+	protected:
+		GameWorld();
 
 	public:
+		// If any of needed interfaces is 0, default implementation is created
 		GameWorld(Ogre::SceneManager* sceneMgr,
 			IObjectDefinitionManager* objectDefinitionManager,
 			IGameObjectPoolManager* objectPoolManager,
 			IGameObjectPool* mainObjectPool,
+			ISceneObjectSpawner* sceneObjSpawner,
+			INoticeMessageSender* noticeSender,
 			GlobalStatisticsManager* statsManager
 			);
 		~GameWorld();
 
+		/// Updates main game components
+		/**
+		Updates:
+		1) Main object pool
+		2) PathingSystem
+		3) SceneObjectSpawner
+		4) Minimap
+		*/
 		void Update(float ms);
 
 		// Sets used map settings
@@ -117,42 +135,7 @@ namespace FlagRTS
 
 		Map* GetMap() const { return _map; }
 
-		SceneObject* CreateSceneObject(SceneObjectDefinition* objectDef, int owner = NEUTRAL_PLAYERNUM);
-		SceneObject* CreateSceneObject(ObjectHandle objectDefHandle, int owner = NEUTRAL_PLAYERNUM);
-		//Unit* CreateUnit(UnitDefinition* objectDef, uint8 owner);
-		//Unit* CreateUnit(ObjectHandle objectDefHandle, uint8 owner);
-		void DestroySceneObject(SceneObject* object);
-		void QueueDestroySceneObject(SceneObject* object);
-		void DestroySceneObject(ObjectHandle objectHandle);
-		void SpawnSceneObject(SceneObject* object, 
-			const SpawnInfo& spawnInfo);
-		void SpawnSceneObject(ObjectHandle objectHandle, 
-			const SpawnInfo& spawnInfo);
-		void DespawnSceneObject(SceneObject* object);
-		void QueueDespawnSceneObject(SceneObject* object);
-		void DespawnSceneObject(ObjectHandle objectHandle);
-		SceneObjectDefinition* GetSceneObjectDefinition(ObjectHandle defHandle);
-		SceneObjectDefinition* GetSceneObjectDefinition(
-			const string& objectFamilyName, 
-			const string& objectKindName);
-
-		// Creates game object other than SceneObject
-		IGameObject* CreateGameObject(ObjectDefinition* objectDef);
-		// Creates game object other than SceneObject
-		IGameObject* CreateGameObject(ObjectHandle objectDefHandle);
-		// Destroys game object other than SceneObject
-		void DestroyGameObject(IGameObject* object);
-		// Destroys game object other than SceneObject
-		void DestroyGameObject(ObjectHandle objectHandle);
-		ObjectDefinition* GetGameObjectDefinition(ObjectHandle defHandle);
-		ObjectDefinition* GetGameObjectDefinition(
-			const string& objectFamilyName, 
-			const string& objectKindName);
-
-
 		Ogre::SceneManager* GetOgreSceneManager() const { return _ogreSceneMgr; }
-		// Returns prevoiusly created pathing system
-		PathingSystem* GetPathingSystem() const { return _pathing; }
 
 		PlayersInfo* GetPlayers() const { return _players; }
 
@@ -163,6 +146,11 @@ namespace FlagRTS
 		IGameObjectPoolManager* GetGameObjectPoolManager() const { return _objectPoolManager; }
 		IGameObjectPool* GetGameObjectPool() const { return _mainObjectPool; }
 		IObjectDefinitionManager* GetObjectDefinitionManager() const { return _objectDefinitionManager; }
+		ISceneObjectSpawner* GetSceneObjectSpawner() const { return _sceneObjectSpawner; } 
+		IPathingSystem* GetPathingSystem() const { return _pathing; }
+
+		//IDataStorage<size_t>* GetObjectDataStorage() const { return _objectDataStorage; }
+		INoticeMessageSender* GetNoticeMessageSender() const { return _noticeSender; }
 
 		ConstructionManager* GetConstructionManager() const { return _constructionMgr; }
 
@@ -185,33 +173,18 @@ namespace FlagRTS
 		void RegisterDataSupplier(const string& name,
 			IKindSpecificDataSupplier* kdsupplier, 
 			IObjectSpecificDataSupplier* odsupplier);
-		
+
 		void RegisterObjectStatesSupplier(const string& name, 
 			size_t targetObjectsTypeId, IObjectStateSupplier* supplier);
 
 		void RegisterUnitCommandsSupplier(const string& name, IUnitCommandSupplier* supplier);
 		void RegisterUnitClassSupplier(const string& name, UnitClassSupplier* supplier);
-
-	private:
-		Event<const NoticeMessage&> _noticeRequested;
-		Event<const NoticeMessage&> _quickNoticeRequested;
-
-	public:
-		// Shows short notice on screen ( quick fade, best for info on events that need short, fast notice,
-		// like 'insufficient resources', 'invalid location', 'inaccessible action' etc )
-		void ShowQuickNotice(const NoticeMessage& msg);
-
-		// Shows short notice on screen (remains few seconds)
-		void ShowNotice(const NoticeMessage& msg);
-
-		Event<const NoticeMessage&>& NoticeRequested() { return _noticeRequested; }
-		Event<const NoticeMessage&>& QuickNoticeRequested() { return _quickNoticeRequested; }
 	};
 
 	/// Provides global access to game system interfaces
 	/**
-		Static class that provides simple global access to important game world components' interfaces.
-		All interfaces are querried via global GameWorld ('GameWorld::GlobalWorld').
+	Static class that provides simple global access to important game world components' interfaces.
+	All interfaces are querried via global GameWorld ('GameWorld::GlobalWorld').
 	*/
 	class GameInterfaces
 	{
@@ -224,5 +197,10 @@ namespace FlagRTS
 		static IGameObjectPoolManager* GetGameObjectPoolManager() { return GetGameWorld()->GetGameObjectPoolManager(); }
 		static IGameObjectPool* GetGameObjectPool() { return GetGameWorld()->GetGameObjectPool(); }
 		static IObjectDefinitionManager* GetObjectDefinitionManager() { return GetGameWorld()->GetObjectDefinitionManager(); }
+		static ISceneObjectSpawner* GetSceneObjectSpawner(){ return GetGameWorld()->GetSceneObjectSpawner(); }
+		//static IDataStorage<size_t>* GetObjectDataStorage() { return GetGameWorld()->GetObjectDataStorage(); }
+		static INoticeMessageSender* GetNoticeMessageSender() { return GetGameWorld()->GetNoticeMessageSender(); }
+		static IPathingSystem* GetPathingSystem() { return GetGameWorld()->GetPathingSystem(); }
+	
 	};
 }

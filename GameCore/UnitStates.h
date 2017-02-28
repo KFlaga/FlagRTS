@@ -13,16 +13,15 @@ namespace FlagRTS
 	class CommandTarget;
 
 	// Base state for all units
+	// TODO: Remove CommandQueue update from states (or not?)
 	class UnitState : public SceneObjectState
 	{
 	protected:
 		Unit* _owner;
 
 	public:
-		UnitState(Unit* owner);
+		UnitState(Unit* owner, size_t type, const char* name);
 
-		void Begin() { }
-		void End() { }
 		void Update(float ms);
 	};
 
@@ -39,9 +38,9 @@ namespace FlagRTS
 
 		void Begin();
 		void End();
+		void Interrupt();
+		void Resume();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
 	};
 
 	// Plays (Move,"Default") animation in normal stituation
@@ -56,8 +55,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
 	};
 
 	// Plays (Move,"Default") animation in normal stituation
@@ -75,8 +74,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
 
 		const Vector3& GetTarget() const { return _target; }
 		void SetTarget(const Vector3& target) { _target = target; }
@@ -100,8 +99,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
 	};
 
 	// For buildings with doors / gates or containers etc
@@ -114,8 +113,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
 	};
 
 	// For buildings with doors / gates or containers etc
@@ -128,8 +127,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
 	};
 
 	// Plays (Dying,"Default") animation
@@ -145,8 +144,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
 	};
 
 	// Standard OnSpawned state for buildings, must be changed to idle or anything
@@ -159,8 +158,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
 	};
 
 	// In building state its draining resources and builds the building
@@ -177,8 +176,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
-		const char* GetName();
-		size_t GetType();
+		void Interrupt();
+		void Resume();
 
 	private:
 		void OnBuildingDestroyed(Unit* building);
@@ -201,6 +200,8 @@ namespace FlagRTS
 		void Begin();
 		void End();
 		void Update(float ms);
+		void Interrupt();
+		void Resume();
 
 		virtual bool TryFinishTrain(Unit* trainedUnit);
 	};

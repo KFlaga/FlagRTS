@@ -5,6 +5,9 @@
 #include "UnitClass.h"
 #include <Profiler.h>
 
+#include "GameWorld.h"
+#include "ObjectDataStorage.h"
+
 namespace FlagRTS
 {
 	using namespace UnitClasses;

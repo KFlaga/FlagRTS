@@ -3,6 +3,7 @@
 #include <GUI.h>
 #include "IMenuScreen.h"
 #include "OptionsPanel.h"
+#include "StringUtils.h"
 
 namespace FlagRTS
 {
@@ -15,7 +16,7 @@ namespace FlagRTS
 		MyGUI::Button* _buttonInput;
 		MyGUI::Button* _buttonGame;
 		MyGUI::Button* _buttonReturn;
-		std::map<string, IOptionsPanel*, string_less> _optionsPanels;
+		std::map<string, IOptionsPanel*, StringLess> _optionsPanels;
 		IOptionsPanel* _currentOptionsPanel;
 		bool _loaded; // True if gui is loaded
 		bool _pendingReturnToMenu;

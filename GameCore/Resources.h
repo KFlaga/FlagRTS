@@ -3,6 +3,8 @@
 #include "DataTypes.h"
 #include <Array.h>
 
+#define INVALID_RESOURCE -1
+
 namespace FlagRTS
 {
 	struct ResourcesInternal;
@@ -11,62 +13,80 @@ namespace FlagRTS
 	struct InGameSettings;
 
 	// Definition and current amounts of used resources
+	/**
+	Stores definitions of in-game resources and their amounts for each player.
+	*/
 	class Resources
 	{
-		ResourcesInternal* _internal;
+	public:
+		struct ResourceDefinition
+		{
+			string Name;
+			int Index;
+			float AbsoluteMaxAmount;
+			bool IsSupply;
+		};
+
+		struct PlayerResource
+		{
+			float Amount;
+			float MaxAmount;
+		};
+
+	protected:
+		Array<ResourceDefinition> _definitions;
+		Array<Array<PlayerResource>> _playerResources; // [player][resIdx] -> PlayerResource
 
 	public:
 		// Sets default resources info
-		Resources();
-		Resources(uint8 resourcesCount, uint8 playerCount);
-		~Resources();
+		Resources(int resourcesCount, int playerCount);
 
 		void SetResourcesSettings(InGameSettings* settings);
 
-		const string& GetResourceName(const uint8 resource);
-		void SetResourceName(const uint8 resource, const string& name);
-		void SetResourceName(const uint8 resource, const char* name);
-		uint8 GetResourceNumber(const string& resource);
-		uint8 GetResourceNumber(const char*  resource);
-		uint8 GetResourcesCount();
+		const string& GetResourceName(const int resource);
+		void SetResourceName(const int resource, const string& name);
+		void SetResourceName(const int resource, const char* name);
+		int GetResourceNumber(const string& resource);
+		int GetResourceNumber(const char*  resource);
+		int GetResourcesCount();
 
-		// Inverted resource means that player can use some max amount of this resource
-		// like max people count
-		bool IsInvertedResource(const uint8 resource);
-		void SetIsInvertedResource(const uint8 resource, const bool isInv);
+		bool IsSupplyResource(const int resource);
+		void SetIsSupplyResource(const int resource, const bool isSupply);
 
-		void SetMaxAmount(const uint8 resNum, const int maxAmount);
-		int GetMaxAmount(const uint8 resNum);
+		void SetMaxAmount(const int resNum, const float maxAmount);
+		float GetMaxAmount(const int resNum);
 
-		int GetPlayerResourceAmount(const uint8 playerNum, const uint8 resNum);
-		void SetPlayerResourceAmount(const uint8 playerNum, const uint8 resNum, const int amount);
-		void AddResourceToPlayer(const uint8 playerNum, const uint8 resNum, const int amount);
-		void TakeResourceFromPlayer(const uint8 playerNum, const uint8 resNum, const int amount);
+		float GetPlayerResourceAmount(const int playerNum, const int resNum);
+		void SetPlayerResourceAmount(const int playerNum, const int resNum, const float amount);
+		void AddResourceToPlayer(const int playerNum, const int resNum, const float amount);
+		void TakeResourceFromPlayer(const int playerNum, const int resNum, const float amount);
 
-		void SetMaxAmountForPlayer(const uint8 playerNum, 
-			const uint8 resNum, 
-			const int maxAmount);
-		
-		int GetMaxAmountForPlayer(const uint8 playerNum, 
-			const uint8 resNum);
+		void SetMaxAmountForPlayer(const int playerNum, 
+			const int resNum, 
+			const float maxAmount);
+
+		float GetMaxAmountForPlayer(const int playerNum, 
+			const int resNum);
 
 		// Returns true if player have all neccessary resources
 		// If have not, returns false + in insufficientResourceNum sets
 		// first resource player lacks
-		bool CheckPlayerHaveSufficientResources(const uint8 playerNum, 
-			const UnitCost& unitCost, uint8* insufficientResourceNum);
+		bool CheckPlayerHaveSufficientResources(const int playerNum, 
+			const UnitCost& unitCost, int* insufficientResourceNum);
 
 		// Takes all resources from array from player
-		void TakeResourcesFromPlayer(const uint8 playerNum, const UnitCost& unitCost);
+		void TakeResourcesFromPlayer(const int playerNum, const UnitCost& unitCost);
 
-		// Returns all resources marked 'return on death' to player
-		void ReturnResourcesOnDeathToPlayer(const uint8 playerNum, const UnitCost& unitCost);
+		// Returns all resources marked 'supply' to player
+		void ReturnResourcesOnDeathToPlayer(const int playerNum, const UnitCost& unitCost);
 
 		// Returns all resources from cost to player
-		void ReturnAllResourcesToPlayer(const uint8 playerNum, const UnitCost& unitCost);
-
-	private:
-		void SetDefaultValues();
+		void ReturnAllResourcesToPlayer(const int playerNum, const UnitCost& unitCost);
+		
+		PlayerResource& GetPlayerResource(const int playerNum, const int resNum)
+		{
+			return _playerResources[playerNum][resNum];
+		}
 	};
 
 	struct ResourceSetting

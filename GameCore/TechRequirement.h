@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GameObjectFactory.h"
 #include "Technology.h"
 #include "ICondition.h"
 #include <Event.h>
@@ -11,7 +10,7 @@ namespace FlagRTS
 	// TechRequirement checks arbitraru condition and based on that sets 
 	// availability of some technology. Requirements are player specific and player must
 	// be set before checking requirement
-	class TechRequirement : public IGameObject
+	class TechRequirement
 	{
 	protected:
 		static const uint8 _noPlayer = (uint8)-1;
@@ -81,10 +80,30 @@ namespace FlagRTS
 		virtual TechRequirement* GetCopy();
 	};
 
-	class TechRequirementFactory : public SubClassXmlFactory
+	class TechRequirementFactory
 	{
-	public:
-		TechRequirementFactory();
+	//	DISALLOW_COPY(TechRequirementFactory);
+
+	//private:
+	//	typedef ArrayMaps<IObjectDefinitionFactory*>::KeyCCString FactoryMap;
+	//	FactoryMap _subFactories;
+
+	//public:
+	//	SubObjectDefinitionFactory();
+	//	~SubObjectDefinitionFactory();
+	//	ObjectDefinition* Create(XmlNode* objNode);
+
+	//	// Adds factory to available subclass factories
+	//	// If factory with given key already exists, then old one is deleted and replaced
+	//	void RegisterFactory(const string& typeName, IObjectDefinitionFactory* factory);
+	//	
+	//	// Removes factory from available subclass factories
+	//	// If factory with given key doesn't exist - nothing happens
+	//	void UnregisterFactory(const string& typeName);
+	//	
+	//	// Returns factory of given type
+	//	// If factory with given key doesn't exist returns 0
+	//	IObjectDefinitionFactory* GetFactoryOfType(const string& typeName);
 	};
 
 	// Returns combined availability of Technology which have given set of Requirements

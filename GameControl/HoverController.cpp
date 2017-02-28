@@ -14,6 +14,7 @@
 #include <SelectionFlags.h>
 #include <BillboardMarker.h>
 #include <ModelMarker.h>
+#include <Exception.h>
 
 namespace FlagRTS
 {
@@ -178,7 +179,7 @@ namespace FlagRTS
 			}
 			else
 			{
-				CastException_d((string("No HoverContext for command : ") + std::to_string(command->GetOrderType())).c_str());
+				CastException_d(string("No HoverContext for command : ") + std::to_string(command->GetOrderType()));
 				// Set some default context
 			}
 		}

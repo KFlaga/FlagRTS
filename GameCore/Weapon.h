@@ -2,6 +2,7 @@
 
 #include "WeaponDefinition.h"
 #include "CommandTarget.h"
+#include "IGameObject.h"
 
 namespace FlagRTS
 {

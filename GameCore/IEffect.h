@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ObjectDefinition.h"
-#include "GameObjectFactory.h"
+#include "IGameObject.h"
 
 namespace FlagRTS
 {
@@ -46,11 +46,5 @@ namespace FlagRTS
 			IGameObject* source,
 			IGameObject* target,
 			const Vector3& targetPoint) = 0;
-	};
-
-	class EffectFactory : public SubClassXmlFactory
-	{
-	public:
-		EffectFactory();
 	};
 }

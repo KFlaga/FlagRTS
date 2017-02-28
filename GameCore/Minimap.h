@@ -61,7 +61,7 @@ namespace FlagRTS
 	class Minimap
 	{
 	private:
-		Array<MinimapUnit*> _allUnits;
+		SceneObject* _initObject; // Need to store first added object, as Dbvh can be created after at least 2 were added
 		MiniMapDbvh* _unitsDbvh; // Dbvh for hittesting ( only selectable units are added )
 		Vector2 _internalWorldSize;
 		Vector2 _gameWorldSize;
@@ -105,9 +105,10 @@ namespace FlagRTS
 		Vector2 ConvertWorldToMinimapCoords(const Vector2& worldPos);
 
 		// Adds object to be shown on minimap
-		void AddObject(SceneObject* unit);
+		void AddObject(SceneObject* object);
+
 		// Removes object from minimap
-		void RemoveObject(SceneObject* unit);
+		void RemoveObject(SceneObject* object);
 
 		// Sets background texture ( material ) for minimap to be terrain's one
 		void SetUseTerrainTexture();
@@ -143,9 +144,9 @@ namespace FlagRTS
 			ObjectMoved, SceneObject*);
 		ObjectMovedDelegate _onObjectMoved;
 		
-		void ObjectIsSelectedChanged(Unit*, bool);
+		void ObjectIsSelectedChanged(SceneObject*, bool);
 		DEFINE_DELEGATE2(ObjectIsSelectedChangedDelegate, Minimap,
-			ObjectIsSelectedChanged, Unit*, bool);
+			ObjectIsSelectedChanged, SceneObject*, bool);
 		ObjectIsSelectedChangedDelegate _onObjectSelected;
 		
 		void GameCameraMoved(SceneObject*);

@@ -90,9 +90,9 @@ namespace FlagRTS
 
 	void CollisionArea::FindCollisions()
 	{
-		_query->SetTestShape( PathFinding::Box( 
-			PFVector2(_center.x - _halfExtends.x, _center.z - _halfExtends.z),
-			PFVector2(_center.x + _halfExtends.x, _center.z + _halfExtends.z)) );
+		_query->SetTestShape( BoundingBox( 
+			Vector2(_center.x - _halfExtends.x, _center.z - _halfExtends.z),
+			Vector2(_center.x + _halfExtends.x, _center.z + _halfExtends.z)) );
 
 		switch(_shape)
 		{
@@ -114,5 +114,23 @@ namespace FlagRTS
 	bool CollisionArea::CheckCollideWith(CollisionArea* otherArea)
 	{
 		return false;
+	}
+
+	CollisionShape::CollisionShape()
+	{
+
+	}
+
+	CollisionShape::CollisionShape(
+		CollisionFilter collisionFilter,
+		CollisionShapeType shape, 
+		const Vector3& center, 
+		const Vector3& halfExtends) :
+	    _collisionFilter(collisionFilter),
+		_shapeType(shape),
+		_center(center),
+		_halfExtends(halfExtends)
+	{
+	
 	}
 }

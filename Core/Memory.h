@@ -170,7 +170,6 @@ namespace FlagRTS
 	sDeleteSafe(ptr) :	\
 	xDeleteSafe(ptr)
 
-
 #define uDeleteArray(T,ptr)		\
 	IsTypeSimple(T) ?		\
 	sDeleteArray(ptr) :	\

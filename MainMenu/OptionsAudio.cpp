@@ -110,7 +110,7 @@ namespace FlagRTS
 		MyGUI::ImageBox* bg = static_cast<MyGUI::ImageBox*>(_gui->FindInLayout(layout, name+"_SliderBG"));
 		MyGUI::ImageBox* fg = static_cast<MyGUI::ImageBox*>(_gui->FindInLayout(layout, name+"_SliderFG"));
 		MyGUI::ImageBox* valImg = static_cast<MyGUI::ImageBox*>(_gui->FindInLayout(layout, name+"_SliderValue"));
-		Slider3ImagesControl* slider = xNew5(Slider3ImagesControl,bg, fg, valImg, 0.f, 1.f);
+		Slider3ImagesControl* slider = xNew5(Slider3ImagesControl, bg, fg, valImg, 0.f, 1.f);
 		
 		return slider;
 	}

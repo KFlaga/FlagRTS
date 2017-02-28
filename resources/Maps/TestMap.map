@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Map>
-  <!-- File with actual map info (must be in same folder) -->
+  <!-- Directory with map data -->
+  <MapDataDir value="TestMap_Data"/>
+  <!-- File with actual map info (must be in folder [MapDataDir]) -->
   <MapFile value="TestMap.xml"/>
   <!-- Name of map to show in gui -->
   <MapName value="Test Map"/>
   <!-- Size of map, 'value' is shown on map browser, size is used for preview -->
   <Size value="S" x="2560" y ="2560"/>
-  <!-- Image with map terrain (must be in same folder) -->
+  <!-- Image with map terrain (must be in folder [MapDataDir]) -->
   <PreviewImage value="TestMap.png"/>
 
   <!-- Max number of players by default -->
@@ -15,7 +17,8 @@
   <!-- Start loc can have an optional name, shown on player panel
        used i.e. if its assigned to some role on map -->
   <AvailableStartLocations>
-    <StartLoc id="0" x="500" y="500"/> <!-- 'id' here for compability with mode/player restrictions -->
+    <StartLoc id="0" x="500" y="500"/>
+    <!-- 'id' here for compability with mode/player restrictions -->
     <StartLoc id="1" x="2060" y="500"/>
     <StartLoc id="2" x="2060" y="2060"/>
   </AvailableStartLocations>
@@ -27,11 +30,12 @@
   <!-- TODO Team can have an optional name, shown on player panel
        used i.e. if its assigned to some role on map -->
   <AvailableTeams>
-    <Team id="0"/> <!-- 'id' here for compability with mode/player restrictions -->
+    <Team id="0"/>
+    <!-- 'id' here for compability with mode/player restrictions -->
     <Team id="1"/>
     <Team id="2"/>
   </AvailableTeams>
-  
+
   <!-- Default used mode, 'name' is used to choose one from below list, 
     'display' to show on map browser-->
   <DefaultMode name="FFA" display="FFA"/>

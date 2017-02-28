@@ -21,7 +21,7 @@ namespace FlagRTS
 
 	class Player
 	{
-	private:
+	protected:
 		string _name;
 		PlayerRelations _relations[9];
 		string _faction;
@@ -66,7 +66,7 @@ namespace FlagRTS
 
 	class PlayersInfo
 	{
-	private:
+	protected:
 		int _playersCount; // Only standard players counts [1-8]
 		int _clientPlayer;
 		Player* _players[9];

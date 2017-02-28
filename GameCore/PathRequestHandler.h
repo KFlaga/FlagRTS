@@ -4,6 +4,7 @@
 #include <Array.h>
 #include <List.h>
 #include <mutex>
+#include "PathingComponent.h"
 
 namespace PathFinding
 {
@@ -12,7 +13,8 @@ namespace PathFinding
 
 namespace FlagRTS
 {
-	class PathUnit;
+	class PathingComponent;
+	typedef PathingComponent PathUnit;
 
 	struct PathRequest
 	{

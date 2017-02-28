@@ -22,9 +22,7 @@ namespace FlagRTS
 	UnitDefinition::UnitDefinition() :
 		PhysicalObjectDefinition(),
 		_baseStats(xNew0(UnitStats)),
-		_canTrainUnits(false),
 		_countsAsPlayerUnit(false),
-		_selectionMarkerDef(0),
 		_defaultMoveStrategy(0)
 	{
 		SetFinalType(GetTypeId<Unit>());
@@ -33,13 +31,10 @@ namespace FlagRTS
 
 	UnitDefinition::UnitDefinition(XmlNode* soDefNode) :
 		PhysicalObjectDefinition(soDefNode),
-		_baseStats(xNew0(UnitStats)),
-		_canTrainUnits(false),
-		_selectionMarkerDef(0)
+		_baseStats(xNew0(UnitStats))
 	{
 		SetFinalType(GetTypeId<Unit>());
 		SetFinalTypeName("Unit");
-		_selectionFlags |= SelectionFlags::Unit;
 
 		// Get node specific to Unit
 		XmlNode* unitNode = soDefNode->first_node("PhysicalObject")->
@@ -63,18 +58,7 @@ namespace FlagRTS
 		_iconName, "Icons", Ogre::TEX_TYPE_2D, (int)icon.getWidth(), (int)icon.getHeight(), 1, icon.getFormat());
 		iconTexture->loadImage(icon);
 		*/
-		ParseWeapons(unitNode->first_node("Weapons",7));
 		ParseCommands(unitNode->first_node("Commands"));
-
-		XmlNode* trainableNode = unitNode->first_node("TrainableUnits");
-		if( trainableNode != 0 )
-			ParseTrainableUnits(unitNode->first_node("TrainableUnits"));
-
-		XmlNode* selectionNode = unitNode->first_node("SelectionMarker");
-		if( selectionNode != 0 )
-		{
-			ParseSelectionMarker(selectionNode);
-		}
 
 		ParseMoveStrategy(unitNode->first_node("MoveStrategy"));
 	}
@@ -82,45 +66,19 @@ namespace FlagRTS
 	UnitDefinition::~UnitDefinition()
 	{
 		xDelete(_baseStats);
-		for(unsigned int i = 0; i < _trainableUnitsDefs.size(); ++i)
+		/*for(unsigned int i = 0; i < _trainableUnitsDefs.size(); ++i)
 		{
 			xDelete( _trainableUnitsDefs[i]->DefinitionName );
 			for(unsigned int req = 0; req < _trainableUnitsDefs[i]->RequirementNames.size(); ++req)
 			{
 				xDelete( _trainableUnitsDefs[i]->RequirementNames[req] );
 			}
-		}
+		}*/
 	}
 
 	void UnitDefinition::ParseUnitProperties(XmlNode* propsNode)
 	{
-		_canTrainUnits = XmlUtility::XmlGetFlag(propsNode, "CanTrainUnits");
 		_countsAsPlayerUnit = XmlUtility::XmlGetFlag(propsNode, "CountsAsUnit", true);
-	}
-
-	void UnitDefinition::ParseWeapons(XmlNode* wNode)
-	{
-		// Load all weapon definitions
-		XmlNode* weaponNode = wNode->first_node("Weapon",6);
-		while(weaponNode != 0)
-		{
-			bool isActive = XmlUtility::XmlGetBool(weaponNode, "active", 6);
-
-			string weaponName = XmlUtility::XmlGetString(weaponNode, "definition", 10);
-
-			// Becouse in this point they might be not loaded yet, 
-			// postpone it until all defs are loaded
-			auto getDefinition = [this, weaponName, isActive](IObjectDefinitionManager* mgr) 
-			{
-				_weapons.push_back(std::make_pair(static_cast<WeaponDefinition*>(
-					mgr->GetObjectDefinitionByName(weaponName, "Weapon")), isActive));
-			};
-			typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;
-			GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
-				xNew1(DefinitionsLoadedHandler, getDefinition);
-
-			weaponNode = weaponNode->next_sibling();
-		}
 	}
 
 	void UnitDefinition::ParseCommands(XmlNode* commandsNode)
@@ -211,52 +169,6 @@ namespace FlagRTS
 				_unitSoundSet[i] = ssource;
 			}
 		}
-	}
-
-	void UnitDefinition::ParseTrainableUnits(XmlNode* trainableNode)
-	{
-		XmlNode* unitNode = trainableNode->first_node("Unit");
-		while(unitNode != 0)
-		{
-			const char* defName = CopyChar(XmlUtility::XmlGetString(unitNode, "definition"));
-			int num = XmlUtility::XmlGetInt(unitNode, "num");
-
-			TrainableUnit* unit(xNew0(TrainableUnit));
-			unit->DefinitionName = defName;
-			unit->Number = num;
-
-			XmlNode* allReqsNode = unitNode->first_node("Requirements");
-			if( allReqsNode != 0 )
-			{
-				XmlNode* reqNode = allReqsNode->first_node("Requirement");
-				while( reqNode != 0 )
-				{
-					unit->RequirementNames.push_back(CopyChar(
-						XmlUtility::XmlGetString(reqNode, "name")));
-				}
-			}
-
-			_trainableUnitsDefs.push_back(unit);
-
-			unitNode = unitNode->next_sibling();
-		}
-	}
-
-	void UnitDefinition::ParseSelectionMarker(XmlNode* selectionNode)
-	{
-		string markerName = XmlUtility::XmlGetString(selectionNode, "definition");
-		string markerType = XmlUtility::XmlGetString(selectionNode, "type");
-		_selectionMarkerSize = XmlUtility::XmlGetXYZ(selectionNode->first_node("Size"));
-		_selectionMarkerOffset = XmlUtility::XmlGetXYZ(selectionNode->first_node("Position"));
-
-		auto getDefinition = [this, markerName, markerType](IObjectDefinitionManager* mgr) 
-		{
-			_selectionMarkerDef = static_cast<SceneMarkerDefinition*>(
-				mgr->GetObjectDefinitionByName(markerType, markerName));
-		};
-		typedef DelegateEventHandler<decltype(getDefinition), IObjectDefinitionManager*> DefinitionsLoadedHandler;
-		GameInterfaces::GetObjectDefinitionManager()->OnAllDefinitionsLoaded() +=
-			xNew1(DefinitionsLoadedHandler, getDefinition);
 	}
 
 	void UnitDefinition::ParseMoveStrategy(XmlNode* moveNode)

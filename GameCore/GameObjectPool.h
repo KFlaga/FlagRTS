@@ -7,14 +7,12 @@
 
 namespace FlagRTS
 {
-
 	/// Defualt implementation of IGameObjectPool
 	/**
-
+		Creates objects from definition and stores them.
+		Does not load them nor creates its components.
 	*/
-	template<typename ObjType, 
-		typename DefType = typename std::enable_if<
-		std::is_base_of<ObjectDefinition, DefType>::value>::type> // Check if DefType is ObjectDefinition
+	template<typename ObjType, typename DefType>
 	class GameObjectPool : public IGameObjectPool
 	{
 		DISALLOW_COPY(GameObjectPool);
@@ -35,7 +33,7 @@ namespace FlagRTS
 
 		void LoadAllResources(Ogre::SceneManager* ogreMgr)
 		{
-			for(auto objIt = _objects.begin(); _objects.isNotEnd(objIt); ++objIt)
+			for(auto objIt = _objects.begin(); objIt != _objects.end(); ++objIt)
 			{
 				objIt->Value->LoadResources(ogreMgr);
 			}
@@ -43,7 +41,7 @@ namespace FlagRTS
 
 		void UnloadAllResources(Ogre::SceneManager* ogreMgr)
 		{
-			for(auto objIt = _objects.begin(); _objects.isNotEnd(objIt); ++objIt)
+			for(auto objIt = _objects.begin(); objIt != _objects.end(); ++objIt)
 			{
 				objIt->Value->UnloadResources(ogreMgr);
 			}
@@ -51,7 +49,7 @@ namespace FlagRTS
 
 		void UpdateAll(float ms)
 		{
-			for(auto objIt = _objects.begin(); _objects.isNotEnd(objIt); ++objIt)
+			for(auto objIt = _objects.begin(); objIt != _objects.end(); ++objIt)
 			{
 				objIt->Value->Update(ms);
 			}
@@ -63,18 +61,15 @@ namespace FlagRTS
 		IGameObject* FindByHandle(TypeId objectType, ObjectHandle handle)
 		{
 			_ASSERT(GetObjectType() == objectType);
+			_ASSERT(_objects.find(handle.Object) != _objects.end());
 			return _objects[handle.Object];
 		}
 
 		IGameObject* Create(ObjectDefinition* objDef, int owner)
 		{
-			return CreateCast(static_cast<DefType*>(objDef), owner);
-		}
-
-		virtual ObjType* CreateCast(DefType* objDef, int owner)
-		{
-			ObjType* newObj(xNew1(ObjType, objDef));
+			ObjType* newObj(xNew1(ObjType, static_cast<DefType*>(objDef)));
 			_objects.insert(newObj->GetHandle().Object, newObj);
+			newObj->SetOwner(owner);
 
 			return newObj;
 		}
@@ -87,7 +82,7 @@ namespace FlagRTS
 
 		void DestroyAll()
 		{
-			for(auto objIt = _objects.begin(); _objects.isNotEnd(objIt); ++objIt)
+			for(auto objIt = _objects.begin(); objIt != _objects.end(); ++objIt)
 			{
 				Destroy(objIt->Value);
 			}

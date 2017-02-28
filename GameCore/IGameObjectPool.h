@@ -2,6 +2,7 @@
 
 #include <ObjectHandle.h>
 #include "IGameObject.h"
+#include "IObjectComponent.h"
 #include "DataTypes.h"
 #include "ObjectDefinition.h"
 
@@ -12,21 +13,18 @@ namespace Ogre
 
 namespace FlagRTS
 {
-	/// Interface for objects that create/store/update game object
 	/**
-		Interface for pool of IGameObject final types.
+		Interface for objects that create/store/update game object
 		All instances of those object should be created/destroyed via corresponding pool.
 		Created objects are stored and updated via pool
 	*/
-	class IGameObjectPool
+	template<typename ObjType, typename OwnerType>
+	class IObjectPool
 	{
-		DISALLOW_COPY(IGameObjectPool);
-
-		IGameObject* _lastCreatedObject;
-
+		DISALLOW_COPY(IObjectPool);
 	public:
-		IGameObjectPool() { }
-		virtual ~IGameObjectPool() { }
+		IObjectPool() { }
+		virtual ~IObjectPool() { }
 
 		/// Loads resources for every created object
 		virtual void LoadAllResources(Ogre::SceneManager* ogrMgr) = 0;
@@ -36,12 +34,6 @@ namespace FlagRTS
 		
 		/// Updates all created objects
 		virtual void UpdateAll(float ms) = 0;
-		
-		/// Gets object last created by this pool
-		IGameObject* GetLastCreatedObject()
-		{
-			return _lastCreatedObject;
-		}
 
 		/// Creates object from given definition
 		/**
@@ -52,19 +44,19 @@ namespace FlagRTS
 			\param owner owning player need if object need to have owner
 			\returns fully created object if objDef is ok or 0 otherwise
 		*/
-		virtual IGameObject* Create(ObjectDefinition* objDef, int owner) = 0;
+		virtual ObjType* Create(ObjectDefinition* objDef, OwnerType owner) = 0;
 		
 		/// Destroys and removes object from pool
 		/**
 			Destroys and removes object from pool.
 			Does not unload object - it should be unloaded externally
 		*/
-		virtual void Destroy(IGameObject* object) = 0;
+		virtual void Destroy(ObjType* object) = 0;
 
 		/// Destroys every created object in this pool
 		virtual void DestroyAll() = 0;
 
-		/// Retuns IGameObject with given handle and type
+		/// Retuns object with given handle and type
 		/**
 			Searches for and returns pointer to created 'IGameObject' with specified
 			TypeId and handle.
@@ -72,6 +64,14 @@ namespace FlagRTS
 			\param handle handle to object
 			\returns object with given handle if found or 0 otherwise
 		*/
-		virtual IGameObject* FindByHandle(TypeId objectType, ObjectHandle handle) = 0;
+		virtual ObjType* FindByHandle(TypeId objectType, ObjectHandle handle) = 0;
+	};
+
+	class IGameObjectPool : public IObjectPool<IGameObject, int>
+	{
+	};
+	
+	class IComponentPool : public IObjectPool<IObjectComponent, IGameObject*>
+	{
 	};
 }

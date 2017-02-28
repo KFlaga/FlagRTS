@@ -1,21 +1,17 @@
 #include "PathingSystem.h"
-#include <PathFindingUniformGridPathingMap.h>
 #include "PathingDrawer.h"
 
 #include <InputManager.h>
 #include <KeyBindings.h>
 
-#include <PathFindingUniformGridPathingMap.h>
-#include <PathFindingUniformGridJumpPointFinder.h>
-#include <PathFindingUniformGridVariedSizeJumpFinder.h>
-#include <PathFindingIPathUnit.h>
-#include <PathFindingForcesPathFinder.h>
-#include <PathFindingUnitIgnorePathFinder.h>
-#include <PathFindingDbvh.h>
-#include <PathFindingDbvhUnitUnitPairer.h>
-#include <PathFindingForcesPathFinder.h>
-#include "PathingPathUnit.h"
+#include "PathingUniformGridMap.h"
+#include "PathingJumpGlobalPathFinder.h"
+#include "PathingVariedSizeJumpGlobalPathFinder.h"
+#include "PathingForcesLocalPathFinder.h"
+#include "PathingIgnoreUnitsLocalPathFinder.h"
+#include "PathingDbvh.h"
 #include "PathingQuery.h"
+#include "PathingDbvhUUPairer.h"
 
 #include <OgreResourceGroupManager.h>
 #include "Unit.h"
@@ -24,9 +20,12 @@
 #include <ThreadManager.h>
 #include "PathRequestHandler.h"
 
-#include "CollisionGroup.h"
+#include "CollisionFilter.h"
 #include "TerrainBase.h"
-#include <PathFindingHeightMapConverter.h>
+#include "SlopeObstacles.h"
+
+#include "CollisionComponent.h"
+#include "PathingComponent.h"
 
 namespace FlagRTS
 {
@@ -42,7 +41,7 @@ namespace FlagRTS
 	};
 
 	// TODO Change to common (multi-filter) result database
-	class JumpPointFinder : public PathFinding::IGlobalPathFinder
+	class JumpPointFinder : public IGlobalPathFinder
 	{
 	public:
 		enum FinderType
@@ -53,7 +52,7 @@ namespace FlagRTS
 
 	private:
 		std::map<int, IGlobalPathFinder*> _perFilterPathfinders;
-		PathFinding::UniformGridPathingMap* _pathingMap;
+		UniformGridPathingMap* _pathingMap;
 		float _eps;
 		FinderType _finderType;
 
@@ -115,37 +114,19 @@ namespace FlagRTS
 				pfIt->second->UpdateCell(x,y);
 		}
 
-		void UpdateObstacle(const PFArray2d<CollisionFilter>& obstacle, const IntVector2& topLeftCell)
+		void UpdateObstacle(const Array2d<CollisionFilter>& obstacle, const IntVector2& topLeftCell)
 		{
 			for(auto pfIt = _perFilterPathfinders.begin(); pfIt != _perFilterPathfinders.end(); ++pfIt)
 				pfIt->second->UpdateObstacle(obstacle, topLeftCell);
 		}
 	};
 
-	inline PathUnit* GetPathUnit(const size_t handle)
+	struct PathingComponentGetter
 	{
-		return reinterpret_cast<PathUnit*>(handle);
-	}
-
-	inline size_t GetUnitHandle(const PathUnit* unit)
-	{
-		return reinterpret_cast<size_t>(unit);
-	}
-
-	struct PathUnitGetter
-	{
-		inline IPathUnit<PFVector2>* operator()(PhysicalObject* obj) const
+		PathingComponent* operator()(PhysicalObject* obj)
 		{
-			return GetPathUnit(obj->GetPathingHandle())->Unit;
+			return obj->FindComponent<PathingComponent>();
 		}
-	};
-
-	class Dbvh : public PathFinding::Dbvh<PathFinding::Box>
-	{
-	public:
-		Dbvh(float minMergeBen, float minRotBen) :
-			PathFinding::Dbvh<PathFinding::Box>(minMergeBen, minRotBen)
-		{ }
 	};
 
 	PathingSystem::PathingSystem(
@@ -159,7 +140,8 @@ namespace FlagRTS
 		_globalFinder(0),
 		_onUnitMoved(this),
 		_onUnitRotated(this),
-		_pathRequestHandler(0)
+		_pathRequestHandler(0),
+		_initDbvhObject(0)
 	{
 		// Read config:
 		RefPtr<XmlDocument> pathingConfig = XmlUtility::XmlDocFromOgreResource("PathingConfig.xml", "Base");
@@ -175,12 +157,12 @@ namespace FlagRTS
 		_debugDrawers[DbvhDrawer] = xNew3(PathingDrawer,ogreMgr, Vector3(0.6f,0.1f,0.1f), "DbvhDrawer");
 		_debugDrawers[BuildingObstaclesDrawer] = xNew3(PathingDrawer,ogreMgr, Vector3(0.5f,0.2f,0.2f), "BObstacleDrawer");
 
-		_dbvh = xNew2(Dbvh, 0.9f, 0.75f);
+		_dbvh = xNew2(Dbvh<BoundingBox>, 0.9f, 0.75f);
 		InitGlobalPathFinder(rootNode);
 		InitLocalPathFinder(rootNode);
 
 		_goalTolerance = XmlUtility::XmlGetFloat(rootNode->first_node("PathGoalTolerance"), "value");
-		_isToleranceRelative = XmlUtility::XmlGetBool(rootNode->first_node("PathGoalToleranceRelative"), "value");
+		// _isToleranceRelative = XmlUtility::XmlGetBool(rootNode->first_node("PathGoalToleranceRelative"), "value");
 	}
 
 	void PathingSystem::CreatePathingMap(XmlNode* rootNode, 
@@ -214,7 +196,7 @@ namespace FlagRTS
 		}
 
 		_pathingMap = xNew4(UniformGridPathingMap,
-			x, y, PFVector2(cellSize, cellSize), filter);
+			x, y, Vector2(cellSize, cellSize), filter);
 	}
 
 	void PathingSystem::CreateSlopeObstacles(TerrainBase* terrain)
@@ -284,10 +266,13 @@ namespace FlagRTS
 		string lpfName =  XmlUtility::XmlGetString(lpfNode, "name", 4);
 		if(lpfName.compare("Forces") == 0)
 		{
-			auto uuPairer = new DbvhUnitUnitLookupPairer2d<Box,
-				FindUnitsWithinLookupShapeQuery2d<Box,
-				PhysicalObject, PathUnitGetter>>(_dbvh);
-			ForcesPathFinder* lpf = xNew2(ForcesPathFinder, _pathingMap, uuPairer);
+			auto uuPairer = new DbvhUnitUnitLookupPairer2d<BoundingBox,
+				PathingComponent,
+				FindUnitsWithinLookupShapeQuery2d<BoundingBox,
+				PhysicalObject, PathingComponent, 
+				PathingComponentGetter>>(_dbvh);
+			ForcesPathFinder<PathingComponent>* lpf = xNew2(
+				ForcesPathFinder<PathingComponent>, _pathingMap, uuPairer);
 			uuPairer->SetUnitSource( lpf->GetUnits() );
 
 			float repCoeff = XmlUtility::XmlGetFloat(
@@ -306,7 +291,8 @@ namespace FlagRTS
 		}
 		else if(lpfName.compare("IgnoreUnits") == 0)
 		{
-			UnitIgnorePathFinder* lpf = xNew1(UnitIgnorePathFinder, _pathingMap);
+			UnitIgnorePathFinder<PathingComponent>* lpf = xNew1(
+				UnitIgnorePathFinder<PathingComponent>, _pathingMap);
 			_localFinder = lpf;
 		}
 	}
@@ -390,149 +376,150 @@ namespace FlagRTS
 
 	void PathingSystem::AddObstacle(PhysicalObject* object)
 	{
-		auto obstacle = object->GetFootprint();
-		const Vector3& position = object->GetPositionAbsolute();
-		int x,y;
-		_pathingMap->FindTopLeftOfObstacleWithCenterPosition(obstacle, Vector2(position.x, position.z), &x, &y);
-		_pathingMap->AddObstacle(obstacle, x, y);
-		_globalFinder->UpdateObstacle(*obstacle, IntVector2(x,y));
+		_ASSERT(object->FindComponent<CollisionComponent>() != 0);
+		CollisionComponent* collision = object->FindComponent<CollisionComponent>();
+
+		auto obstacle = collision->GetFootprint();
+		if(obstacle != 0)
+		{
+			const Vector3& position = object->GetPositionAbsolute();
+			int x,y;
+			_pathingMap->FindTopLeftOfObstacleWithCenterPosition(obstacle, Vector2(position.x, position.z), &x, &y);
+			_pathingMap->AddObstacle(obstacle, x, y);
+			_globalFinder->UpdateObstacle(*obstacle, IntVector2(x,y));
+		}
 	}
 
 	void PathingSystem::RemoveObstacle(PhysicalObject* object)
 	{
-		auto obstacle = object->GetFootprint();
-		const Vector3& position = object->GetPositionAbsolute();
-		int x,y;
-		_pathingMap->FindTopLeftOfObstacleWithCenterPosition(obstacle, Vector2(position.x, position.z), &x, &y);
-		_pathingMap->RemoveObstacle(obstacle, x, y);
-		_globalFinder->UpdateObstacle(*obstacle, IntVector2(x,y));
+		_ASSERT(object->FindComponent<CollisionComponent>() != 0);
+		CollisionComponent* collision = object->FindComponent<CollisionComponent>();
+
+		auto obstacle = collision->GetFootprint();
+		if(obstacle != 0)
+		{
+			const Vector3& position = object->GetPositionAbsolute();
+			int x,y;
+			_pathingMap->FindTopLeftOfObstacleWithCenterPosition(obstacle, Vector2(position.x, position.z), &x, &y);
+			_pathingMap->RemoveObstacle(obstacle, x, y);
+			_globalFinder->UpdateObstacle(*obstacle, IntVector2(x,y));
+		}
 	}
 
 	void PathingSystem::AddPathingObject(PhysicalObject* object)
 	{
-		// Create PathUnit for object and set some values
-		PathUnit* pathUnit = CreateShapedPathUnit(
-			(CollisionShapeType)object->GetPhysicalObjectDefinition()->GetPathingShape(),
-			CollisionFilter(object->GetPathingGroup(), object->GetPathingBlockedGroups()));
+		_ASSERT(object->FindComponent<CollisionComponent>() != 0);
+		CollisionComponent* collision = object->FindComponent<CollisionComponent>();
 
-		pathUnit->Owner = object;
-
-		if(object->GetFinalType() == GetTypeId<Unit>())
+		PathingComponent* pathing = object->FindComponent<PathingComponent>();
+		if(pathing != 0)
 		{
-			// Only units can move
-			pathUnit->Unit->SetMaxSpeed(static_cast<Unit*>(object)->GetSpeed() );
+			// Unit cannot move
+			AddObstacle(object);
+			return;
 		}
-		pathUnit->Unit->SetIsPathRequested(false);
 
-		const Vector3& position = object->GetPositionAbsolute();
-		pathUnit->Unit->SetPosition(Vector2(position.x, position.z));
-		SetPathUnitShape(pathUnit, object);
+		pathing->SetIsRequestedGlobalPath(false);
+		pathing->SetIsRequestedLocalPath(false);
+		pathing->SetIsFinishedMove(true);
 
 		Vector3 size = object->GetSize();
-		pathUnit->CellSize = IntVector2(
+		pathing->SetSizeInCells(IntVector2(
 			std::max(1, (int)(size.x / _pathingMap->GetCellSize().x)), 
-			std::max(1, (int)(size.z / _pathingMap->GetCellSize().y)));
+			std::max(1, (int)(size.z / _pathingMap->GetCellSize().y))));
 
-		object->SetPathingHandle(GetUnitHandle(pathUnit));
 		object->Moved() += &_onUnitMoved;
 
+		// If object is to be added to pathing graph ( and so be able to request paths and influence other paths )
+		// then add it to Dbvh and local finder
+		pathing->SetFrameMove(Vector2(0.f,0.f));
+		pathing->SetGlobalGoal(pathing->GetPosition());
+		_localFinder->AddUnit(pathing);
 
-		if( object->GetAddToPathingGraph() )
+		// Dbvh can be create only with >= 2 object
+		if( _dbvh->IsCreated() == false && _initDbvhObject == 0 )
 		{
-			// If object is to be added to pathing graph ( and so be able to request paths and influence other paths )
-			// then add it to Dbvh and local finder
-			pathUnit->Unit->SetFrameMove(Vector2(0.f,0.f));
-			pathUnit->Unit->SetGoal(pathUnit->Unit->GetPosition());
-			_localFinder->AddUnit(pathUnit->Unit);
-
-			_pathUnits.insert(pathUnit, object);
-			// Dbvh can be create only with >= 2 object
-			if( _pathUnits.size() == 2 )
-			{
-				PFArray<std::pair<PhysicalObject*, PathFinding::Box>> objects;
-				auto it = _pathUnits.begin();
-				objects.push_back(std::make_pair(it->Value, GetPathUnitBoundingBox(it->Key)));
-				++it;
-				objects.push_back(std::make_pair(it->Value, GetPathUnitBoundingBox(it->Key)));
-				_dbvh->CreateInitialBvh(objects);
-			}
-			else if( _pathUnits.size() > 2 )
-			{
-				_dbvh->AddObject(object, GetPathUnitBoundingBox(pathUnit));
-			}
+			_initDbvhObject = object;
+		}
+		else if( _dbvh->IsCreated() == false )
+		{
+			_initDbvhObject = 0;
+			CollisionComponent* initCollision = _initDbvhObject->FindComponent<CollisionComponent>();
+			Array<std::pair<PhysicalObject*, BoundingBox>> objects;
+			objects.push_back(std::make_pair(_initDbvhObject, initCollision->GetCollisionShape().GetBoundingBox()));
+			objects.push_back(std::make_pair(object, collision->GetCollisionShape().GetBoundingBox()));
+			_dbvh->CreateInitialBvh(objects);
+		}
+		else
+		{
+			_dbvh->AddObject(object, pathing->GetCollisionShape().GetBoundingBox());
 		}
 	}
 
 	void PathingSystem::RemovePathingObject(PhysicalObject* object)
 	{
-		if(object->GetPathingHandle() == 0)
-			return;
+		_ASSERT(object->FindComponent<CollisionComponent>() != 0);
+		CollisionComponent* collision = object->FindComponent<CollisionComponent>();
 
-		PathUnit* pathUnit = GetPathUnit(object->GetPathingHandle());
 		object->Moved() -= &_onUnitMoved;
-		object->SetPathingHandle(0);
 
-		if( object->GetAddToPathingGraph() )
+		PathingComponent* pathing = object->FindComponent<PathingComponent>();
+		if(pathing != 0)
 		{
-			_localFinder->RemoveUnit(pathUnit->Unit);
+			_localFinder->RemoveUnit(pathing);
 			_dbvh->RemoveObject(object);
 		}
-
-		xDelete(pathUnit);
 	}
 
 	void PathingSystem::SetUnitGlobalGoal(Unit* unit, const Vector3& goal, 
 		bool moveToGoal, bool reqestPath)
 	{
-		if(unit->GetPathingHandle() == 0)
-			return;
+		_ASSERT(unit->FindComponent<PathingComponent>());
+		CollisionComponent* collision = unit->FindComponent<CollisionComponent>();
+		PathingComponent* pathing = unit->FindComponent<PathingComponent>();
 
-		PathUnit* pathUnit = GetPathUnit(unit->GetPathingHandle());
-		pathUnit->FinalGoal = Vector2(goal.x, goal.z);
+		pathing->SetGlobalGoal(Vector2(goal.x, goal.z));
 
 		if(reqestPath)
 			RequestPathToGoal(unit);
 
 		if(moveToGoal)
 		{
-			pathUnit->Unit->SetIsPathRequested(true);
-			pathUnit->Unit->SetGoal(pathUnit->FinalGoal);
+			pathing->SetIsRequestedLocalPath(true);
+			pathing->SetLocalGoal(pathing->GetGlobalGoal());
 		}
 	}
 
-	void SetSameCellGoal() { }
-
-	void PathingSystem::RequestPathToGoal(Unit* unit)
+	void PathingSystem::RequestPath(PhysicalObject* unit)
 	{
-		if(unit->GetPathingHandle() == 0)
-			return;
+		_ASSERT(unit->FindComponent<PathingComponent>() != 0);
+		CollisionComponent* collision = unit->FindComponent<CollisionComponent>();
+		PathingComponent* pathing = unit->FindComponent<PathingComponent>();
 
-		PathUnit* pathUnit = GetPathUnit(unit->GetPathingHandle());
-		pathUnit->FinishedMove = false;
-		pathUnit->NextPathIdx = 1;
-		pathUnit->Path.clear();
+		pathing->SetIsFinishedMove(false);
+		pathing->SetCurrentPathIndex(0);
+		pathing->GetGlobalPath().clear();
 
-		if(pathUnit->HavePathRequestPending == true)
+		if(pathing->IsRequestedGlobalPath() == true)
 		{
-			pathUnit->HavePathRequestPending = false;
-			_pathRequestHandler->RemoveRequest(pathUnit);
+			pathing->SetIsRequestedGlobalPath(false);
+			_pathRequestHandler->RemoveRequest(pathing);
 		}
 
 		// Request new global path
-		_globalFinder->SetBlockFilter(pathUnit->Unit->GetCollsionFilter());
+		_globalFinder->SetBlockFilter(pathing->GetCollsionFilter());
 		IntVector2 begin, end;
 		const Vector3& position = unit->GetPositionAbsolute();
-		pathUnit->Unit->SetGoal(Vector2(position.x, position.z)); // Comment line, so unit will move towards goal awaiting for path, rather than staying in place
 		begin = _pathingMap->FindCellPositionFallsInto(Vector2(position.x, position.z));
-		end = _pathingMap->FindCellPositionFallsInto(pathUnit->FinalGoal);
+		end = _pathingMap->FindCellPositionFallsInto(pathing->GetGlobalGoal());
 		if( begin == end )
 		{
-			SetSameCellGoal(); // TODO -> add only local pathfinding. It can be changed to something like 1 cell radius or 1 collision radius etc.
+			// SetSameCellGoal(); // TODO -> add only local pathfinding. It can be changed to something like 1 cell radius or 1 collision radius etc.
 			// For now assume it finished moving
 			return;
 		}
-		pathUnit->HavePathRequestPending = true;
-		_pathRequestHandler->AddRequest(begin, end, pathUnit);	
+		pathing->SetIsRequestedGlobalPath(true);
+		_pathRequestHandler->AddRequest(begin, end, pathing);	
 	}
 
 	void PathingSystem::ProcessFinishedPathRequests()
@@ -541,30 +528,31 @@ namespace FlagRTS
 		PathRequest* req = _pathRequestHandler->GetFirstFinishedRequest();
 		while(req != 0)
 		{
-			PathUnit* pathUnit = req->Unit;
-			pathUnit->HavePathRequestPending = false;
+			PathingComponent* pathing = req->Unit;
+			pathing->SetIsRequestedGlobalPath(false);
 
-			if(pathUnit->Path.size() > 1)
+			if(pathing->GetGlobalPath().size() > 1)
 			{
 				// GlobalPathfinder found some non-trivial path, so make unit follow it
 				// TODO sometimes unit moves past first path cell before full path is calculated 
 				// So need to check it and move to next cell, or change GPF, so that partial path 
 				// can be accessed fast
-				pathUnit->Unit->SetIsPathRequested(true);
-				pathUnit->NextPathIdx = 1;
-				pathUnit->Unit->SetGoal(pathUnit->Path[pathUnit->NextPathIdx]);
+				pathing->SetIsRequestedLocalPath(true);
+				pathing->SetCurrentPathIndex(0);
+				pathing->SetLocalGoal(pathing->GetGlobalPath()[pathing->GetCurrentPathIndex() + 1]);
 			}
-			else if(pathUnit->Path.size() == 1) 
+			else if(pathing->GetGlobalPath().size() == 1) 
 			{
 				// Goal is on straight line - only go to final goal
-				pathUnit->Unit->SetIsPathRequested(true);
-				pathUnit->Unit->SetGoal(pathUnit->FinalGoal);
+				pathing->SetIsRequestedLocalPath(true);
+				pathing->SetLocalGoal(pathing->GetGlobalGoal());
 			}
 			else // There's no path
 			{
-				pathUnit->Unit->SetIsPathRequested(false);
-				pathUnit->Unit->SetGoal(pathUnit->Unit->GetPosition());
-				pathUnit->FinishedMove = true;
+				pathing->SetIsRequestedLocalPath(false);
+				pathing->SetGlobalGoal(pathing->GetPosition());
+				pathing->SetLocalGoal(pathing->GetPosition());
+				pathing->SetIsFinishedMove(true);
 			}
 
 			_pathRequestHandler->RemoveFinishedRequest();
@@ -575,107 +563,94 @@ namespace FlagRTS
 
 	Vector2 PathingSystem::GetUnitNextMove(Unit* unit)
 	{
-		_ASSERT( unit->GetPathingHandle() != 0 );
+		_ASSERT(unit->FindComponent<PathingComponent>() != 0);
+		PathingComponent* pathing = unit->FindComponent<PathingComponent>();
 
-		PathUnit* pathUnit = GetPathUnit(unit->GetPathingHandle());
-		return pathUnit->Unit->GetFrameMove();
+		return pathing->GetFrameMove();
 	}
 
 	bool PathingSystem::ShouldUnitMove(Unit* unit)
 	{
-		if(unit->GetPathingHandle() == 0)
-			return false;
+		_ASSERT(unit->FindComponent<PathingComponent>() != 0);
+		PathingComponent* pathing = unit->FindComponent<PathingComponent>();
 
-		PathUnit* pathUnit = GetPathUnit(unit->GetPathingHandle());
-		return pathUnit->Unit->GetFrameMove().squaredLength() > 0.1f;
+		return pathing->GetFrameMove().squaredLength() > 0.1f;
 	}
 
 	void PathingSystem::SetUnitHoldPosition(Unit* unit, bool holdPos)
 	{
-		if( unit->GetPathingHandle() != 0 )
-		{
-			PathUnit* pathUnit = GetPathUnit(unit->GetPathingHandle());
-			//pathUnit->Unit.SetAllowDisplacement(!holdPos);
-		}
+		_ASSERT(unit->FindComponent<PathingComponent>() != 0);
+		PathingComponent* pathing = unit->FindComponent<PathingComponent>();
+		pathing->SetIsAllowDisplacement(!holdPos);
 	}
 
-	inline void ResetGoal(PathUnit* pathUnit)
+	void PathingSystem::AbandonPath(PhysicalObject* unit)
 	{
-		_ASSERT( pathUnit != 0 );
+		_ASSERT(unit->FindComponent<PathingComponent>() != 0);
+		PathingComponent* pathing = unit->FindComponent<PathingComponent>();
 
-		pathUnit->FinishedMove = true;
+		pathing->GetGlobalPath().clear();
+		if(pathing->IsRequestedGlobalPath() == true)
+		{
+			_pathRequestHandler->RemoveRequest(pathing);
+		}
+
+		pathing->SetIsFinishedMove(true);
 		//pathUnit->Unit.SetAllowDisplacement(false);
-		pathUnit->Unit->SetIsPathRequested(false);
-		pathUnit->Unit->SetGoal(pathUnit->Unit->GetPosition());
-	}
-
-	void PathingSystem::AbandonPath(Unit* unit)
-	{
-		_ASSERT( unit->GetPathingHandle() != 0 );
-
-		PathUnit* pathUnit = GetPathUnit(unit->GetPathingHandle());
-		pathUnit->Path.clear();
-		if(pathUnit->HavePathRequestPending == true)
-		{
-			_pathRequestHandler->RemoveRequest(pathUnit);
-		}
-		ResetGoal(pathUnit);
+		pathing->SetIsRequestedGlobalPath(false);
+		pathing->SetIsRequestedLocalPath(false);
+		pathing->SetGlobalGoal(pathing->GetPosition());
+		pathing->SetLocalGoal(pathing->GetPosition());
 	}
 
 	void PathingSystem::OnUnitMoved(SceneObject* unit)
 	{
-		PathUnit* pathUnit = GetPathUnit( static_cast<Unit*>(unit)->GetPathingHandle() );
-		const Vector3& pos = unit->GetPositionAbsolute();
-		pathUnit->Unit->SetPosition(Vector2(pos.x, pos.z));
-		UpdatePathUnitShape(pathUnit, static_cast<PhysicalObject*>(unit));
+		_ASSERT(unit->FindComponent<PathingComponent>() != 0);
+		PathingComponent* pathing = unit->FindComponent<PathingComponent>();
 
-		// Dont update paths for unit not in graph
-		if( static_cast<PhysicalObject*>(unit)->GetAddToPathingGraph() == false )
-			return;
-
-		_localFinder->MoveUnit( pathUnit->Unit );
-		_dbvh->ObjectChanged(unit, GetPathUnitBoundingCircle(pathUnit));
+		_localFinder->MoveUnit( pathing );
+		_dbvh->ObjectChanged(unit, pathing->GetCollisionShape().GetBoundingBox());
 
 		_pathRequestHandler->Lock();
-		if(pathUnit->Unit->GetIsPathRequested()) // If unit have some path to follow
+		if(pathing->IsRequestedLocalPath()) // If unit have some path to follow
 		{
 			// Check if unit reach goal
 			// if it is sub-goal check within tolerance
-			if(pathUnit->NextPathIdx >= (int)pathUnit->Path.size() - 1 ||
-				pathUnit->Path.size() == 0) // Reached final goal cell
+			if(pathing->GetCurrentPathIndex() >= (int)pathing->GetGlobalPath().size() - 2 ||
+				pathing->GetGlobalPath().size() == 0) // Reached final goal cell
 			{
-				if(pathUnit->FinalGoal.squaredDistance(pathUnit->Unit->GetPosition()) < 0.1f) // Reach final goal position
+				if(pathing->GetGlobalGoal().squaredDistance(pathing->GetPosition()) < 0.1f) // Reach final goal position
 				{
-					ResetGoal(pathUnit);
+					pathing->SetIsFinishedMove(true);
+					//pathUnit->Unit.SetAllowDisplacement(false);
+					pathing->SetIsRequestedLocalPath(false);
 				}
 			}
 			else
 			{
 				// TODO make '100.f' ( distance where target is considered to be reached ) configurable parameter
-				if( pathUnit->Unit->GetGoal().squaredDistance(
-					pathUnit->Unit->GetPosition()) < 100.f ) // Reached next goal cell 
+				if( pathing->GetLocalGoal().squaredDistance(pathing->GetPosition()) < 100.f ) // Reached next goal cell 
 				{
-					pathUnit->NextPathIdx += 1;
-					if(pathUnit->NextPathIdx >= (int)pathUnit->Path.size() - 1) // Reached final cell
+					pathing->SetCurrentPathIndex(pathing->GetCurrentPathIndex() + 1);
+					if(pathing->GetCurrentPathIndex() >= (int)pathing->GetGlobalPath().size() - 2) // Reached final cell
 					{
-						pathUnit->Unit->SetGoal(pathUnit->FinalGoal);
+						pathing->SetLocalGoal(pathing->GetGlobalGoal());
 					}
 					else
 					{
-						pathUnit->Unit->SetGoal(
-							pathUnit->Path[pathUnit->NextPathIdx]);
+						pathing->SetLocalGoal(
+							pathing->GetGlobalPath()[pathing->GetCurrentPathIndex() + 1]);
 					}
 				}
 			}
 		}
-		else
-			pathUnit->Unit->SetGoal(pathUnit->Unit->GetPosition());
+
 		_pathRequestHandler->Unlock();
 	}
 
 	void PathingSystem::OnUnitRotated(SceneObject* unit)
 	{
-		PathUnit* pathUnit = GetPathUnit( static_cast<Unit*>(unit)->GetPathingHandle() );
+		//PathUnit* pathUnit = GetPathUnit( static_cast<Unit*>(unit)->GetPathingHandle() );
 
 		// _localFinder->RotateUnit( pathUnit, 0 );
 	}
@@ -689,22 +664,18 @@ namespace FlagRTS
 		}
 	}
 
-	IBoxPathingQuery* PathingSystem::CreateBoxPathingQuery()
+	IPathingQuery* PathingSystem::CreatePathingQuery()
 	{
-		return new BoxDbvhBoxObjectPathingQuery(_dbvh);
-	}
-
-	void PathingSystem::DestroyBoxPathingQuery(IBoxPathingQuery* query)
-	{
-		delete query;
+		return new BoxDbvhQuery(_dbvh);
 	}
 
 	float PathingSystem::GetDistanceBetweenObjects(PhysicalObject* obj1, PhysicalObject* obj2)
 	{
-		_ASSERT( obj1->GetPathingHandle() != 0 );
-		_ASSERT( obj2->GetPathingHandle() != 0 );
-		return GetPathUnit(obj1->GetPathingHandle())->Unit->GetDitanceTo(
-			GetPathUnit(obj2->GetPathingHandle())->Unit);
+		_ASSERT(obj1->FindComponent<CollisionComponent>() != 0);
+		_ASSERT(obj2->FindComponent<CollisionComponent>() != 0);
+
+		CollisionComponent* col1 = obj1->FindComponent<CollisionComponent>();
+		return col1->GetDistanceToOtherObject(obj2);
 	}
 
 	struct Check3dCollision : public Dyscriminator
@@ -725,16 +696,16 @@ namespace FlagRTS
 	Array<PhysicalObject*>& PathingSystem::Find3dCollisions(PhysicalObject* collider)
 	{
 		_lastCollisions.clear();
-		if(collider->GetPathingHandle() == 0)
+		CollisionComponent* collision = collider->FindComponent<CollisionComponent>();
+		if(collision == 0)
 			return _lastCollisions;
 
-		PathUnit* collideUnit = GetPathUnit(collider->GetPathingHandle());
 		// Use query to accept 2d collision only if object collide in 3d
-		PathFinding::DbvhQuery<Box, Box, PhysicalObject> query;
+		BoxDbvhQuery query(_dbvh);
 		Check3dCollision checkCollision;
 		checkCollision.TestObject = collider;
-		query.SetTestShape(GetPathUnitBoundingBox(collideUnit));
-		query.Execute(_dbvh, checkCollision);
+		query.SetTestShape(&collision->GetCollisionShape());
+		query.Execute(checkCollision);
 
 		_lastCollisions.resize(query.GetObjectsHit().size());
 		for(unsigned int i = 0; i < _lastCollisions.size(); ++i)

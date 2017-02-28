@@ -264,7 +264,10 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enum.h">
+    <ClInclude Include="Any.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

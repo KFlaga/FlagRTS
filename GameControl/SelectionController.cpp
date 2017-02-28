@@ -9,6 +9,7 @@
 #include <Player.h>
 #include <GameWorld.h>
 #include <Unit.h>
+#include <SelectionComponent.h>
 
 #include <AudioManager.h>
 #include <SoundChannel.h>
@@ -67,14 +68,19 @@ namespace FlagRTS
 		bool queryResult(Ogre::MovableObject* object) 
 		{
 			// Add only owned, selectable units with any flag from desired set and none from undesired set
-			SceneObject* pobj = object->getUserObjectBindings().getUserAny().get<SceneObject*>();
-			if( pobj->GetFinalType() == GetTypeId<Unit>() &&
-				static_cast<Unit*>(pobj)->IsSelectable() // &&
+			SceneObject* obj = object->getUserObjectBindings().getUserAny().get<SceneObject*>();
+
+			// Check if it have selection component
+			SelectionComponent* comp = obj->FindComponent<SelectionComponent>();
+
+			if( comp != 0 &&
+				obj->GetFinalType() == GetTypeId<Unit>() &&
+				comp->IsSelectable() // &&
 				//(pobj->GetSelectionFlags() & _desiredFlags) > 0 &&
 				//(pobj->GetSelectionFlags() & _undesiredFlags) == 0
 				)
 			{
-				Unit* unit = static_cast<Unit*>(pobj);
+				Unit* unit = static_cast<Unit*>(obj);
 				if(unit->GetOwner() == GameWorld::GlobalWorld->GetPlayers()->GetClientPlayer())
 				{
 					_selector->AddToSelectionSilient(unit);
@@ -255,7 +261,9 @@ namespace FlagRTS
 	void SelectionController::AddToSelection(Unit* unit)
 	{
 		_ASSERT(unit != 0);
-		unit->SetIsSelected(true);
+		_ASSERT(unit->FindComponent<SelectionComponent>() != 0);
+		SelectionComponent* comp = unit->FindComponent<SelectionComponent>();
+		comp->SetIsSelected(true);
 		_selectedUnits->AddToGroup(unit);
 		_selectionChanged.Fire(_selectedUnits);
 		UpdateContextSubgroup();
@@ -264,14 +272,18 @@ namespace FlagRTS
 	void SelectionController::AddToSelectionSilient(Unit* unit)
 	{
 		_ASSERT(unit != 0);
-		unit->SetIsSelected(true);
+		_ASSERT(unit->FindComponent<SelectionComponent>() != 0);
+		SelectionComponent* comp = unit->FindComponent<SelectionComponent>();
+		comp->SetIsSelected(true);
 		_selectedUnits->AddToGroup(unit);
 	}
 
 	void SelectionController::DeselectUnit(Unit* unit)
 	{
 		_ASSERT(unit != 0);
-		unit->SetIsSelected(false);
+		_ASSERT(unit->FindComponent<SelectionComponent>() != 0);
+		SelectionComponent* comp = unit->FindComponent<SelectionComponent>();
+		comp->SetIsSelected(true);
 		_selectedUnits->RemoveFromGroup(unit);
 		_selectionChanged.Fire(_selectedUnits);
 		UpdateContextSubgroup();
@@ -280,14 +292,20 @@ namespace FlagRTS
 	void SelectionController::DeselectSilient(Unit* unit)
 	{
 		_ASSERT(unit != 0);
-		unit->SetIsSelected(false);
+		_ASSERT(unit->FindComponent<SelectionComponent>() != 0);
+		SelectionComponent* comp = unit->FindComponent<SelectionComponent>();
+		comp->SetIsSelected(true);
 		_selectedUnits->RemoveFromGroup(unit);
 	}
 
 	void SelectionController::DeselectAll()
 	{
 		//_currentSubgroupType = 0;
-		_selectedUnits->ForEach( [](Unit* unit){ unit->SetIsSelected(false); } );
+		_selectedUnits->ForEach( [](Unit* unit)
+		{ 
+			SelectionComponent* comp = unit->FindComponent<SelectionComponent>();
+			comp->SetIsSelected(false); 
+		} );
 		_selectedUnits->RemoveAll();
 		_selectionChanged.Fire(_selectedUnits);
 		UpdateContextSubgroup();
@@ -296,7 +314,11 @@ namespace FlagRTS
 	void SelectionController::DeselectAllSilient()
 	{
 		//_currentSubgroupType = 0;
-		_selectedUnits->ForEach( [](Unit* unit){ unit->SetIsSelected(false); } );
+		_selectedUnits->ForEach( [](Unit* unit)
+		{ 
+			SelectionComponent* comp = unit->FindComponent<SelectionComponent>();
+			comp->SetIsSelected(false); 
+		} );
 		_selectedUnits->RemoveAll();
 	}
 
@@ -319,7 +341,8 @@ namespace FlagRTS
 
 		for(auto unitIt = units->begin(); unitIt != units->end(); ++unitIt)
 		{
-			(*unitIt)->SetIsSelected(false);
+			SelectionComponent* comp = (*unitIt)->FindComponent<SelectionComponent>();
+			comp->SetIsSelected(false); 
 		}
 
 		_selectedUnits->RemoveAllOfType(type);
@@ -338,7 +361,8 @@ namespace FlagRTS
 			{
 				for(auto unitIt = unitTypeIt->second.begin(); unitIt != unitTypeIt->second.end(); ++unitIt)
 				{
-					(*unitIt)->SetIsSelected(false);
+					SelectionComponent* comp = (*unitIt)->FindComponent<SelectionComponent>();
+					comp->SetIsSelected(false); 
 				}
 				unitTypeIt = _selectedUnits->GetUnitsMap()->erase(unitTypeIt);
 			}
@@ -431,7 +455,10 @@ namespace FlagRTS
 
 	void SelectionController::SelectedUnitDied(UnitGroup* group, Unit* unit)
 	{
-		unit->SetIsSelected(false);
+		_ASSERT(unit != 0);
+		_ASSERT(unit->FindComponent<SelectionComponent>() != 0);
+		SelectionComponent* comp = unit->FindComponent<SelectionComponent>();
+		comp->SetIsSelected(false); 
 		_selectionChanged.Fire(_selectedUnits);
 		UpdateContextSubgroup();
 	}

@@ -1,28 +1,62 @@
 #include "ObjectDefinitionsManager.h"
 
-#include "SceneObjectDefinition.h"
-#include "CommandButtonDefinition.h"
-#include "WeaponDefinition.h"
-#include "IEffect.h"
-#include "IMover.h"
-#include "IMoveStrategy.h"
-#include "FXObjectDefinition.h"
-#include "ObjectTypeHelper.h"
-
 #include <StringUtils.h>
 #include <OgreResourceGroupManager.h>
+
+#include "UnitDefinition.h"
+#include "MapDecoratorDefinition.h"
+#include "GameCameraDefinition.h"
+#include "MissleDefinition.h"
+#include "BillboardMarkerDefinition.h"
+#include "ModelMarkerDefinition.h"
+#include "TerrainProjectionMarkerDefinition.h"
+#include "FXSoundDefinition.h"
+#include "FXParticlesDefinition.h"
+
+#include "MinimapComponent.h"
+#include "SelectionComponent.h"
 
 namespace FlagRTS
 {
 	ObjectDefinitionsManager::ObjectDefinitionsManager()
 	{
-		_defFactory = new SubClassXmlFactory("ObjectDefinition");
-		_defFactory->RegisterFactory("SceneObject", xNew0(SceneObjectDefinitionFactory));
-		_defFactory->RegisterFactory("Weapon", xNew0(FinalClassXmlFactory<WeaponDefinition>));
-		_defFactory->RegisterFactory("CommandButton", xNew0(FinalClassXmlFactory<CommandButtonDefinition>));
-		_defFactory->RegisterFactory("Effect", xNew0(EffectFactory));
-		_defFactory->RegisterFactory("Mover", xNew0(MoverFactory));
-		_defFactory->RegisterFactory("MoveStrategy", xNew0(MoveStrategyFactory));
+		_defFactory = new SubObjectDefinitionFactory();
+
+		RegisterFactory("GameCamera", xNew0(FinalObjectDefinitionFactory<GameCameraDefinition>));
+
+		// Physical objects
+		RegisterFactory("Unit", xNew0(FinalObjectDefinitionFactory<UnitDefinition>));
+		RegisterFactory("MapDecorator", xNew0(FinalObjectDefinitionFactory<MapDecoratorDefinition>));
+		RegisterFactory("Missle", xNew0(FinalObjectDefinitionFactory<MissleDefinition>));
+
+		// Scene markers
+		RegisterFactory("TerrainProjectionMarker", xNew0(FinalObjectDefinitionFactory<TerrainProjectionMarkerDefinition>));
+		RegisterFactory("ModelMarker", xNew0(FinalObjectDefinitionFactory<ModelMarkerDefinition>));
+		RegisterFactory("BillboardMarker", xNew0(FinalObjectDefinitionFactory<BillboardMarkerDefinition>));
+
+		// Fx objects
+		RegisterFactory("FXSound", xNew0(FinalObjectDefinitionFactory<FXSoundDefinition>));
+		RegisterFactory("FXParticles", xNew0(FinalObjectDefinitionFactory<FXParticlesDefinition>));
+
+		// Movers
+		//RegisterFactory("Line", xNew0(FinalObjectDefinitionFactory<LineMover>));
+		//RegisterFactory("AcceleratedLine", xNew0(FinalObjectDefinitionFactory<AcceleratedLineMover>));
+
+		//RegisterFactory("NoMove", xNew0(FinalObjectDefinitionFactory<NoMoveMoveStrategy>));
+		//RegisterFactory("NoMove", xNew0(FinalObjectDefinitionFactory<FaceAndGoMoveStrategy>));
+		//RegisterFactory("NoMove", xNew0(FinalObjectDefinitionFactory<RotateOnlyStrategy>));
+
+		// Effects
+		/*
+		RegisterFactory("LaunchMissle", xNew0(FinalObjectDefinitionFactory<LaunchMissleEffect>));
+		RegisterFactory("InflictDamage", xNew0(FinalObjectDefinitionFactory<InflictDamageEffect>));
+		RegisterFactory("Multi", xNew0(FinalObjectDefinitionFactory<MultiEffect>));
+		RegisterFactory("SpawnObject", xNew0(FinalObjectDefinitionFactory<SpawnObjectEffect>));
+		*/
+
+		// Components
+		RegisterFactory("MinimapComponent", xNew0(FinalObjectDefinitionFactory<MinimapComponentDefinition>));
+		RegisterFactory("SelectionComponent", xNew0(FinalObjectDefinitionFactory<SelectionComponentDefinition>));
 	}
 
 	ObjectDefinitionsManager::~ObjectDefinitionsManager()
@@ -76,10 +110,7 @@ namespace FlagRTS
 
 	void ObjectDefinitionsManager::LoadObjectDefintion(XmlNode* defNode)
 	{
-		string familyName = XmlUtility::XmlGetString(defNode, "family");
-		IGameObjectFactory<XmlNode*>* factory = _defFactory->GetFactoryOfType(familyName);
-
-		ObjectDefinition* def = static_cast<ObjectDefinition*>(factory->Create(defNode));
+		ObjectDefinition* def = _defFactory->Create(defNode);
 
 		// Override old definition with same name and type name
 		const char* typeName = def->GetFinalTypeName().c_str();
@@ -108,10 +139,13 @@ namespace FlagRTS
 
 	ObjectDefinition* ObjectDefinitionsManager::GetObjectDefinitionByHandle(ObjectHandle handle)
 	{
-		if(handle.Type > _objectDefinitions.size())
-			CastException_d("Bad defintion handle");
-		else
-			return _objectDefinitions[handle.Type];
+		auto it = _objectDefinitions.find(handle.Object);
+
+		if(it != _objectDefinitions.end())
+		{
+			return it->Value;
+		}
+		CastException_d("Bad defintion handle");
 		return 0;
 	}
 
@@ -127,5 +161,87 @@ namespace FlagRTS
 		}
 		CastException_d("Bad defintion name");
 		return 0;
+	}
+
+	void ObjectDefinitionsManager::RegisterFactory(const string& typeName, IObjectDefinitionFactory* factory)
+	{
+		_defFactory->RegisterFactory(typeName, factory);
+	}
+
+	void ObjectDefinitionsManager::UnregisterFactory(const string& typeName)
+	{
+		_defFactory->UnregisterFactory(typeName);
+	}
+
+	// ======================================= //
+
+	SubObjectDefinitionFactory::SubObjectDefinitionFactory()
+	{ }
+
+	SubObjectDefinitionFactory::~SubObjectDefinitionFactory()
+	{
+		for(auto factoryIt = _subFactories.begin(); factoryIt != _subFactories.end(); factoryIt++)
+		{
+			xDelete(factoryIt->Value);
+		}
+		_subFactories.clear();
+	}
+
+	void SubObjectDefinitionFactory::RegisterFactory(const string& typeName, IObjectDefinitionFactory* factory)
+	{
+		auto it = _subFactories.find(typeName.c_str());
+		if(it != _subFactories.end())
+		{
+			xDelete(it->Value);
+		}
+
+		_subFactories.insert(typeName.c_str(), factory);
+	}
+
+	void SubObjectDefinitionFactory::UnregisterFactory(const string& typeName)
+	{
+		auto it = _subFactories.find(typeName.c_str());
+		if(it != _subFactories.end())
+		{
+			xDelete(it->Value);
+		}
+	}
+
+	IObjectDefinitionFactory* SubObjectDefinitionFactory::GetFactoryOfType(const string& typeName)
+	{
+		auto it = _subFactories.find(typeName.c_str());
+		if(it != _subFactories.end())
+		{
+			return it->Value;
+		}
+		else
+		{
+			CastException_d(string("Requested IObjectDefinitionFactory of type [") + typeName + "] does not exist");
+		}
+		return 0;
+	}
+
+	ObjectDefinition* SubObjectDefinitionFactory::Create(XmlNode* objNode)
+	{
+		ObjectDefinition* definition = 0;
+		string name = XmlUtility::XmlGetStringIfExists(objNode, "name");
+
+		try
+		{
+			string fullType = XmlUtility::XmlGetString(objNode, "type");
+			IObjectDefinitionFactory* factory = GetFactoryOfType(fullType);
+			definition = factory->Create(objNode);
+		}
+		catch(Exception* e)
+		{
+			throw e; // Rethrow our exception (already logged)
+		}
+		catch(...) // Failed to create object for some
+		{
+			CastException(string("MainObjectDefinitionFactory::Create: Error during creation of") + 
+				"object definition for object named: [" + name + "].");
+		}
+
+		return definition;
 	}
 }

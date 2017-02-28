@@ -18,13 +18,10 @@ namespace FlagRTS
 		MapDecoratorIdleState(MapDecorator* owner);
 
 		void Begin();
-
 		void End();
+		void Resume();
+		void Interrupt();
 
 		void Update(float ms);
-		
-		const char* GetName();
-
-		size_t GetType();
 	};
 }

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "DataTypes.h"
+#include "IPathingSystem.h"
 #include <Event.h>
 #include <Xml.h>
 #include <ArrayMap.h>
-#include "IPathingQuery.h"
 #include "CollisionShapes.h"
+#include "PathingComponent.h"
 
 namespace Ogre
 {
@@ -13,47 +13,41 @@ namespace Ogre
 	class SceneNode;
 }
 
-namespace PathFinding
+namespace FlagRTS
 {
 	class UniformGridPathingMap;
 	class IGlobalPathFinder;
-	template<typename VectorT>
+	template<typename UnitT>
 	class ILocalPathFinder;
 	class UniformGridObstacle;
-	template<typename VectorT>
-	class IPathUnit;
-}
+	template<typename UnitT>
+	class Dbvh;
 
-namespace FlagRTS
-{
 	class PathingDrawer;
 	class PhysicalObject;
 	class Unit;
 	class SceneObject;
 	class PathRequestHandler;
-	class Dbvh;
-	class PathUnit;
 	struct IBoxPathingQuery;
 	class TerrainBase;
 
-	class PathingSystem
+	class PathingSystem : public IPathingSystem
 	{
 	private:
 		Ogre::SceneManager* _ogreMgr;
 		Ogre::SceneNode* _debugNode;
-		PathFinding::UniformGridPathingMap* _pathingMap;
-		PathFinding::IGlobalPathFinder* _globalFinder;
-		PathFinding::ILocalPathFinder<Vector2>* _localFinder;
-		Dbvh* _dbvh;
+		UniformGridPathingMap* _pathingMap;
+		IGlobalPathFinder* _globalFinder;
+		ILocalPathFinder<PathingComponent>* _localFinder;
+		Dbvh<BoundingBox>* _dbvh;
 		size_t _globalFinderThreadHandle;
 		PathRequestHandler* _pathRequestHandler;
-		ArrayMap<PathUnit*, PhysicalObject*> _pathUnits;
 		Array<PhysicalObject*> _lastCollisions;
 
 		Array<PathingDrawer*> _debugDrawers;
 		Array<bool> _useDrawer;
-
-		bool _isToleranceRelative;
+		
+		PhysicalObject* _initDbvhObject;
 		float _goalTolerance;
 		float _fixedInterval;
 
@@ -94,11 +88,8 @@ namespace FlagRTS
 		void SetUnitGlobalGoal(Unit* unit, const Vector3& goal, 
 			bool moveToGoal = false, bool requestPath = false);
 
-		// Finder will attempt to find global path to goal
-		void RequestPathToGoal(Unit* unit);
-
-		// Finished units movement ( sets unit have no goal and cancels pathing request )
-		void AbandonPath(Unit* unit);
+		void RequestPath(PhysicalObject* object);
+		void AbandonPath(PhysicalObject* object);
 
 		// Returns true if unit should move in this frame
 		bool ShouldUnitMove(Unit* unit);
@@ -109,12 +100,11 @@ namespace FlagRTS
 		// Sets wether unit can be moved
 		void SetUnitHoldPosition(Unit* unit, bool holdPos);
 
-		PathFinding::UniformGridPathingMap* GetPathingMap() const { return _pathingMap; }
-		PathFinding::ILocalPathFinder<Vector2>* GetLocalFinder() const { return _localFinder; }
-		PathFinding::IGlobalPathFinder* GetGlobalFinder() const { return _globalFinder; }
+		UniformGridPathingMap* GetPathingMap() const { return _pathingMap; }
+		ILocalPathFinder<PathingComponent>* GetLocalFinder() const { return _localFinder; }
+		IGlobalPathFinder* GetGlobalFinder() const { return _globalFinder; }
 
-		IBoxPathingQuery* CreateBoxPathingQuery();
-		void DestroyBoxPathingQuery(IBoxPathingQuery*);
+		IPathingQuery* CreatePathingQuery();
 
 		float GetDistanceBetweenObjects(PhysicalObject* obj1, PhysicalObject* obj2);
 

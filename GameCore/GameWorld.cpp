@@ -27,6 +27,9 @@
 #include "IObjectDefinitionManager.h"
 #include "IGameObjectPoolManager.h"
 #include "IGameObjectPool.h"
+#include "ISceneObjectSpawner.h"
+
+#include "ObjectDataStorage.h"
 
 namespace FlagRTS
 {
@@ -45,33 +48,65 @@ namespace FlagRTS
 		Array<const char*> ClassSupsNames;
 	};
 
+	GameWorld::GameWorld() :
+		_ogreSceneMgr(0),
+		_objectDefinitionManager(0),
+		_objectPoolManager(0),
+		_mainObjectPool(0),
+		_sceneObjectSpawner(0),
+		_noticeSender(0),
+		_statsManager(0),
+		_map(0),
+		_pathing(0),
+		_techsManager(0),
+		_factionsManager(0),
+		_players(0),
+		_resources(0),
+		_minimap(0)
+	{
+
+	}
+
 	GameWorld::GameWorld(Ogre::SceneManager* ogreMgr,
 			IObjectDefinitionManager* objectDefinitionManager,
 			IGameObjectPoolManager* objectPoolManager,
 			IGameObjectPool* mainObjectPool,
+			ISceneObjectSpawner* sceneObjSpawner,
+			INoticeMessageSender* noticeSender,
 			GlobalStatisticsManager* statsMgr ) :
 		_ogreSceneMgr(ogreMgr),
 		_objectDefinitionManager(objectDefinitionManager),
 		_objectPoolManager(objectPoolManager),
 		_mainObjectPool(mainObjectPool),
+		_sceneObjectSpawner(sceneObjSpawner),
+		_noticeSender(noticeSender),
 		_statsManager(statsMgr),
 		_map(xNew1(Map, ogreMgr)),
 		_pathing(0),
-		_registeredSups(xNew0(SuppliersData)),
 		_techsManager(0),
 		_factionsManager(0),
 		_players(xNew0(PlayersInfo)),
 		_resources(xNew0(Resources)),
 		_minimap(0)
-	{ }
+	{ 
+		//TODO: create default implementation of interfaces if any is 0
+
+		//_objectDataStorage = xNew0(ObjectDataStorage);
+	}
 
 	GameWorld::~GameWorld()
 	{
 		// Delete spawn infos
 		for(auto objIt = _mapInitObjects.begin(); objIt != _mapInitObjects.end(); ++objIt)
 		{
-			xDelete(objIt->first.first);
+			xDelete(objIt->second);
 		}
+		/*xDeleteSafe(_noticeSender);
+		xDeleteSafe(_sceneObjectSpawner);
+		xDeleteSafe(_objectDefinitionManager);
+		xDeleteSafe(_mainObjectPool);
+		xDeleteSafe(_objectPoolManager);*/
+		
 		xDeleteSafe(_registeredSups);
 		xDeleteSafe(_factionsManager);
 		xDeleteSafe(_techsManager);
@@ -81,23 +116,11 @@ namespace FlagRTS
 		xDeleteSafe(_map);
 		xDeleteSafe(_players);
 		xDeleteSafe(_resources);
+	//	xDeleteSafe(_objectDataStorage);
 	}
 
 	void GameWorld::Update(float ms)
 	{
-		// Execute all pending requests
-		for(unsigned int i = 0; i < _despawnPending.size(); ++i)
-		{
-			DespawnSceneObject(_despawnPending[i]);
-		}
-		_despawnPending.clear();
-
-		for(unsigned int i = 0; i < _destroyPending.size(); ++i)
-		{
-			DestroySceneObject(_destroyPending[i]);
-		}
-		_destroyPending.clear();
-
 		_minimap->Update(ms);
 	}
 
@@ -120,13 +143,14 @@ namespace FlagRTS
 			SpawnInfo* spawnInfo = (SpawnInfo*)spFactory.Create(objNode);
 			XmlNode* ownerNode = objNode->first_node("Owner");
 			int owner = XmlUtility::XmlGetInt(ownerNode, "value");
+			spawnInfo->SetOwner(owner);
 			if( _players->GetPlayer(owner)->IsUsed() )
 			{
 				string defName = objNode->first_attribute("name",4,false)->value();
 				string defType = objNode->first_attribute("type",4,false)->value();
 				// Pair spawn info with SODefinition of object to be spawned
 				_mapInitObjects.push_back(std::make_pair(
-					std::make_pair(spawnInfo, owner),
+					spawnInfo,
 					static_cast<SceneObjectDefinition*>(
 					_objectDefinitionManager->GetObjectDefinitionByName(defName,defType))));
 			}
@@ -203,8 +227,9 @@ namespace FlagRTS
 		// Create and spawn all objects
 		for(auto objIt = _mapInitObjects.begin(); objIt != _mapInitObjects.end(); objIt++)
 		{
-			SceneObject* obj = CreateSceneObject(objIt->second, objIt->first.second);
-			SpawnSceneObject(obj, *objIt->first.first);
+			SceneObject* obj = static_cast<SceneObject*>(GetGameObjectPool()->Create(
+				objIt->second, objIt->first->GetOwner()));
+			GetSceneObjectSpawner()->SpawnSceneObject(obj, *objIt->first);
 		}
 	}
 
@@ -228,105 +253,50 @@ namespace FlagRTS
 		_map->DestroyMap();
 	}
 
-	SceneObject* GameWorld::CreateSceneObject(SceneObjectDefinition* objectDef, int owner)
-	{
-		SceneObject* object = 
-			static_cast<SceneObject*>(_mainObjectPool->Create(objectDef, owner));
-		object->LoadResources(_ogreSceneMgr);
-		object->ChangeState(SceneObjectStates::NotSpawned);
-		return object;
-	}
+	//void GameWorld::SpawnSceneObject(SceneObject* object, 
+	//	const SpawnInfo& spawnInfo)
+	//{
+	//	_map->SpawnObject(object, spawnInfo);
+	//	if(object->HavePhysics())
+	//	{
+	//		if(object->HaveFootprint())
+	//		{
+	//			_pathing->AddObstacle(static_cast<PhysicalObject*>(object));
+	//		}
+	//		_pathing->AddPathingObject(static_cast<PhysicalObject*>(object));
+	//	}
 
-	SceneObject* GameWorld::CreateSceneObject(ObjectHandle objectDefHandle, int owner)
-	{
-		ObjectDefinition* objectDef = _objectDefinitionManager->GetObjectDefinitionByHandle(objectDefHandle);
-		return CreateSceneObject(static_cast<SceneObjectDefinition*>(objectDef), owner);
-	}
+	//	int mmapFlags = object->GetMinimapFlags();
+	//	if( mmapFlags != MinimapFlags::None &&
+	//		(mmapFlags & MinimapFlags::NeverVisible) == 0 )
+	//	{
+	//		// Object is to be shown on minimap, so add it to minimap
+	//		// But first set it owner flag
+	//		if( object->GetOwner() == NEUTRAL_PLAYERNUM )
+	//			mmapFlags |= MinimapFlags::EnvironmentUnit;
+	//		else if( _players->IsOwned(object->GetOwner()) )
+	//			mmapFlags |= MinimapFlags::OwnedUnit;
+	//		else if( _players->IsAlly(_players->GetClientPlayer(), object->GetOwner()) )
+	//			mmapFlags |= MinimapFlags::AllyUnit;
+	//		else if( _players->IsNeutral(_players->GetClientPlayer(), object->GetOwner()) )
+	//			mmapFlags |= MinimapFlags::NeutralUnit;
+	//		else if( _players->IsEnemy(_players->GetClientPlayer(), object->GetOwner()) )
+	//			mmapFlags |= MinimapFlags::EnemyUnit;
 
-	/*Unit* GameWorld::CreateUnit(UnitDefinition* objectDef, uint8 owner)
-	{
-		auto unitsPool = static_cast<UnitPool*>(_objectPool->GetObjectPool(GetTypeId<Unit>()));
-		Unit* object = unitsPool->CreateUnit(objectDef, owner);
-		object->LoadResources(_ogreSceneMgr);
-		object->ChangeState(SceneObjectStates::NotSpawned);
-		return object;
-	}
+	//		object->SetMinimapFlags(mmapFlags);
 
-	Unit* GameWorld::CreateUnit(ObjectHandle objectDefHandle, uint8 owner)
-	{
-		ObjectDefinition* objectDef = _objectPool->GetObjectDefinitionByHandle(objectDefHandle);
-		return CreateUnit(static_cast<UnitDefinition*>(objectDef), owner);
-	}*/
+	//		_minimap->AddObject(object);
+	//	}
 
-	void GameWorld::DestroySceneObject(SceneObject* object)
-	{
-		// DespawnObject(object)
-		object->UnloadResources(_ogreSceneMgr);
-		_mainObjectPool->Destroy(object);
-	}
+	//	if(object->GetFinalType() == GetTypeId<Unit>() &&
+	//		static_cast<Unit*>(object)->CountsAsPlayerUnit() &&
+	//		static_cast<Unit*>(object)->GetOwner() < 8u) // If owner >= 8 it belongs to neutral player ( environment ), so don't add it to stats
+	//	{
+	//		_statsManager->UnitSpawned(  static_cast<Unit*>(object) );
+	//	}
+	//}
 
-	void GameWorld::DestroySceneObject(ObjectHandle objectHandle)
-	{
-		IGameObject* baseObject = reinterpret_cast<IGameObject*>(objectHandle.Object);
-		DestroySceneObject( static_cast<SceneObject*>(baseObject) );
-	}
-
-	void GameWorld::QueueDestroySceneObject(SceneObject* object)
-	{
-		_destroyPending.push_back(object);
-	}
-
-	void GameWorld::SpawnSceneObject(SceneObject* object, 
-		const SpawnInfo& spawnInfo)
-	{
-		_map->SpawnObject(object, spawnInfo);
-		if(object->HavePhysics())
-		{
-			if(object->HaveFootprint())
-			{
-				_pathing->AddObstacle(static_cast<PhysicalObject*>(object));
-			}
-			_pathing->AddPathingObject(static_cast<PhysicalObject*>(object));
-		}
-
-		int mmapFlags = object->GetMinimapFlags();
-		if( mmapFlags != MinimapFlags::None &&
-			(mmapFlags & MinimapFlags::NeverVisible) == 0 )
-		{
-			// Object is to be shown on minimap, so add it to minimap
-			// But first set it owner flag
-			if( object->GetOwner() == NEUTRAL_PLAYERNUM )
-				mmapFlags |= MinimapFlags::EnvironmentUnit;
-			else if( _players->IsOwned(object->GetOwner()) )
-				mmapFlags |= MinimapFlags::OwnedUnit;
-			else if( _players->IsAlly(_players->GetClientPlayer(), object->GetOwner()) )
-				mmapFlags |= MinimapFlags::AllyUnit;
-			else if( _players->IsNeutral(_players->GetClientPlayer(), object->GetOwner()) )
-				mmapFlags |= MinimapFlags::NeutralUnit;
-			else if( _players->IsEnemy(_players->GetClientPlayer(), object->GetOwner()) )
-				mmapFlags |= MinimapFlags::EnemyUnit;
-
-			object->SetMinimapFlags(mmapFlags);
-
-			_minimap->AddObject(object);
-		}
-
-		if(object->GetFinalType() == GetTypeId<Unit>() &&
-			static_cast<Unit*>(object)->CountsAsPlayerUnit() &&
-			static_cast<Unit*>(object)->GetOwner() < 8u) // If owner >= 8 it belongs to neutral player ( environment ), so don't add it to stats
-		{
-			_statsManager->UnitSpawned(  static_cast<Unit*>(object) );
-		}
-	}
-
-	void GameWorld::SpawnSceneObject(ObjectHandle objectHandle, 
-		const SpawnInfo& spawnInfo)
-	{
-		IGameObject* baseObject = reinterpret_cast<IGameObject*>(objectHandle.Object);
-		SpawnSceneObject(static_cast<SceneObject*>(baseObject), spawnInfo);
-	}
-
-	void GameWorld::DespawnSceneObject(SceneObject* object)
+	/*void GameWorld::DespawnSceneObject(SceneObject* object)
 	{
 		if(object->HavePhysics())
 		{
@@ -344,66 +314,7 @@ namespace FlagRTS
 			if( unit->CountsAsPlayerUnit() && unit->GetOwner() <= 8 && !unit->IsDead() )
 				_statsManager->UnitVanished( unit );
 		}
-	}
-
-	void GameWorld::DespawnSceneObject(ObjectHandle objectHandle)
-	{
-		IGameObject* baseObject = reinterpret_cast<IGameObject*>(objectHandle.Object);
-		DespawnSceneObject(static_cast<SceneObject*>(baseObject));
-	}
-
-	void GameWorld::QueueDespawnSceneObject(SceneObject* object)
-	{
-		_despawnPending.push_back(object);
-	}
-
-	SceneObjectDefinition* GameWorld::GetSceneObjectDefinition(ObjectHandle defHandle)
-	{
-		return static_cast<SceneObjectDefinition*>(
-			_objectDefinitionManager->GetObjectDefinitionByHandle(defHandle));
-	}
-
-	SceneObjectDefinition* GameWorld::GetSceneObjectDefinition(
-		const string& objectFamilyName, 
-		const string& objectKindName)
-	{
-		return static_cast<SceneObjectDefinition*>(
-			_objectDefinitionManager->GetObjectDefinitionByName(objectKindName, objectFamilyName));
-	}
-
-	IGameObject* GameWorld::CreateGameObject(ObjectDefinition* objectDef)
-	{
-		return _mainObjectPool->Create(objectDef, NEUTRAL_PLAYERNUM);
-	}
-
-	IGameObject* GameWorld::CreateGameObject(ObjectHandle objectDefHandle)
-	{
-		ObjectDefinition* objectDef = _objectDefinitionManager->GetObjectDefinitionByHandle(objectDefHandle);
-		return _mainObjectPool->Create(objectDef, NEUTRAL_PLAYERNUM);
-	}
-
-	void GameWorld::DestroyGameObject(IGameObject* object)
-	{
-		_mainObjectPool->Destroy(object);
-	}
-
-	void GameWorld::DestroyGameObject(ObjectHandle objectHandle)
-	{
-		IGameObject* baseObject = reinterpret_cast<IGameObject*>(objectHandle.Object);
-		_mainObjectPool->Destroy(baseObject);
-	}
-
-	ObjectDefinition* GameWorld::GetGameObjectDefinition(ObjectHandle defHandle)
-	{
-		return _objectDefinitionManager->GetObjectDefinitionByHandle(defHandle);
-	}
-
-	ObjectDefinition* GameWorld::GetGameObjectDefinition(
-		const string& objectFamilyName, 
-		const string& objectKindName)
-	{
-		return _objectDefinitionManager->GetObjectDefinitionByName(objectKindName, objectFamilyName);
-	}
+	}*/
 
 	void GameWorld::SetNewResourcesData(Resources* resources)
 	{
@@ -545,16 +456,5 @@ namespace FlagRTS
 		_registeredSups->ClassSups.push_back(supplier);
 
 		_registeredSups->ClassSupsNames.push_back(CopyString(name));
-	}
-
-	void GameWorld::ShowQuickNotice(const NoticeMessage& msg)
-	{
-		_quickNoticeRequested.Fire(msg);
-	}
-
-	void GameWorld::ShowNotice(const NoticeMessage& msg)
-	{
-
-		_noticeRequested.Fire(msg);
 	}
 }

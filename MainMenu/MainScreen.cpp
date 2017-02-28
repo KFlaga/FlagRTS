@@ -6,6 +6,7 @@
 #include <LogManager.h>
 #include "QuitConfirmDialog.h"
 #include <GuiElement.h>
+#include <Input.h>
 
 namespace FlagRTS
 {
@@ -59,9 +60,9 @@ namespace FlagRTS
 		// Assign widgets
 		RefPtr<Layout> mainLayout = _gui->GetLayout("MainScreen.layout");
 		_bgPanel = static_cast<MyGUI::ImageBox*>(_gui->FindInLayout(mainLayout, "MainPanel"));
-		_buttonStart = xNew3(GameGui::GuiElement,_gui, mainLayout, "ButtonStart");
-		_buttonOptions = xNew3(GameGui::GuiElement,_gui, mainLayout, "ButtonOptions");
-		_buttonQuit = xNew3(GameGui::GuiElement,_gui, mainLayout, "ButtonQuit");
+		_buttonStart = xNew3(GameGui::GuiElement, _gui, mainLayout, "ButtonStart");
+		_buttonOptions = xNew3(GameGui::GuiElement, _gui, mainLayout, "ButtonOptions");
+		_buttonQuit = xNew3(GameGui::GuiElement, _gui, mainLayout, "ButtonQuit");
 
 		// Set button texts
 		_buttonStart->GetMyGUIWidget<MyGUI::Button>()->setCaption(GET_TEXT("ButtonStart","Gui.MainMenu.MainScreen"));
@@ -108,7 +109,7 @@ namespace FlagRTS
 			// it would block, so have a callback to QuitConfirmed
 			// Check result -> if true -> exit app
 			// if false -> just return
-			_quitDialog = xNew1(QuitConfirmDialog,_gui);
+			_quitDialog = xNew1(QuitConfirmDialog, _gui);
 			_quitDialog->Show();
 		}
 	}

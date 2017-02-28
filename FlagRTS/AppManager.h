@@ -6,6 +6,7 @@
 #include <Pointers.h>
 #include <TypeDefs.h>
 #include <OGRE\Ogre.h>
+#include <StringUtils.h>
 #include "Task.h"
 
 namespace FlagRTS
@@ -16,7 +17,7 @@ namespace FlagRTS
 	class AppManager : public GenericManager<AppManager>
 	{
 	private:
-		typedef std::map<string, IAppState*, string_less> StateMap;
+		typedef std::map<string, IAppState*, StringLess> StateMap;
 		typedef List<IAppState*> StateQueue;
 		typedef List<IAppState*>::iterator StateIterator;
 		typedef List<RefPtr<Task>> TaskList;

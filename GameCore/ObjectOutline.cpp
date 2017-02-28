@@ -11,13 +11,8 @@ namespace FlagRTS
 	{
 		auto pdef = GetPhysicalObjectDefinition();
 		pdef->SetFinalType(GetTypeId<ObjectOutline>());
-		pdef->SetFootprint(0);
 		pdef->SetFinalTypeName("ObjectOutline");
-		pdef->SetIsHoverable(false);
 		pdef->SetIsIndependent(true);
-		pdef->SetIsSelectable(false);
-		pdef->SetPathingBlockedGroups(0);
-		pdef->SetPathingGroup(0);
 		pdef->SetInheritsScale(false);
 		pdef->SetModelName( def->GetModelName() );
 		pdef->SetModelGroup( def->GetModelGroup() );

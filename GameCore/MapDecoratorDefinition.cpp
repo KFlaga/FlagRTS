@@ -20,7 +20,5 @@ namespace FlagRTS
 		// Get node specific to MapDecorator
 		XmlNode* mdNode = soDefNode->first_node("PhysicalObject")->
 			first_node("MapDecorator");
-		
-		_selectionFlags |= SelectionFlags::MapDecorator;
 	}
 }

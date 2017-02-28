@@ -5,11 +5,10 @@
 
 namespace FlagRTS
 {
-	AnimationDefinitionFactory::AnimationDefinitionFactory() :
-		SubClassXmlFactory("AnimationDefinition")
+	AnimationDefinitionFactory::AnimationDefinitionFactory()
 	{
-		RegisterFactory("Skeletal", xNew0(FinalClassXmlFactory<SkeletalAnimationDefinition>));
-		RegisterFactory("Transform", xNew0(FinalClassXmlFactory<TransformAnimationDefinition>));
-		RegisterFactory("Empty", xNew0(FinalClassXmlFactory<EmptyAnimationDefinition>));
+		RegisterFactory("Skeletal", xNew0(FinalObjectDefinitionFactory<SkeletalAnimationDefinition>));
+		RegisterFactory("Transform", xNew0(FinalObjectDefinitionFactory<TransformAnimationDefinition>));
+		RegisterFactory("Empty", xNew0(FinalObjectDefinitionFactory<EmptyAnimationDefinition>));
 	}
 }

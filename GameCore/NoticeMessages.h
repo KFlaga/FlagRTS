@@ -39,4 +39,13 @@ namespace FlagRTS
 			Player(player)
 		{ }
 	};
+
+
+	class INoticeMessageSender
+	{
+	public:
+		// Shows short notice on screen ( quick fade, best for info on events that need short, fast notice,
+		// like 'insufficient resources', 'invalid location', 'inaccessible action' etc )
+		virtual void ShowNotice(const NoticeMessage& msg) = 0;
+	};
 }

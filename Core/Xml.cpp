@@ -52,6 +52,29 @@ namespace FlagRTS
 		return RefPtr<XmlDocument>(doc);
 	}
 
+	
+	void FindAllNodesWithName(XmlNode* parent, const char* nodeName, std::vector<XmlNode*> nodes)
+	{
+		XmlNode* node = parent->first_node();
+		while(node != 0)
+		{
+			if( StringIsEqual()(nodeName, node->name()) )
+			{
+				nodes.push_back(node);
+			}
+
+			FindAllNodesWithName(node, nodeName, nodes);
+			node = node->next_sibling();
+		}
+	}
+
+	Array<XmlNode*> XmlFindAllNodesWithName(XmlNode* parent, const char* nodeName)
+	{
+		std::vector<XmlNode*> nodes;
+		FindAllNodesWithName(parent, nodeName, nodes);
+		return nodes;
+	}
+
 	RefPtr<XmlDocument> XmlUtility::XmlDocFromOgreResource(const char* resourceName, const char* groupName)
 	{
 		auto files = Ogre::ResourceGroupManager::getSingleton().findResourceFileInfo(

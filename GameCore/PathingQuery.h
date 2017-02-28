@@ -1,45 +1,90 @@
 #pragma once
 
 #include "IPathingQuery.h"
-#include <PathFindingDbvhQueries.h>
+#include "BoundingShapes.h"
+#include "PathingDbvh.h"
+#include "CollisionShapes.h"
+#include "CollisionComponent.h"
+#include "PhysicalObject.h"
 
 namespace FlagRTS
 {
-	class BoxDbvhBoxObjectPathingQuery : public IBoxPathingQuery, 
-		public PathFinding::DbvhQuery<PathFinding::Box, PathFinding::Box, PhysicalObject>
+	struct AcceptAllDyscryminator
 	{
-		typedef PathFinding::DbvhQuery<PathFinding::Box, PathFinding::Box, PhysicalObject> DbvhQuery;
-		PathFinding::Dbvh<PathFinding::Box>* _dbvh;
+		inline bool operator()(PhysicalObject* object)
+		{
+			return true;
+		}
+	};
+	
+	struct BlockedByTestObjectDyscryminator
+	{
+		CollisionFilter _filter;
+		BlockedByTestObjectDyscryminator(CollisionFilter filter)
+		{
+			_filter = filter;
+		}
+
+		inline bool operator()(PhysicalObject* object)
+		{
+			_filter.Blocks(object->FindComponent<CollisionComponent>()->GetCollisionFilter());
+			return true;
+		}
+	};
+	
+	struct BlocksTestObjectDyscryminator
+	{
+		CollisionFilter _filter;
+		BlocksTestObjectDyscryminator(CollisionFilter filter)
+		{
+			_filter = filter;
+		}
+
+		inline bool operator()(PhysicalObject* object)
+		{
+			_filter.IsBlockedBy(object->FindComponent<CollisionComponent>()->GetCollisionFilter());
+			return true;
+		}
+	};
+
+	class BoxDbvhQuery : public IPathingQuery
+	{
+	protected:
+		Dbvh<BoundingBox>* _dbvh;
 
 	public:
-		BoxDbvhBoxObjectPathingQuery(PathFinding::Dbvh<PathFinding::Box>* dbvh) :
-			_dbvh(dbvh)
-		{ }
+		BoxDbvhQuery(Dbvh<BoundingBox>* dbvh) { }
 
-		void SetTestShape(const PathFinding::Box& shape)
+		bool Intersect(const BoundingBox& dbvhShape)
 		{
-			DbvhQuery::SetTestShape(shape);
+			return _collisionShape->GetBoundingBox().Intersect(dbvhShape);
 		}
 
 		void Execute()
 		{
-			DbvhQuery::Execute(_dbvh);
+			Execute_Custom(AcceptAllDyscryminator());
 		}
-
-		void Execute(Dyscriminator& acceptHit)
+		
+		void Execute(Dyscriminator& d)
 		{
-			DbvhQuery::Execute(_dbvh, acceptHit);
+			Execute_Custom(d);
 		}
-
-		template<typename DyscriminatorT>
-		void Execute(DyscriminatorT& acceptHit)
+		
+		void Execute_CatchBlockedByTestObject()
 		{
-			DbvhQuery::Execute(_dbvh, acceptHit);
+			Execute_Custom(BlockedByTestObjectDyscryminator(_collisionShape->GetCollisionFilter()));
 		}
-
-		PFArray<PhysicalObject*>& GetObjectsHit()
+		
+		void Execute_CatchBlocksTestObject()
 		{
-			return DbvhQuery::GetObjectsHit();
+			Execute_Custom(BlocksTestObjectDyscryminator(_collisionShape->GetCollisionFilter()));
+		}
+		
+		template<typename DysryminatorType = AcceptAllDyscryminator>
+		void Execute_Custom(DysryminatorType& acceptHit = DysryminatorType())
+		{
+			_hitObjects.clear();
+			_dbvh->TestGeneric(_collisionShape->GetBoundingBox(), _hitObjects, acceptHit);
 		}
 	};
 }

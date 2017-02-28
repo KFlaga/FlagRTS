@@ -4,7 +4,7 @@
 #include "ObjectDefinition.h"
 #include <List.h>
 #include <map>
-#include "GameObjectFactory.h"
+#include "ObjectDefinitionFactory.h"
 
 namespace FlagRTS
 {
@@ -43,7 +43,7 @@ namespace FlagRTS
 		virtual bool GetLoop() const { return _loop; }
 	};
 
-	class AnimationDefinitionFactory : public SubClassXmlFactory
+	class AnimationDefinitionFactory : public SubObjectDefinitionFactory
 	{
 	public:
 		AnimationDefinitionFactory();

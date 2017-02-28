@@ -21,7 +21,7 @@ namespace FlagRTS
 	bool CreateGameScreen::_newGameSettingsLoaded = false;
 
 	CreateGameScreen::CreateGameScreen() :
-		IMenuScreen(xNew1(GUI,"CreateGameScreen"), "CreateGameScreen"),
+		IMenuScreen(xNew1(GUI, "CreateGameScreen"), "CreateGameScreen"),
 		_loaded(false),
 		_onMapSelected(this),
 		_onStartPosLeftClicked(this),
@@ -119,6 +119,10 @@ namespace FlagRTS
 			}
 		}
 
+		// Add all map-specific resources
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+			_currentMapDir, "FileSystem", "Maps");
+
 		_gameStartRequested.Fire(&_gameSettings);
 	}
 
@@ -212,15 +216,15 @@ namespace FlagRTS
 		_comboStartLocMode->eventComboChangePosition += MyGUI::newDelegate(this, &CreateGameScreen::StartLocModeSelected);
 	}
 
-	void CreateGameScreen::MapSelected(RefPtr<XmlDocument>& mapDoc)
+	void CreateGameScreen::MapSelected(MapBaseInfo& mapInfo)
 	{
-		_currentMapDoc = mapDoc;
-		_currentMapDir = _mapList->GetCurrentDir();
+		_currentMapDoc = mapInfo.MapDoc;
+		_currentMapDir = _mapList->GetCurrentDir() + mapInfo.MapDirName + "\\";
 		_buttonStart->setEnabled(false);
 		try
 		{
 			// Read and set preview image and start locations
-			XmlNode* mapNode = mapDoc->first_node("Map");
+			XmlNode* mapNode = _currentMapDoc->first_node("Map");
 			Vector2 mapSize = XmlUtility::XmlGetXY(mapNode->first_node("Size"));
 			string previewImage = XmlUtility::XmlGetString(mapNode->first_node("PreviewImage"), "value");
 			XmlNode* startLocListNode = mapNode->first_node("AvailableStartLocations");
@@ -231,7 +235,7 @@ namespace FlagRTS
 				startLocNode = startLocNode->next_sibling();
 			}
 
-			_mapPreview->SetNewMap(mapSize, _mapList->GetCurrentDir() + previewImage, 
+			_mapPreview->SetNewMap(mapSize, _currentMapDir + previewImage, 
 				previewImage, _startLocPositions.size());
 			for(unsigned int i = 0; i < _startLocPositions.size(); ++i)
 			{

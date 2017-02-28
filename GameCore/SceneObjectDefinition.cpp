@@ -14,9 +14,7 @@ namespace FlagRTS
 {
 	SceneObjectDefinition::SceneObjectDefinition() :
 		_isIndependent(true), 
-		_inhertisScale(false),
-		_selectionFlags(0),
-		_minimapFlags(MinimapFlags::NeverVisible)
+		_inhertisScale(false)
 	{
 
 	}
@@ -24,9 +22,7 @@ namespace FlagRTS
 	SceneObjectDefinition::SceneObjectDefinition(XmlNode* node) :
 		ObjectDefinition(node),
 		_isIndependent(true), 
-		_inhertisScale(false),
-		_selectionFlags(0),
-		_minimapFlags(MinimapFlags::NeverVisible)
+		_inhertisScale(false)
 	{
 		// Read properties from xml ( node should be root node ("ObjectDefinition") )
 
@@ -48,12 +44,6 @@ namespace FlagRTS
 		XmlNode* childrenNode = node->first_node("ChildObjects");
 		if(childrenNode != 0)
 			ParseSOChildObjects(childrenNode);
-
-		XmlNode* minimapNode = node->first_node("Minimap");
-		if(minimapNode != 0)
-		{
-			ParseMinimap(minimapNode);
-		}
 	}
 
 	SceneObjectDefinition::~SceneObjectDefinition()
@@ -65,16 +55,6 @@ namespace FlagRTS
 		}
 		auto& onDespawnHandlers = _onDespawn.GetHandlers();
 		for(auto it = onDespawnHandlers.cbegin(); it != onDespawnHandlers.cend(); ++it)
-		{
-			xDelete(it->Value);
-		}
-		auto& onHoverHandlers = _onHoverBegin.GetHandlers();
-		for(auto it = onHoverHandlers.cbegin(); it != onHoverHandlers.cend(); ++it)
-		{
-			xDelete(it->Value);
-		}
-		auto& onHoverHandlersEnd = _onHoverBegin.GetHandlers();
-		for(auto it = onHoverHandlersEnd.cbegin(); it != onHoverHandlersEnd.cend(); ++it)
 		{
 			xDelete(it->Value);
 		}
@@ -132,28 +112,5 @@ namespace FlagRTS
 		}
 
 		_childObjects.reserve(children);
-	}
-
-	void SceneObjectDefinition::ParseMinimap(XmlNode* minimapNode)
-	{
-		XmlNode* flagsNode = minimapNode->first_node("Flags");
-		_minimapFlags = 0;
-		XmlNode* flagNode = flagsNode->first_node();
-		while(flagNode != 0)
-		{
-			_minimapFlags |= MinimapFlags::ParseMinimapFlags(flagNode->name());
-
-			flagNode = flagNode->next_sibling();
-		}
-
-		if( (_minimapFlags & MinimapFlags::UseCustomIcon) != 0 )
-		{
-			_minimapIconMaterialName = XmlUtility::XmlGetString(minimapNode->first_node("CustomIcon"), "name");
-			// Get material and set its handle
-			auto mat = Ogre::MaterialManager::getSingleton().getByName(_minimapIconMaterialName, "Materials");
-			_minimapIconHandle = reinterpret_cast<size_t>(mat.getPointer());
-		}
-
-		_minimapSize = XmlUtility::XmlGetXY(minimapNode->first_node("Size"));
 	}
 }

@@ -3,9 +3,12 @@
 #include <rapidxml.hpp>
 #include "Pointers.h"
 #include "TypeDefs.h"
+#include "Array.h"
 
 namespace FlagRTS
 {
+
+
 	// Typedef fro convienece
 	typedef rapidxml::xml_document<char> XmlDoc;
 	typedef rapidxml::xml_node<char> XmlNode;
@@ -42,6 +45,9 @@ namespace FlagRTS
 
 		// Returns XmlDoc from given file resource name in resource group using OgreResourceGroupManager
 		static RefPtr<XmlDocument> XmlDocFromOgreResource(const char* resourceName, const char* groupName);
+
+		// Returns all nodes that are childs or grand...childs of given node which have given name
+		static Array<XmlNode*> XmlFindAllNodesWithName(XmlNode* parent, const char* nodeName);
 
 		// Return value of attribute as float
 		static float XmlGetFloat(XmlAttribute* att);

@@ -42,6 +42,7 @@ namespace FlagRTS
 		void SetShapeType(CollisionShapeType shape) { _shape = shape; } 
 		void SetCollisionFilter(int filter) { _filter = filter; }
 		void SetOwner(PhysicalObject* owner) { _owner = owner; }
+		
 		// Finds collision using PathingSystem, only registered PathUnits are hit
 		// which collides with given filter ( this filter must block unit pathing group )
 		void FindCollisions();

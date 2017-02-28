@@ -2,9 +2,7 @@
 #include <OgreSceneManager.h>
 #include <OgreUserObjectBindings.h>
 #include "AnimationController.h"
-#include "SelectionFlags.h"
 #include "GameWorld.h"
-#include "PathingSystem.h"
 #include <OgreSubEntity.h>
 #include "Player.h"
 
@@ -16,11 +14,7 @@ namespace FlagRTS
 		SceneObject(static_cast<SceneObjectDefinition*>(poDef)),
 		_physicalDef(static_cast<PhysicalObjectDefinition*>(_definition)),
 		_animControl(xNew1(AnimationControler,this)),
-		_isSelectable(poDef->GetIsSelectable()),
-		_isHoverable(poDef->GetIsHoverable()),
-		_updateBoundingBox(this),
-		_entity(0),
-		_pathingHandle(0)
+		_entity(0)
 	{
 
 	}
@@ -35,12 +29,10 @@ namespace FlagRTS
 		_sceneNode->attachObject(_entity);
 		_sceneNode->setScale(_physicalDef->GetScale());
 		SceneObject::Spawn();
-		_onRotated += &_updateBoundingBox;
 	}
 
 	void PhysicalObject::Despawn()
 	{
-		_onRotated -= &_updateBoundingBox;
 		_sceneNode->detachObject(_entity);
 		SceneObject::Despawn();
 	}
@@ -49,7 +41,7 @@ namespace FlagRTS
 	{
 		// Load mesh
 		_entity = ogreMgr->createEntity( GetPhysicalObjectDefinition()->GetModelName() );
-		_entity->setQueryFlags( _selectionFlags );
+		//_entity->setQueryFlags( _selectionFlags );
 		_entity->setCastShadows(true);
 		// Bind this object to ogre entity to get it in scene queries etc
 		_entity->getUserObjectBindings().setUserAny(Ogre::Any((SceneObject*)this));
@@ -58,13 +50,6 @@ namespace FlagRTS
 		_animControl->SetAnimations(animations);
 
 		SceneObject::LoadResources(ogreMgr);
-
-		Vector3 halfSize(GetHalfSize());
-
-		_orientedBounds[0] = Vector2(-halfSize.x, -halfSize.z);
-		_orientedBounds[1] = Vector2(halfSize.x, -halfSize.z);
-		_orientedBounds[2] = Vector2(-halfSize.x, halfSize.z);
-		_orientedBounds[3] = Vector2(halfSize.x, halfSize.z);
 
 		if( GetPlayerColorMaterial().size() > 0)
 		{
@@ -109,45 +94,5 @@ namespace FlagRTS
 				}
 			}
 		}
-	}
-
-	void PhysicalObject::SetSelectionFlags(uint32 flags)
-	{
-		_selectionFlags = flags;
-		if(_entity != 0)
-		{
-			_entity->setQueryFlags(flags);
-		}
-	}
-
-	void PhysicalObject::SetIsHoverable(bool value)
-	{
-		_isHoverable = value;
-		value == true ?
-			AddSelectionFlags(SelectionFlags::Hoverable) :
-			RemoveSelectionFlags(SelectionFlags::Hoverable);
-	}
-
-	void PhysicalObject::SetIsSelectable(bool value)
-	{
-		_isSelectable = value;
-		value == true ?
-			AddSelectionFlags(SelectionFlags::Selectable) :
-			RemoveSelectionFlags(SelectionFlags::Selectable);
-	}
-
-	void PhysicalObject::UpdateBoundingBox(SceneObject* )
-	{
-		Vector3 halfSize(GetOrientationAbsolute() * GetHalfSize());
-
-		_orientedBounds[0] = Vector2(-halfSize.x, -halfSize.z);
-		_orientedBounds[1] = Vector2(halfSize.x, -halfSize.z);
-		_orientedBounds[2] = Vector2(-halfSize.x, halfSize.z);
-		_orientedBounds[3] = Vector2(halfSize.x, halfSize.z);
-	}
-
-	float PhysicalObject::GetDistanceToOtherObject(PhysicalObject* target)
-	{
-		return GameWorld::GlobalWorld->GetPathingSystem()->GetDistanceBetweenObjects(this, target);
 	}
 }

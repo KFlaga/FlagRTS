@@ -1,12 +1,12 @@
 #include "Minimap.h"
-#include "MinimapUnit.h"
 #include "Unit.h"
 #include <OgreSceneManager.h>
 #include <OgreTextureManager.h>
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreManualObject.h>
 #include <RenderSystemManager.h>
-#include <PathFindingDbvh.h>
+#include "PathingDbvh.h"
+#include "BoundingShapes.h"
 #include "BillboardMarker.h"
 #include "GameWorld.h"
 #include "Map.h"
@@ -14,22 +14,14 @@
 #include "GameCamera.h"
 #include "IGameObjectPool.h"
 #include "IObjectDefinitionManager.h"
+#include "MinimapComponent.h"
+#include "SelectionComponent.h"
 
 namespace FlagRTS
 {
-	inline size_t GetMinimapUnitHandle(MinimapUnit* unit)
+	inline BoundingBox GetMinimapShape(MinimapComponent* object, const Vector3& internalCenter)
 	{
-		return reinterpret_cast<size_t>(unit);
-	}
-
-	inline MinimapUnit* GetMinimapUnit(size_t handle)
-	{
-		return reinterpret_cast<MinimapUnit*>(handle);
-	}
-
-	inline PathFinding::Box GetMinimapShape(SceneObject* object, const Vector3& internalCenter)
-	{
-		return PathFinding::Box(
+		return BoundingBox(
 			Vector2(internalCenter.x - object->GetMinimapSize().x*0.5f, 
 			internalCenter.z - object->GetMinimapSize().y*0.5f),
 			Vector2(internalCenter.x + object->GetMinimapSize().x*0.5f, 
@@ -39,12 +31,12 @@ namespace FlagRTS
 	struct MinimapHitTest
 	{
 		Vector2 TestPoint;
-		
+
 		MinimapHitTest(const Vector2& point) : 
 			TestPoint(point)
 		{ }
 
-		inline bool Intersect(const PathFinding::Box& box, Vector2& point) const
+		inline bool Intersect(const BoundingBox& box, Vector2& point) const
 		{
 			// Check few unit wide box with center below test point, as its quite hard to 
 			// hit box with mouse cursor precisely
@@ -56,11 +48,11 @@ namespace FlagRTS
 		}
 	};
 
-	class MiniMapDbvh : public PathFinding::Dbvh<PathFinding::Box>
+	class MiniMapDbvh : public Dbvh<BoundingBox>
 	{
 	public:
 		MiniMapDbvh(float minMergeBen, float minRotBen) :
-			PathFinding::Dbvh<PathFinding::Box>(minMergeBen, minRotBen)
+			Dbvh<BoundingBox>(minMergeBen, minRotBen)
 		{ }
 	};
 
@@ -94,6 +86,7 @@ namespace FlagRTS
 		LoadTerrainTexture(terrainImageName, terrainImageResourceGroup);
 
 		_unitsDbvh = xNew2(MiniMapDbvh,0.5f,0.75f);
+		_initObject = 0;
 	}
 
 	Minimap::~Minimap()
@@ -239,11 +232,11 @@ namespace FlagRTS
 
 	void Minimap::Update(float ms)
 	{
-		static float updateTimer = 200.f;
+		static float updateTimer = 400.f;
 		if( updateTimer <= 0.f )
 		{
 			_unitsDbvh->Optimize();
-			updateTimer = 200.f;
+			updateTimer = 400.f;
 		}
 		else
 			updateTimer -= ms;
@@ -279,7 +272,7 @@ namespace FlagRTS
 			return 0;
 		if( hitObjects.size() == 1 )
 			return hitObjects[0].first;
-		
+
 		SceneObject* hit = 0;
 		float minDist = 999999.f;
 		// For multiple hits find closest one
@@ -300,27 +293,24 @@ namespace FlagRTS
 
 	void Minimap::AddObject(SceneObject* object)
 	{
-		int mmapFlags = object->GetMinimapFlags();
+		_ASSERT(object->FindComponent(GetTypeId<MinimapComponent>()) != 0);
+		MinimapComponent* component = object->FindComponent<MinimapComponent>();
 
-		MinimapUnit* mmapUnit = xNew0(MinimapUnit);
-		mmapUnit->SetGameObject(object);
-		object->SetMinimapHandle(GetMinimapUnitHandle(mmapUnit));
+		int mmapFlags = component->GetMinimapFlags();
 		object->Moved() += &_onObjectMoved;
-
-		_allUnits.push_back(mmapUnit);
 
 		// Find / create billboard set for object
 		MarkersMap::Iterator markerIt = _unitMarkers.end();
 		if( (mmapFlags & MinimapFlags::UseCustomIcon) != 0 )
 		{
 			// Object kind uses custom icon -> get its handle
-			size_t iconHandle = object->GetMinimapIconHandle();
+			size_t iconHandle = component->GetMinimapIconHandle();
 
 			markerIt = _unitMarkers.find(iconHandle);
 			if( markerIt == _unitMarkers.end() )
 			{
 				// If marker is not created yet -> create it
-				BillboardMarker* marker = CreateBillboardMarker( object->GetMinimapIconMaterialName() );
+				BillboardMarker* marker = CreateBillboardMarker( component->GetMinimapIconMaterialName() );
 				_unitMarkers.insert(iconHandle, marker);
 				markerIt = _unitMarkers.find(iconHandle);
 			}
@@ -332,9 +322,9 @@ namespace FlagRTS
 		const Vector3& pos(object->GetPositionAbsolute());
 		auto bill = markerIt->Value->AddBillboard( Vector3(pos.x, 10.f, pos.z), 
 			object->GetOrientationAbsolute().getYaw() );
-		bill->setDimensions( object->GetMinimapSize().x, object->GetMinimapSize().y );
-		mmapUnit->SetBillboard(bill);
-		mmapUnit->SetMarkerHandle(markerIt->Key);
+		bill->setDimensions( component->GetMinimapSize().x, component->GetMinimapSize().y );
+		component->SetBillboard(bill);
+		component->SetBillboardMarkerHandle(markerIt->Key);
 
 		if( (mmapFlags & MinimapFlags::MinimapSelectable) != 0 )
 		{
@@ -342,43 +332,80 @@ namespace FlagRTS
 			auto sbill = _selectedMarker->AddBillboard(Vector3(pos.x, 10.f, pos.z),
 				object->GetOrientationAbsolute().getYaw());
 			sbill->setDimensions( 0.f, 0.f );
-			mmapUnit->SetSelectedBillboard(sbill);
+			component->SetSelectedBillboard(sbill);
 
 			// If unit is selectable add it to Dbvh for ray tests
-			if( _allUnits.size() == 2 )
+			if(_unitsDbvh->IsCreated() == false && _initObject == 0)
 			{
-				// Dbvh can br created with at least 2 objects
-				PFArray<std::pair<SceneObject*, PathFinding::Box>> objects;
-				objects.push_back(std::make_pair(_allUnits[0]->GetGameObject(), 
-					GetMinimapShape(_allUnits[0]->GetGameObject(), _allUnits[0]->GetBillboard()->getPosition())));
-				objects.push_back(std::make_pair(_allUnits[1]->GetGameObject(), 
-					GetMinimapShape(_allUnits[1]->GetGameObject(), _allUnits[1]->GetBillboard()->getPosition())));
-				_unitsDbvh->CreateInitialBvh(objects);
-				static_cast<Unit*>(_allUnits[0]->GetGameObject())->IsSelectedChanged() += &_onObjectSelected;
-				static_cast<Unit*>(_allUnits[1]->GetGameObject())->IsSelectedChanged() += &_onObjectSelected;
+				// This is first object
+				_initObject = object;
 			}
-			else if( _allUnits.size() > 2 )
+			else if( _unitsDbvh->IsCreated() == false && _initObject != 0 )
 			{
-				_unitsDbvh->AddObject( object, GetMinimapShape(object, object->GetPositionAbsolute()));
-				static_cast<Unit*>(object)->IsSelectedChanged() += &_onObjectSelected;
+				// Dbvh can be created with at least 2 objects
+				Array<std::pair<MinimapComponent*, BoundingBox>> objects;
+
+				MinimapComponent* initComponent = _initObject->FindComponent<MinimapComponent>();
+
+				objects.push_back(std::make_pair(initComponent, 
+					GetMinimapShape(initComponent, 
+					initComponent->GetBillboard()->getPosition())));
+
+				objects.push_back(std::make_pair(component, 
+					GetMinimapShape(component, 
+					component->GetBillboard()->getPosition())));
+				_unitsDbvh->CreateInitialBvh(objects);
+
+				SelectionComponent* selection = initComponent->GetOwner<Unit>()->FindComponent<SelectionComponent>();
+				if(selection != 0)
+				{
+					selection->IsSelectedChanged() += &_onObjectSelected;
+
+				}
+
+				selection = component->GetOwner<Unit>()->FindComponent<SelectionComponent>();
+				if(selection != 0)
+				{
+					selection->IsSelectedChanged() += &_onObjectSelected;
+				}
+
+				_initObject = 0;
+			}
+			else
+			{
+				_unitsDbvh->AddObject(component, 
+					GetMinimapShape(component, object->GetPositionAbsolute()));
+
+				SelectionComponent* selection = object->FindComponent<SelectionComponent>();
+				if(selection != 0)
+				{
+					selection->IsSelectedChanged() += &_onObjectSelected;
+
+				}
 			}
 		}
 	}
 
 	void Minimap::RemoveObject(SceneObject* object)
 	{
-		MinimapUnit* mmapUnit = GetMinimapUnit(object->GetMinimapHandle());
-		if( (object->GetMinimapFlags() & MinimapFlags::MinimapSelectable) != 0 )
+		_ASSERT(object->FindComponent(GetTypeId<MinimapComponent>()) != 0);
+		MinimapComponent* component = object->FindComponent<MinimapComponent>();
+
+		if( (component->GetMinimapFlags() & MinimapFlags::MinimapSelectable) != 0 )
 		{
-			_selectedMarker->RemoveBillboard(mmapUnit->GetSelectedBillboard());
-			_unitsDbvh->RemoveObject(object);
-			static_cast<Unit*>(object)->IsSelectedChanged() -= &_onObjectSelected;
+			_selectedMarker->RemoveBillboard(component->GetSelectedBillboard());
+			_unitsDbvh->RemoveObject(component);
+
+			SelectionComponent* selection = object->FindComponent<SelectionComponent>();
+			if(selection != 0)
+			{
+				selection->IsSelectedChanged() -= &_onObjectSelected;
+			}
 		}
 		object->Moved() -= &_onObjectMoved;
 
-		auto marker = _unitMarkers[mmapUnit->GetMarkerHandle()];
-		marker->RemoveBillboard(mmapUnit->GetBillboard());
-		_allUnits.remove(mmapUnit);
+		auto marker = _unitMarkers[component->GetBillboardMarkerHandle()];
+		marker->RemoveBillboard(component->GetBillboard());
 	}
 
 	void Minimap::SetDrawCameraBounds(bool value)
@@ -453,43 +480,47 @@ namespace FlagRTS
 
 	void Minimap::ObjectMoved(SceneObject* object)
 	{
-		MinimapUnit* mmapUnit = GetMinimapUnit(object->GetMinimapHandle());
-		const Vector3& pos(object->GetPositionAbsolute());
-		mmapUnit->GetBillboard()->setPosition(Vector3(pos.x, 10.f, pos.z));
-		mmapUnit->GetSelectedBillboard()->setPosition(Vector3(pos.x, 10.f, pos.z));
+		_ASSERT(object->FindComponent(GetTypeId<MinimapComponent>()) != 0);
+		MinimapComponent* component = object->FindComponent<MinimapComponent>();
 
-		if( (object->GetMinimapFlags() & MinimapFlags::MinimapSelectable) != 0 )
+		const Vector3& pos(object->GetPositionAbsolute());
+		component->GetBillboard()->setPosition(Vector3(pos.x, 10.f, pos.z));
+		component->GetSelectedBillboard()->setPosition(Vector3(pos.x, 10.f, pos.z));
+
+		if( (component->GetMinimapFlags() & MinimapFlags::MinimapSelectable) != 0 )
 		{
-			_unitsDbvh->ObjectChanged(object, PathFinding::Box(
-				Vector2(pos.x - object->GetMinimapSize().x*0.5f, 
-				pos.z - object->GetMinimapSize().y*0.5f),
-				Vector2(pos.x + object->GetMinimapSize().x*0.5f, 
-				pos.z + object->GetMinimapSize().y*0.5f)));
+			_unitsDbvh->ObjectChanged(component, BoundingBox(
+				Vector2(pos.x - component->GetMinimapSize().x*0.5f, 
+				pos.z - component->GetMinimapSize().y*0.5f),
+				Vector2(pos.x + component->GetMinimapSize().x*0.5f, 
+				pos.z + component->GetMinimapSize().y*0.5f)));
 		}
 	}
 
-	void Minimap::ObjectIsSelectedChanged(Unit* unit, bool isSelected)
+	void Minimap::ObjectIsSelectedChanged(SceneObject* unit, bool isSelected)
 	{
-		MinimapUnit* mmapUnit = GetMinimapUnit(unit->GetMinimapHandle());
+		_ASSERT(unit->FindComponent(GetTypeId<MinimapComponent>()) != 0);
+		MinimapComponent* component = unit->FindComponent<MinimapComponent>();
+
 		BillboardMarker* oldMarker = 0;
 		BillboardMarker* newMarker = 0;
 		if( isSelected == true )
 		{
 			// Unit selected
-			unit->SetMinimapFlags( unit->GetMinimapFlags() | MinimapFlags::Selected );
+			component->SetMinimapFlags( component->GetMinimapFlags() | MinimapFlags::Selected );
 			// Change billboard set of unit
-			mmapUnit->GetBillboard()->setDimensions(0.f,0.f);
-			mmapUnit->GetSelectedBillboard()->setDimensions(
-				unit->GetMinimapSize().x, unit->GetMinimapSize().y);
+			component->GetBillboard()->setDimensions(0.f,0.f);
+			component->GetSelectedBillboard()->setDimensions(
+				component->GetMinimapSize().x, component->GetMinimapSize().y);
 		}
 		else
 		{
 			// Unit de-selected
-			unit->SetMinimapFlags( unit->GetMinimapFlags() & (~MinimapFlags::Selected) );
+			component->SetMinimapFlags( component->GetMinimapFlags() & (~MinimapFlags::Selected) );
 			// Change billboard set of unit
-			mmapUnit->GetSelectedBillboard()->setDimensions(0.f,0.f);
-			mmapUnit->GetBillboard()->setDimensions(
-				unit->GetMinimapSize().x, unit->GetMinimapSize().y);
+			component->GetSelectedBillboard()->setDimensions(0.f,0.f);
+			component->GetBillboard()->setDimensions(
+				component->GetMinimapSize().x, component->GetMinimapSize().y);
 		}
 	}
 

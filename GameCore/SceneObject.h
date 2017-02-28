@@ -1,5 +1,6 @@
 #pragma once
 
+#include "IGameObject.h"
 #include "SceneObjectDefinition.h"
 
 #include <OgreSceneNode.h>
@@ -29,22 +30,13 @@ namespace FlagRTS
 
 		Event<SceneObject*> _onSpawn;
 		Event<SceneObject*> _onDespawn;
-		Event<SceneObject*> _onHoverBegin;
-		Event<SceneObject*> _onHoverEnd;
 
 		Event<SceneObject*> _onMoved;
 		Event<SceneObject*> _onRotated;
 
-		uint32 _selectionFlags; // Flags used for scene queries to determine if object should accept hover/selection
-		unsigned int _owner; // Owning player ( for objects that have owener )
-
 		bool _loaded;
 		bool _spawned;
 		
-		size_t _objectSpecificDataHandle; // Some additional data specific to the kind of object
-		size_t _minimapHandle; // Handle to MinimapUnit
-		int _minimapFlags;
-
 	public:
 		// Creates empty scene object ( as definiton cannot be added later
 		SceneObject();
@@ -105,31 +97,11 @@ namespace FlagRTS
 		void SetParent(SceneObject* parent) { _parentObject = parent; }
 		SceneObject* GetParent() const { return _parentObject; }
 
-		size_t GetCurrentState() const { return _stateMachine.GetCurrentState(); }
+		SceneObjectStateMachine& GetStates() { return _stateMachine; }
 
-		SceneObjectState* GetCurrentStatePtr() const { return _stateMachine.GetCurrentStatePtr(); }
-		
-		void ChangeState(size_t state) { _stateMachine.ChangeState(state); }
-
-		void AddState(size_t type, SceneObjectState* state)
-		{
-			_stateMachine.AddState(type, state);
-		}
-
-		SceneObjectState* FindState(size_t state)
-		{
-			return _stateMachine.FindState(state);
-		}
-
-		uint32 GetSelectionFlags() const { return _selectionFlags; }
-		virtual void SetSelectionFlags(uint32 flags) { _selectionFlags = flags; }
-		void AddSelectionFlags(uint32 flags) { SetSelectionFlags(_selectionFlags | flags); }
-		void RemoveSelectionFlags(uint32 flags) { SetSelectionFlags(_selectionFlags & (~flags)); }
-	
 	public:
-
-		// Updates state of object ( by default delegates update to state machine , updates mover )
-		virtual void Update(float ms);
+		// Updates state of object ( by default delegates update to IGameObject then state machine )
+		void Update(float ms);
 
 		// Create actor and place it in scene -> SceneNode must be set before call
 		// Should be called after subclass spawn
@@ -149,69 +121,18 @@ namespace FlagRTS
 		// Should be called after subclass despawn
 		Event<SceneObject*>& Despawned()  { return _onDespawn; }
 
-		// To be called if mouse hovers over scene object
-		virtual void SetMouseHoverBegin()
-		{
-			_onHoverBegin.Fire(this);
-		}
-		
-		// To be called if mouse leaves scene object
-		virtual void SetMouseHoverEnd()
-		{
-			_onHoverEnd.Fire(this);
-		}
-
-		// Get event that is fired when mouse is hovering over object
-		Event<SceneObject*>& MouseHoverBegin()  { return _onHoverBegin; }
-		
-		// Get event that is fired when mouse is hovering over object
-		Event<SceneObject*>& MouseHoverEnd()  { return _onHoverEnd; }
-
 		Event<SceneObject*>& Moved() { return _onMoved; }
 		Event<SceneObject*>& Rotated() { return _onRotated; }
 
 		const SceneObjectDefinition* GetSceneObjectDefinition() const { return _definition; }
 		void SetSceneObjectDefinition(SceneObjectDefinition* soDef);
-		
-		int GetMinimapFlags() const { return _minimapFlags; }
-		void SetMinimapFlags(int flags) { _minimapFlags = flags; }
-
-		size_t GetMinimapHandle() const { return _minimapHandle; }
-		void SetMinimapHandle(const size_t handle) { _minimapHandle = handle; }
-		
-		size_t GetMinimapIconHandle() const { return GetSceneObjectDefinition()->GetMinimapIconHandle(); }
-		
-		const string& GetMinimapIconMaterialName() const { return GetSceneObjectDefinition()->GetMinimapIconMaterialName(); }
-		
-		const Vector2& GetMinimapSize() const { return GetSceneObjectDefinition()->GetMinimapSize(); }
-
 	public:
 		// Properties accessors
 		string GetName() const { return _definition->GetName(); }
 		TypeId GetFinalType() const { return _definition->GetFinalType(); }
 		bool IsIndependent() const { return _definition->IsIndependent(); }
 		bool InheritsScale() const { return _definition->InheritsScale(); }
-		bool HavePhysics() const { return _definition->HavePhysics(); }
-		bool HaveFootprint() const { return _definition->HaveFootprint(); }
 		
-		size_t GetObjectSpecificDataHandle() const { return _objectSpecificDataHandle; }
-		void SetObjectSpecificDataHandle(size_t handle) { _objectSpecificDataHandle = handle; }
-		template<typename DataType>
-		DataType* GetObjectSpecificData() const 
-		{ 
-			return reinterpret_cast<DataType*>(_objectSpecificDataHandle); 
-		}
-
-		size_t GetKindSpecificDataHandle() const { return _definition->GetKindSpecificDataHandle(); }
-		template<typename DataType>
-		DataType* GetKindSpecificData() const 
-		{ 
-			return _definition->GetKindSpecificData<DataType>(); 
-		}
-
-		unsigned int GetOwner() const { return _owner; }
-		virtual void SetOwner(unsigned int owner) { _owner = owner; }
-
 	public:
 		// Wrapper around Ogre SceneNode :
 		// Methods to access / change position in space ( SO's position = scene node position )

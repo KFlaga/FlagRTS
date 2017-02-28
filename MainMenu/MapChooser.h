@@ -13,7 +13,8 @@ namespace FlagRTS
 	struct MapBaseInfo
 	{
 		RefPtr<XmlDocument> MapDoc;
-		string MapName;
+		string MapDirName; // Filesystem name of map
+		string MapName; // In-Game name of map
 		string Size;
 		string Players;
 		string Mode;
@@ -29,14 +30,14 @@ namespace FlagRTS
 		string _exePath;
 		Array<MapBaseInfo> _maps; // Maps in current dir
 
-		Event<RefPtr<XmlDocument>&> _mapSelected;
+		Event<MapBaseInfo&> _mapSelected;
 
 		MyGUI::ListBox* _listBox;
 		
 		int _mapsFirstIndex;
 		
+		int _newMapIdx;
 		string _newDir;
-		RefPtr<XmlDocument> _newMapDoc;
 		bool _pendingChangeDirectory;
 		bool _pendingMapChoosen;
 
@@ -56,13 +57,15 @@ namespace FlagRTS
 		const string& GetCurrentDir() const { return _currentDir; }
 
 		// Fired when user selects map for list - map header passed as param
-		Event<RefPtr<XmlDocument>&>& MapSelected() { return _mapSelected; }
+		Event<MapBaseInfo&>& MapSelected() { return _mapSelected; }
 
 	private:
 		// Returns false if its disc-level directory ( for now do not allow change of disc )
 		bool IsUpLevelAvailable();
 		// Sets current dir as previous folder
 		void UpOneLevel();
+
+		string ChangeDirPathToAbsolute(const string& relativePath);
 
 		void ItemSelected(MyGUI::ListBox* listBox, size_t index);
 

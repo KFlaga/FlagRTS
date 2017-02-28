@@ -1,7 +1,7 @@
 #include "GameGuiModelViewer.h"
 #include <PhysicalObject.h>
 #include <GameWorld.h>
-#include <MainGameObjectPool.h>
+#include <IGameObjectPool.h>
 #include <OgreSceneManager.h>
 #include <RenderSystemManager.h>
 #include <MyGUI\MyGUI_OgreTexture.h>
@@ -77,7 +77,7 @@ namespace FlagRTS
 		{
 			// Create object instance for this object kind
 			_viewedObject = static_cast<PhysicalObject*>(
-				GameWorld::GlobalWorld->GetObjectPool()->Create(objectDef, NEUTRAL_PLAYERNUM));
+				GameInterfaces::GetGameObjectPool()->Create(objectDef, NEUTRAL_PLAYERNUM));
 
 			_viewedObject->LoadResources(_sceneMgr);
 			_viewedObject->ChangeState(SceneObjectStates::NotSpawned);

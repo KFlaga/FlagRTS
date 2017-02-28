@@ -35,7 +35,7 @@ namespace FlagRTS
 		else if( _pendingMapChoosen )
 		{
 			_pendingMapChoosen = false;
-			_mapSelected.Fire(_newMapDoc);
+			_mapSelected.Fire(_maps[_newMapIdx]);
 		}
 	}
 
@@ -87,39 +87,9 @@ namespace FlagRTS
 		string oldDir = _currentDir;
 		if(isRelative)
 		{
-			// Convert relative to absolute path :
-			// Find amount of '../' and go up this number of levels from exe dir
-			// Then go down rest of folders
-			string tempDir = _exePath;
-			int lastDot = 0;
-			for(unsigned int i = 0; i < dir.size()-1; ++i)
-			{
-				if(dir[i] == '.' && dir[i+1] == '.')
-				{
-					// Found '..' -> go up one level with tempDir : find pos of last '\' or '/' and remove to this point
-					int pos = tempDir.size();
-					for(unsigned int k = tempDir.size()-1; k > 1; --k)
-					{
-						if( tempDir[k] == '\\' || tempDir[k] == '/' )
-						{
-							pos = k;
-							break;
-						}
-					}
-					if( pos != tempDir.size() )
-					{
-						tempDir = tempDir.substr(0, pos);
-					}
-					++i;
-					lastDot = i;
-				}
-			}
-			// Append rest of directory to tempDir
-			tempDir.append(dir.substr(lastDot+1));
-			_currentDir = EnsureEndsWithDash(tempDir);
+			_currentDir = ChangeDirPathToAbsolute(dir);
 		}
-		else
-			_currentDir = EnsureEndsWithDash(dir);
+		_currentDir = EnsureEndsWithDash(dir);
 
 		_fileBrowser.SetDirectory(_currentDir);
 		if( _fileBrowser.UpdateFiles() == false)
@@ -160,6 +130,7 @@ namespace FlagRTS
 					MapBaseInfo mapInfo;
 					mapInfo.MapDoc = mapDoc;
 					XmlNode* mapNode = mapDoc->first_node("Map");
+					mapInfo.MapDirName = XmlUtility::XmlGetString(mapNode->first_node("MapDataDir"), "value");
 					mapInfo.MapName = XmlUtility::XmlGetString(mapNode->first_node("MapName"), "value");
 					mapInfo.Players = XmlUtility::XmlGetString(mapNode->first_node("Players"), "value");
 					mapInfo.Mode = XmlUtility::XmlGetString(mapNode->first_node("DefaultMode"), "name");
@@ -184,6 +155,40 @@ namespace FlagRTS
 		}
 	}
 
+	string MapChooser::ChangeDirPathToAbsolute(const string& dir)
+	{
+		// Convert relative to absolute path :
+		// Find amount of '../' and go up this number of levels from exe dir
+		// Then go down rest of folders
+		string tempDir = _exePath;
+		int lastDot = 0;
+		for(unsigned int i = 0; i < dir.size()-1; ++i)
+		{
+			if(dir[i] == '.' && dir[i+1] == '.')
+			{
+				// Found '..' -> go up one level with tempDir : find pos of last '\' or '/' and remove to this point
+				int pos = tempDir.size();
+				for(unsigned int k = tempDir.size()-1; k > 1; --k)
+				{
+					if( tempDir[k] == '\\' || tempDir[k] == '/' )
+					{
+						pos = k;
+						break;
+					}
+				}
+				if( pos != tempDir.size() )
+				{
+					tempDir = tempDir.substr(0, pos);
+				}
+				++i;
+				lastDot = i;
+			}
+		}
+		// Append rest of directory to tempDir
+		tempDir.append(dir.substr(lastDot+1));
+		return tempDir;
+	}
+
 	void MapChooser::ItemSelected(MyGUI::ListBox* listBox, size_t index)
 	{
 		if(index > _mapsFirstIndex + _maps.size())
@@ -206,8 +211,7 @@ namespace FlagRTS
 		else
 		{
 			// Map was choosen
-			MapBaseInfo& mapInfo = _maps[fileIndex - _mapsFirstIndex];
-			_newMapDoc = mapInfo.MapDoc;
+			_newMapIdx = fileIndex - _mapsFirstIndex;
 			_pendingMapChoosen = true;
 		}
 	}

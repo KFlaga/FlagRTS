@@ -2,7 +2,7 @@
 #include <PathFindingIPathFinder.h>
 #include <Thread.h>
 #include <ThreadManager.h>
-#include "PathingPathUnit.h"
+#include "PathingComponent.h"
 #include <Profiler.h>
 
 namespace FlagRTS
@@ -75,8 +75,9 @@ namespace FlagRTS
 			_reqMutex.unlock();
 
 			// Request new global path
-			_pathFinder->SetBlockFilter(req->Unit->Unit->GetCollsionFilter());
-			_pathFinder->SetUnitSize(req->Unit->CellSize);
+			_pathFinder->SetBlockFilter(
+				PathFinding::CollisionFilter(req->Unit->GetCollsionFilter().Value));
+			_pathFinder->SetUnitSize(req->Unit->GetSizeInCells());
 			_pathFinder->FindPath(req->Begin, req->End);
 
 			_reqMutex.lock();
@@ -91,12 +92,12 @@ namespace FlagRTS
 				++_firstPendingRequest;
 
 				auto& path = _pathFinder->GetLastPathReal();
-				req->Unit->Path.clear();
+				req->Unit->GetGlobalPath().clear();
 				if(path.size() > 0)
 				{
-					req->Unit->Path.reserve(path.size());
+					req->Unit->GetGlobalPath().reserve(path.size());
 					for(int i = path.size() - 1; i >= 0; --i)
-						req->Unit->Path.push_back(path[i]);
+						req->Unit->GetGlobalPath().push_back(path[i]);
 				}
 			}
 			_reqMutex.unlock();

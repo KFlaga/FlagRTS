@@ -1,5 +1,6 @@
 #include "FXObject.h"
 #include "GameWorld.h"
+#include "ISceneObjectSpawner.h"
 
 namespace FlagRTS
 {
@@ -31,8 +32,8 @@ namespace FlagRTS
 				if( _fxDef->GetDestroyOnEnd() )
 				{
 					Stop();
-					GameWorld::GlobalWorld->QueueDespawnSceneObject(this);
-					GameWorld::GlobalWorld->QueueDestroySceneObject(this);
+					GameInterfaces::GetSceneObjectSpawner()->DespawnSceneObject(this, true);
+					GameInterfaces::GetSceneObjectSpawner()->DestroySceneObject(this, true);
 				}
 				else if( _looped == true )
 					Reset();
